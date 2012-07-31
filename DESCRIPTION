@@ -1,0 +1,26 @@
+Package: blastr
+Version: 0.0-1
+Date: 2012-07-30
+Type: Package
+Title: A wrapper arpound NCBI Blast.
+Authors@R: person("Gerhard", "Schöfl", role=c("aut","cre"),
+    email="gschofl@yahoo.de")
+Description: A set of classes and functions to manage
+    NCBI Blast web service queries via R.
+License: MIT
+Encoding: latin1
+Depends:
+    R (>= 2.15),
+    methods
+Imports:
+    XML,
+    RCurl,
+    stringr,
+    Biostrings
+Collate:
+    'blast-utils.r'
+    'blast-classes.r'
+    'blast-getters.r'
+    'blast-parser.r'
+    'blast.r'
+    'package.r'
