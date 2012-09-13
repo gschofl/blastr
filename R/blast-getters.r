@@ -146,59 +146,59 @@ setMethod("getEvalue", "hit", function (x) unlist(x@hsp@evalue) )
 
 ## getQueryRange ===================
 ##
-##' Getter methods for blast records
-##' 
-##' @usage getQueryRange(x)
-##' 
-##' @param x A \code{\link{blastReport-class}} or \code{\link{hit-class}} object.
-##' 
-##' @return Start and end position for each query.
-##' 
-##' @rdname blastReport-method
-##' @docType methods
-##' @export
+#' Getter methods for blast records
+#' 
+#' @usage getQueryRange(x)
+#' 
+#' @param x A \code{\link{blastReport-class}} or \code{\link{hit-class}} object.
+#' 
+#' @return Start and end position for each query.
+#' 
+#' @rdname blastReport-method
+#' @docType methods
+#' @export
 setGeneric("getQueryRange", function (x) standardGeneric("getQueryRange"))
 
-##' @export
-setMethod("getQueryRange", "blastReport", function (x) {
-  lapply(x@hits, function (x) getQueryRange(x)) 
-})
-
-##' @export
+#' @export
 setMethod("getQueryRange", "hit", function (x) {
-  r <- Map(function(from, to, frame) {
-    setNames(c(from, to, frame), c("from", "to", "frame"))
-  }, from=x@hsp@query_from, to=x@hsp@query_to, frame=x@hsp@query_frame)
-  data.frame(do.call(rbind, r))
+  frame <- x@hsp@query_frame
+  start <- as.integer(ifelse(frame == 1, x@hsp@query_from, x@hsp@query_to))
+  end <- as.integer(ifelse(frame == 1, x@hsp@query_to, x@hsp@query_from))
+  new("gbRange", start = start, width = end - start + 1L, strand = frame)
+}) 
+
+#' @export
+setMethod("getQueryRange", "blastReport", function (x) {
+  lapply(x@hits, getQueryRange) 
 })
 
 
 ## getHitRange =====================
 ##
-##' Getter methods for blast records
-##' 
-##' @usage getHitRange(x)
-##' 
-##' @param x A \code{\link{blastReport-class}} or \code{\link{hit-class}} object.
-##' 
-##' @return Start and end position for each hit.
-##' 
-##' @rdname blastReport-method
-##' @docType methods
-##' @export
+#' Getter methods for blast records
+#' 
+#' @usage getHitRange(x)
+#' 
+#' @param x A \code{\link{blastReport-class}} or \code{\link{hit-class}} object.
+#' 
+#' @return Start and end position for each hit.
+#' 
+#' @rdname blastReport-method
+#' @docType methods
+#' @export
 setGeneric("getHitRange", function (x) standardGeneric("getHitRange"))
 
-##' @export
-setMethod("getHitRange", "blastReport", function (x) {
-  lapply(x@hits, function (x) getHitRange(x)) 
+#' @export
+setMethod("getHitRange", "hit", function (x) {
+  frame <- x@hsp@hit_frame
+  start <- as.integer(ifelse(frame == 1, x@hsp@hit_from, x@hsp@hit_to))
+  end <- as.integer(ifelse(frame == 1, x@hsp@hit_to, x@hsp@hit_from))
+  new("gbRange", start = start, width = end - start + 1L, strand = frame)
 })
 
-##' @export
-setMethod("getHitRange", "hit", function (x) {
-  r <- Map(function(from, to, frame) {
-    setNames(c(from, to, frame), c("from", "to", "frame"))
-  }, from=x@hsp@hit_from, to=x@hsp@hit_to, frame=x@hsp@hit_frame)
-  data.frame(do.call(rbind, r))
+#' @export
+setMethod("getHitRange", "blastReport", function (x) {
+  lapply(x@hits, getHitRange) 
 })
 
 

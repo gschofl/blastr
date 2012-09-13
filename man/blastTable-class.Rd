@@ -1,7 +1,7 @@
 \name{blastTable-class}
-\alias{$,blastReport-method}
 \alias{[,blastReport-method}
 \alias{[[,blastReport-method}
+\alias{$,blastReport-method}
 \alias{blastTable-class}
 \alias{names,blastReport-method}
 \alias{show,blastReport-method}

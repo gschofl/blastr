@@ -8,19 +8,14 @@ NULL
 ##' Parse xml blast output
 ##' 
 ##' @param blast_output Blast output in XML format
-##' (File or character vector)
-##' 
-##' @importFrom stringr str_split
-##' @importFrom stringr str_split_fixed
-##' @importFrom stringr str_replace_all
-##' @importFrom Biostrings BStringSet
-##' @importFrom Biostrings BString
+##' (File or character vector) 
 ##' 
 ##' @return A \code{\link{blastReport-class}} object.
 ##' 
+##' @importFrom Biostrings BStringSet
+##' @importFrom Biostrings BString
 ##' @export
-parseBlastXml <- function (blast_output)
-{
+parseBlastXml <- function (blast_output) {
   ## BlastOutput
   doc <- xmlRoot(xmlParse(blast_output))
   program <- xpathSApply(doc, "//BlastOutput_program", xmlValue)
@@ -112,7 +107,7 @@ parseBlastXml <- function (blast_output)
   
   .blastReport(program=program, version=version, reference=reference,
                db=db, query=query, iter_num=iter_num, hits=hit_list,
-               params=params, stats=stats, message=message)  
+               params=params, stats=stats, message=message, data=blast_output)  
 }
 
 ##' read a blast hit table
@@ -123,8 +118,7 @@ parseBlastXml <- function (blast_output)
 ##' @return A \code{\link{blastReport-class}} object.
 ##' 
 ##' @export
-parseBlastTabular <- function (blast_output)
-{
+parseBlastTabular <- function (blast_output) {
   if (is.character(blast_output) && file.exists(blast_output)) {
     cf <- count.fields(blast_output, sep="\t", comment.char="#")
     file_path <- file(blast_output, open="r")
@@ -192,38 +186,3 @@ parseBlastTabular <- function (blast_output)
               accession = accn,
               table = hit_table)
 }
-
-
-# gapsOpen <- function (s1, s2)
-# {
-#   length(gregexpr("-+", s1)[[1L]]) + length(gregexpr("-+", s2)[[1L]])
-# }
-
-# {   
-#     hit_table[[i]] <- 
-#       data.frame(stringsAsFactors=FALSE,
-#                  qid = query_id,                         # Id of query sequence
-#                  sid = id,                               # Id of database hit 
-#                  pident = 100*(identity/align_len),      # percent identity
-#                  length = align_len,                     # alignment length
-#                  mismatch = align_len - identity - gaps, # number of mismatches
-#                  gapopen = gapsOpen(qseq, hseq),                         # number of gap openings
-#                  qstart = query_from,
-#                  qend = query_to,
-#                  sstart = hit_from,
-#                  send = hit_to,
-#                  evalue = evalue,
-#                  bitscore = bit_score,
-#                  ### extended table ###
-#                  sdef = def,                      # subject definition line
-#                  sgi = gi,                        # subject gi
-#                  sacc = accn,                     # subject accession number
-#                  score = score,                   # raw score
-#                  nident = identity,               # number of identical matches
-#                  positive = positive,             # number of positive-scoring matches
-#                  gaps = gaps,                     # total number of gaps
-#                  ppos = 100*(positive/align_len), # percentage positive-scoring matches
-#                  qframe = query_frame,
-#                  sframe = hit_frame)
-#                           
-#   }

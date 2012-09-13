@@ -2,6 +2,7 @@
 ##' @include blast-classes.r
 NULL
 
+##' @keywords internal
 SysCall <- function (exec,
                      ...,
                      args = list(),
@@ -11,8 +12,7 @@ SysCall <- function (exec,
                      style = c("unix", "gnu"),
                      show_cmd = FALSE,
                      intern = FALSE,
-                     input = NULL)
-{  
+                     input = NULL) {  
   isFALSE <- function (x) identical(FALSE, x)
   
   args <- merge(list(...), args)
@@ -20,18 +20,16 @@ SysCall <- function (exec,
   
   if (is.null(stdin)) {
     stdin <- ""
-  }
-  else if (!is.null(stdin) && redirection) {
+  } else if (!is.null(stdin) && redirection) {
     stdin <- paste("<", stdin)
   }
   
   if (is.null(stdout)) {
     stdout <- ""
-  }
-  else {
+  } else {
     stdout <- paste(">", stdout)
   }
-   
+  
   args[vapply(args, isTRUE, logical(1))] <- ""
   args[vapply(args, isFALSE, logical(1))] <- NULL
   args[vapply(args, is.null, logical(1))] <- NULL
@@ -40,16 +38,16 @@ SysCall <- function (exec,
                             collapse=" "),
                  gnu=paste(str_trim(sprintf("--%s %s", names(args), args)),
                            collapse=" ")
-                 )
-  if (show_cmd)
+  )
+  if (show_cmd) {
     print(str_trim(paste(exec, args, stdin, stdout)))
-  else
-    return(system(str_trim(paste(exec, args, stdin, stdout)),
-                  intern = intern, input = input))
+  } else {
+    return( system(str_trim(paste(exec, args, stdin, stdout)),
+                   intern = intern, input = input) )
+  }
 }
 
-Curry <- function (FUN, ...)
-{
+Curry <- function (FUN, ...) {
   args <- match.call(expand.dots=FALSE)$...
   args$... <- as.name("...")
   
@@ -75,7 +73,8 @@ Curry <- function (FUN, ...)
 
 ##' Wrapper for NCBI makeblastdb
 ##' 
-##' @param input_file Input file/database name.
+##' @param input_file Input file/database name. Multiple file/database names
+##' can be provided as a character vector.
 ##' @param input_type Type of data specified in input file.
 ##' @param dbtype Molecule type of target db.
 ##' @param ... further arguments passed to makeblastdb.
@@ -90,14 +89,18 @@ makeblasttdb <- function(input_file,
                          dbtype=c("nucl","prot"),
                          ...,
                          show_log=TRUE,
-                         show_cmd=FALSE)
-{
+                         show_cmd=FALSE) {
   if (missing(input_file))
     return(SysCall("makeblastdb", help=TRUE, redirection=FALSE))
   
-  if (!file.exists(input_file))
-    stop(sprintf("File %s does not exist", sQuote(input_file)))
-
+  if (any(!file.exists(input_file)))
+    stop(sprintf("File %s does not exist", 
+                 sQuote(input_file[!file.exists(input_file)])))
+  
+  if (length(input_file) > 1) {
+    input_file <- sprintf("\"%s\"", paste(input_file, collapse=" "))
+  }
+  
   input_type <- match.arg(input_type)
   dbtype <- match.arg(dbtype)
   
@@ -106,12 +109,25 @@ makeblasttdb <- function(input_file,
   
   logfile <- "logfile"
   
-  SysCall(exec="makeblastdb", infile=NULL, outfile=NULL,
-          `in`=input_file, input_type=input_type,
-          dbtype=dbtype, ..., style="unix", show_cmd=show_cmd)
+  blastr:::SysCall(exec="makeblastdb", infile=NULL, outfile=NULL,
+                   `in`=input_file, input_type=input_type,
+                   dbtype=dbtype, ..., style="unix", show_cmd=show_cmd)
   
   if (nzchar(logfile) && isTRUE(show_log))
     cat(paste(readLines(logfile), collapse="\n"))
+}
+
+#' @keywords internal
+merge.list <- function (x, y, ...) {
+  if (length(x) == 0) 
+    return(y)
+  if (length(y) == 0) 
+    return(x)
+  i = match(names(y), names(x))
+  i = is.na(i)
+  if (any(i)) 
+    x[names(y)[which(i)]] = y[which(i)]
+  x
 }
 
 ##' Wrapper for the new NCBI BLAST+ tools
@@ -143,14 +159,14 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
                    ...,
                    intern = FALSE,
                    input = NULL,
-                   show_cmd = FALSE)
-{  
+                   show_cmd = FALSE) {
+  
   program <- match.arg(program)
   strand <- match.arg(strand)
   
   ### dealing with query
   if (missing(query))
-    return(SysCall(program, help=TRUE, intern=FALSE))
+    return( blastr:::SysCall(program, help=TRUE, intern=FALSE) )
   
   if (is(query, "XStringSet")) {
     input <- paste0(">", names(query[1L]), "\n", toString(query[[1L]]))
@@ -206,15 +222,14 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
     max_target_seqs <- max_hits
   }
   
-  args <- merge(list(...),
-               # args <-
-                list(query=query,
-                     db=db,
-                     outfmt=outfmt,
-                     num_descriptions=num_descriptions,
-                     num_alignments=num_alignments,
-                     max_target_seqs=max_target_seqs,
-                     strand=strand))
+  args <- merge.list(list(...),
+                     list(query=query,
+                          db=db,
+                          outfmt=outfmt,
+                          num_descriptions=num_descriptions,
+                          num_alignments=num_alignments,
+                          max_target_seqs=max_target_seqs,
+                          strand=strand))
   
   # remove stdin', 'stdout' from the arguments list
   stdin <- args[["stdin"]]
@@ -225,14 +240,14 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
   # check if 'out' is specified, otherwise return results internally
   intern <- if (is.null(args[["out"]])) TRUE else FALSE
   
-  res <- SysCall(exec=program, args=args,
-                 stdin=stdin, stdout=stdout,
-                 redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
-                 style="unix", show_cmd=show_cmd,
-                 intern=intern, input=input)
+  res <- blastr:::SysCall(exec=program, args=args,
+                          stdin=stdin, stdout=stdout,
+                          redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
+                          style="unix", show_cmd=show_cmd,
+                          intern=intern, input=input)
   
   res <- paste(res, collapse="\n")
-  return(res)
+  return( res )
 }
 
 ##' Wrapper for the NCBI Nucleotide-Nucleotide BLAST
@@ -281,25 +296,28 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
 ##' ##
 blastn <-
   #### blastn ####
-  Curry(FUN = blast, program = "blastn", task = "blastn")
+  Curry(FUN = blastr:::blast, program = "blastn", task = "blastn")
 
 ##' @usage blastn_short(query, db="nt", out=NULL, outfmt=5, max_hits=20,
 ##'  evalue=10, html=FALSE, remote=FALSE, ..., show_cmd=FALSE)
 ##' @export
 ##' @rdname blastn
-blastn_short <- Curry(FUN = blast, program = "blastn", task = "blastn-short")
+blastn_short <- 
+  Curry(FUN = blastr:::blast, program = "blastn", task = "blastn-short")
 
 ##' @usage megablast(query, db="nt", out=NULL, outfmt=5, max_hits=20,
 ##'  evalue=10, html=FALSE, remote=FALSE, ..., show_cmd=FALSE)
 ##' @export
 ##' @rdname blastn
-megablast <- Curry(FUN = blast, program = "blastn", task = "megablast")
+megablast <- 
+  Curry(FUN = blastr:::blast, program = "blastn", task = "megablast")
 
 ##' @usage dc_megablast(query, db="nt", out=NULL, outfmt=5, max_hits=20,
 ##'  evalue=10, html=FALSE, remote=FALSE, ..., show_cmd=FALSE)
 ##' @export
 ##' @rdname blastn
-dc_megablast <- Curry(FUN = blast, program = "blastn", task = "dc-megablast")
+dc_megablast <- 
+  Curry(FUN = blastr:::blast, program = "blastn", task = "dc-megablast")
 
 ##' Wrapper for the NCBI Protein-Protein BLAST
 ##' 
@@ -339,7 +357,7 @@ dc_megablast <- Curry(FUN = blast, program = "blastn", task = "dc-megablast")
 ##' ##
 blastp <- 
   #### blastp ####
-  Curry(FUN = blast, program = "blastp", task = "blastp")
+  Curry(FUN = blastr:::blast, program = "blastp", task = "blastp")
 
 ##' @usage blastp_short(query, db="nr", out=NULL, outfmt=5, max_hits=20,
 ##'  evalue=10, matrix="BLOSUM62", html=FALSE, remote=FALSE, ...,
@@ -347,7 +365,7 @@ blastp <-
 ##' @export
 ##' @rdname blastp
 ##' @inheritParams blastp
-blastp_short <- Curry(FUN = blast, program = "blastp", task = "blastp-short")
+blastp_short <- Curry(FUN = blastr:::blast, program = "blastp", task = "blastp-short")
 
 ##' Wrapper for the NCBI Translated Query-Protein Subject BLAST
 ##' 
@@ -388,7 +406,7 @@ blastp_short <- Curry(FUN = blast, program = "blastp", task = "blastp-short")
 ##' ##
 blastx <- 
   #### blastx ####
-  Curry(FUN = blast, program = "blastx")
+  Curry(FUN = blastr:::blast, program = "blastx")
 
 ##' Wrapper for the NCBI Translated Query-Protein Subject BLAST
 ##' 
@@ -429,7 +447,7 @@ blastx <-
 ##' ##
 tblastx <- 
   #### tblastx ####
-  Curry(FUN = blast, program = "tblastx")
+  blastr:::Curry(FUN = blastr:::blast, program = "tblastx")
 
 ##' Wrapper for the NCBI Protein Query-Translated Subject BLAST
 ##' 
@@ -468,7 +486,7 @@ tblastx <-
 ##' ##
 tblastn <- 
   #### tblastn ####
-  Curry(FUN = blast, program = "tblastn")
+  Curry(FUN = blastr:::blast, program = "tblastn")
 
 ##' Do a BLAST search using the QBLAST URL API
 ##' 
@@ -492,8 +510,6 @@ tblastn <-
 ##' @param update_time How often to poll the blast server for results.
 ##' 
 ##' @return A \code{\link{blastReport-class}} object.
-##'
-##' @importFrom stringr str_match
 ##'
 ##' @family blast applications
 ##' @export

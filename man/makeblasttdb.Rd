@@ -8,7 +8,9 @@
     show_cmd = FALSE)
 }
 \arguments{
-  \item{input_file}{Input file/database name.}
+  \item{input_file}{Input file/database name. Multiple
+  file/database names can be provided as a character
+  vector.}
 
   \item{input_type}{Type of data specified in input file.}
 

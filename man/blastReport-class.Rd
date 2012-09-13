@@ -14,9 +14,10 @@
   data retrived by calls to the NCBI Blast utility.
 }
 \details{
-  blastReport objects have eight slots: \describe{
+  blastReport objects have eleven slots: \describe{
   \item{program}{} \item{version}{} \item{reference}{}
-  \item{db}{} \item{query}{} \item{params}{} \item{stats}{}
-  \item{hits}{} }
+  \item{db}{} \item{iter_num}{} \item{query}{}
+  \item{hits}{} \item{params}{} \item{stats}{}
+  \item{message}{} \item{data}{} }
 }
 

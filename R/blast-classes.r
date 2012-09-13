@@ -9,16 +9,19 @@ NULL
 ##' blastReport is an S4 class that provides a container for data retrived
 ##' by calls to the NCBI Blast utility.
 ##' 
-##' blastReport objects have eight slots:
+##' blastReport objects have eleven slots:
 ##' \describe{
 ##'   \item{program}{}
 ##'   \item{version}{}
 ##'   \item{reference}{}
 ##'   \item{db}{}
+##'   \item{iter_num}{}
 ##'   \item{query}{}
+##'   \item{hits}{}
 ##'   \item{params}{}
 ##'   \item{stats}{}
-##'   \item{hits}{}
+##'   \item{message}{}
+##'   \item{data}{}
 ##' }
 ##' 
 ##' @param ... Slots for \sQuote{blastReport} objects.
@@ -39,7 +42,8 @@ NULL
                           hits = "list",
                           params = "list",
                           stats = "list",
-                          message = "character"),
+                          message = "character",
+                          data = "character"),
            prototype(program = NA_character_,
                      version = NA_character_,
                      reference = NA_character_,
@@ -49,7 +53,8 @@ NULL
                      hits = list(),
                      params = list(),
                      stats = list(),
-                     message = NA_character_))
+                     message = NA_character_,
+                     data = NA_character_))
 
 ##' hsp class
 ##'
@@ -97,7 +102,7 @@ NULL
              num = "integer",         # hit number
              id = "list",             # SeqIds
              desc = "list",           # Description line
-             accn = "character",       # accession number
+             accn = "character",      # accession number
              len = "integer",         # length of subject
              hsp = "hsp"))            # hit HSPs
 

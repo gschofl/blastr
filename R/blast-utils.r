@@ -1,12 +1,17 @@
-##' display a html file in a browser
-##' 
-##' @param html file path or html encoded character string
-##' @param browser browser
-##' @param unlink remove temporary file
-##' 
-##' @export 
-displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE)
-{
+#' @import XML
+#' @import stringr
+#' @import biofiles
+#' 
+NULL
+
+#' display a html file in a browser
+#' 
+#' @param html file path or html encoded character string
+#' @param browser browser
+#' @param unlink remove temporary file
+#' 
+#' @export 
+displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE) {
   if (!file.exists(html)) { 
     f_tmp <- tempfile(fileext=".html")
     writeLines(html, f_tmp)
@@ -23,18 +28,17 @@ displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE)
   }
 }
 
-##' Parse fasta definition lines
-##' 
-##' @param defline List or character vector of NCBI fasta deflines.
-##' @param species Parse out species designations.
-##' 
-##' @importFrom stringr perl
-##' @importFrom stringr str_split_fixed
-##' @importFrom stringr str_extract_all
-##' @importFrom stringr str_split
-##' @export
-parseDeflines <- function (defline, species=FALSE)
-{
+
+is_empty <- function (x) length(x) == 0L || !nzchar(x)
+  
+
+#' Parse fasta definition lines
+#' 
+#' @param defline List or character vector of NCBI fasta deflines.
+#' @param species Parse out species designations.
+#' 
+#' @export
+parseDeflines <- function (defline, species=FALSE) {
   # first split into identifier and description at the first blank space
   x <- str_split_fixed(unlist(defline), " ", 2)
   id <- as.list(x[,1])
@@ -46,22 +50,22 @@ parseDeflines <- function (defline, species=FALSE)
     sp <- x[,2]
   }
   
-  ## parse identifier patterns
-  ## first we extract the database tags which always are 2 or 3 lowercase
-  ## letters followed by a pipe.
+  # parse identifier patterns
+  # first we extract the database tags which always are 2 or 3 lowercase
+  # letters followed by a pipe.
   db_pattern <- perl("([[:lower:]]{2,3})(?=\\|)")
   db_tag <- str_extract_all(unlist(id), db_pattern)
   db_tag[vapply(db_tag, isEmpty, logical(1))] <- "identifier"
   
-  ## next we split the identifier along the database tags
-  rmEmpty <- function (x) {
+  # next we split the identifier along the database tags
+  rm_empty <- function (x) {
     if (is.atomic(x)) x <- list(x)
     Map(function (x) x[nzchar(x)], x=x)
   }
   
   str_split_list <- function (string, pattern) {  
     Map( function (string, pattern) {
-      rmEmpty(str_split(string, paste(pattern, collapse="|")))[[1L]]
+      rm_empty(str_split(string, paste(pattern, collapse="|")))[[1L]]
     }, string=string, pattern=pattern, USE.NAMES=FALSE) 
   }
   
@@ -168,8 +172,7 @@ linebreak <- function (s, width=getOption("width") - 2, indent=0, offset=0,
                     linebreak(s=trailing_string, width=width, indent=0,
                               offset=offset, split=split, FORCE=FORCE, FULL_FORCE=FULL_FORCE))
       }
-    }
-    else
+    } else
       # if everything fits on one line go with the string
       s
   }, s, width, offset, abs(indent), indent_string, split, FORCE, FULL_FORCE,
@@ -187,16 +190,9 @@ blanks <- function(n) {
 }
 
 
-##' @importFrom stringr str_pad
 ##' @keywords internal
-wrapAln <- function (seq1,
-                     ..., 
-                     prefix=c(""),
-                     suffix=c(""),
-                     start=c(1),
-                     reverse=c(FALSE),
-                     sep=2)
-{
+wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
+                     start=c(1), reverse=c(FALSE), sep=2) {
   # seqs <- c(seq1, list(seq2, seq3))
   seqs <- c(seq1, list(...))
   lseqs <- vapply(seqs, nchar, numeric(1))
@@ -237,8 +233,8 @@ wrapAln <- function (seq1,
   seq_starts[reverse] <- tmp
   
   pasteAln <- function(prefix, seq_starts, s, seq_ends, suffix) {
-    seq_starts[is.empty(seq_starts)] <- ""
-    seq_ends[is.empty(seq_ends)] <- ""
+    seq_starts[is_empty(seq_starts)] <- ""
+    seq_ends[is_empty(seq_ends)] <- ""
     paste0(str_pad(prefix, pref_width, side="right"),
            blanks(sep),
            str_pad(as.character(seq_starts), aln_start_width, side="left"),
