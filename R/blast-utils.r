@@ -55,7 +55,7 @@ parseDeflines <- function (defline, species=FALSE) {
   # letters followed by a pipe.
   db_pattern <- perl("([[:lower:]]{2,3})(?=\\|)")
   db_tag <- str_extract_all(unlist(id), db_pattern)
-  db_tag[vapply(db_tag, isEmpty, logical(1))] <- "identifier"
+  db_tag[vapply(db_tag, is_empty, logical(1))] <- "identifier"
   
   # next we split the identifier along the database tags
   rm_empty <- function (x) {

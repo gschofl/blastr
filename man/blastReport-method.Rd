@@ -1,4 +1,4 @@
-\name{hits}
+\name{query}
 \alias{getAccn}
 \alias{getAccn-methods}
 \alias{getBitscore}
@@ -21,6 +21,8 @@
 \alias{getQuerySeq-methods}
 \alias{hits}
 \alias{hits-methods}
+\alias{query}
+\alias{query-methods}
 \title{Getter methods for blast records}
 \usage{
   getId(x, db="gi")
@@ -44,6 +46,10 @@
   getHitSeq(x)
 }
 \arguments{
+  \item{x}{A \code{\link{blastRecord-class}} object.}
+
+  \item{...}{Additional arguments}
+
   \item{x}{A \code{\link{blastRecord-class}} object.}
 
   \item{...}{Additional arguments}
@@ -105,6 +111,8 @@
   \code{\link[Biostrings]{DNAStringSet}}
 }
 \description{
+  Getter methods for blast records
+
   Getter methods for blast records
 
   Getter methods for blast records

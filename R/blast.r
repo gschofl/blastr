@@ -163,36 +163,40 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
   
   program <- match.arg(program)
   strand <- match.arg(strand)
-  
-  ### dealing with query
+  names
+  # dealing with query
   if (missing(query))
     return( blastr:::SysCall(program, help=TRUE, intern=FALSE) )
   
-  if (is(query, "XStringSet")) {
-    input <- paste0(">", names(query[1L]), "\n", toString(query[[1L]]))
+  if (is(query, "XStringSet") || is(query, "XString")) {
+    input <- setNames(paste0(">", names(query), "\n",
+                             as.character(query)),
+                      nm=names(query))      
     query <- NULL
-  }
-  else if (is(query, "XString")) {
-    input <- paste0(">", names(query[1L]), "\n", toString(query))
-    query <- NULL
-  }
-  else if (is.vector(query)) {
+  } else if (is.vector(query)) {
     if (!file.exists(query)) {
       input <- as.character(query)
+      if (is.null(names(input))) {
+        names(input) <- paste0("Query", seq_along(input))
+      }
+      
       query <- NULL
-    }
-    else {
+    } else {
       input <- NULL
       query <- query
     }
-  } 
-  else {
+  } else {
     stop(sprintf("Objects of class %s are not supported for query",
                  sQuote(class(query))))
   }
+ 
+  # set strand=NULL if blastp
+  if (program %in% c("blastp","blastp_short")) {
+    strand <- NULL
+  }
   
-  ## set a number of defaults different from the internal defaults of
-  ## the blast applications
+  # set a number of defaults different from the internal defaults of
+  # the blast applications
   if (missing(db)) {
     if (program == "blastn")
       db <- "nt"
@@ -215,8 +219,7 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
     num_descriptions <- max_hits
     num_alignments <- max_hits
     max_target_seqs <- NULL
-  }
-  else if (as.integer(outfmt) >= 5) {
+  } else if (as.integer(outfmt) >= 5) {
     num_descriptions <- NULL
     num_alignments <- NULL
     max_target_seqs <- max_hits
@@ -230,7 +233,7 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
                           num_alignments=num_alignments,
                           max_target_seqs=max_target_seqs,
                           strand=strand))
-  
+
   # remove stdin', 'stdout' from the arguments list
   stdin <- args[["stdin"]]
   args[["stdin"]] <- NULL
@@ -240,14 +243,30 @@ blast <- function (program = c("blastn", "blastp", "blastx", "tblastn", "tblastx
   # check if 'out' is specified, otherwise return results internally
   intern <- if (is.null(args[["out"]])) TRUE else FALSE
   
-  res <- blastr:::SysCall(exec=program, args=args,
-                          stdin=stdin, stdout=stdout,
-                          redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
-                          style="unix", show_cmd=show_cmd,
-                          intern=intern, input=input)
+  # loop over input
+  res <- list()
+  if (is.null(args$query) && !is.null(input)) {
+    for (i in seq_along(input)) {
+      cat("Blasting ", names(input[i]), " [", program, "]", "\n", sep="")
+      res[[i]] <- 
+        SysCall(exec=program, args=args,
+                stdin=stdin, stdout=stdout,
+                redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
+                style="unix", show_cmd=show_cmd,
+                intern=intern, input=input[[i]])
+      res[[i]] <- paste0(res[[i]], collapse="\n")
+    }
+  } else {
+    res[[1]] <- 
+      SysCall(exec=program, args=args,
+              stdin=stdin, stdout=stdout,
+              redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
+              style="unix", show_cmd=show_cmd,
+              intern=intern, input=NULL)
+    res[[1]] <- paste0(res[[1]], collapse="\n")
+  }
   
-  res <- paste(res, collapse="\n")
-  return( res )
+  return(res)
 }
 
 ##' Wrapper for the NCBI Nucleotide-Nucleotide BLAST

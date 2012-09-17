@@ -1,6 +1,23 @@
 
 # Blast-Getters -------------------------------------------------------------
 
+# query ============================
+#
+#' Getter methods for blast records
+#' 
+#' @param x A \code{\link{blastRecord-class}} object.
+#' @param ... Additional arguments
+#' 
+#' @rdname blastReport-method
+#' @docType methods
+#' @export
+setGeneric("query", function (x, ...) standardGeneric("query"))
+
+
+##' @export
+setMethod("query", "blastReport", function (x) x@query)
+
+
 ## hits ============================
 ##
 ##' Getter methods for blast records
