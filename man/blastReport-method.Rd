@@ -21,10 +21,13 @@
 \alias{getQuerySeq-methods}
 \alias{hits}
 \alias{hits-methods}
+\alias{index,blastReport-method}
 \alias{query}
 \alias{query-methods}
 \title{Getter methods for blast records}
 \usage{
+  \S4method{index}{blastReport}(x, attributes = FALSE, ...)
+
   getId(x, db="gi")
 
   getDesc(x)
@@ -46,16 +49,21 @@
   getHitSeq(x)
 }
 \arguments{
-  \item{x}{A \code{\link{blastRecord-class}} object.}
+  \item{x}{A \code{\linkS4class{blastRecord}} object.}
 
   \item{...}{Additional arguments}
 
-  \item{x}{A \code{\link{blastRecord-class}} object.}
+  \item{x}{A \code{\linkS4class{blastRecord}} object.}
+
+  \item{attributes}{Include definition as a name
+  attribute.}
+
+  \item{x}{A \code{\linkS4class{blastRecord}} object.}
 
   \item{...}{Additional arguments}
 
-  \item{x}{A \code{\link{blastReport-class}} or
-  \code{\link{hit-class}} object.}
+  \item{x}{A \code{\linkS4class{blastRecord}} or
+  \code{\linkS4class{hit}} object.}
 
   \item{db}{Database tag (e.g.: 'gi', 'gb', 'emb', 'ref',
   'gnl', ...)}
@@ -111,6 +119,8 @@
   \code{\link[Biostrings]{DNAStringSet}}
 }
 \description{
+  Getter methods for blast records
+
   Getter methods for blast records
 
   Getter methods for blast records

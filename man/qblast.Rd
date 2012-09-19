@@ -2,11 +2,10 @@
 \alias{qblast}
 \title{Do a BLAST search using the QBLAST URL API}
 \usage{
-  qblast(query,
-    program = c("megablast", "blastn", "blastp", "rpsblast", "blastx", "tblastn", "tblastx"),
-    db = "nr", outfmt = c("xml", "tabular", "html"),
-    max_hits = 20, entrez_query = "", evalue = 10, ...,
-    .params = list(), display = FALSE, update_time = 4)
+  qblast(query, program = "megablast", db = "nr",
+    outfmt = "xml", max_hits = 20, entrez_query = "",
+    evalue = 10, ..., .params = list(), display = FALSE,
+    update_time = 4)
 }
 \arguments{
   \item{query}{An accession number, a gi, or a fasta

@@ -1,20 +1,20 @@
 
 # blast-parser -----------------------------------------------------------
 
-##' @include blast-utils.r
-##' @include blast-classes.r
+#' @include blast-utils.r
+#' @include blast-classes.r
 NULL
 
-##' Parse xml blast output
-##' 
-##' @param blast_output Blast output in XML format
-##' (File or character vector) 
-##' 
-##' @return A \code{\link{blastReport-class}} object.
-##' 
-##' @importFrom Biostrings BStringSet
-##' @importFrom Biostrings BString
-##' @export
+#' Parse xml blast output
+#' 
+#' @param blast_output Blast output in XML format
+#' (File or character vector) 
+#' 
+#' @return A \code{\link{blastReport-class}} object.
+#' 
+#' @importFrom Biostrings BStringSet
+#' @importFrom Biostrings BString
+#' @export
 parseBlastXml <- function (blast_output) {
   res <- list()
   for (blout in blast_output) {
@@ -31,7 +31,7 @@ parseBlastXml <- function (blast_output) {
     qdef <- xpathSApply(doc, "//Iteration_query-def", xmlValue)
     qlen <- xpathSApply(doc, "//Iteration_query-len", xmlValue)
     qseq <- xpathSApply(doc, "//Iteration_query-seq", xmlValue) # optional
-    query <- merge(qid[[1L]], list(
+    query <- merge_list(qid[[1L]], list(
       def=qdef,
       len=as.integer(qlen),
       seq=if (length(qseq) > 0L) BString(qseq) else NULL
@@ -93,7 +93,7 @@ parseBlastXml <- function (blast_output) {
       ## parse hits
       id <- paste(xpathSApply(hit, "//Hit_id", xmlValue),
                   xpathSApply(hit, "//Hit_def", xmlValue))
-      id <- parseDeflines(defline=str_split(id, " >")[[1L]])
+      id <- parseDeflines(defline=strsplit(id, " >")[[1L]])
       hit_obj <- .hit(num=as.integer(xpathSApply(hit, "//Hit_num", xmlValue)),
                       id=id$id,
                       desc=id$desc,
@@ -114,14 +114,14 @@ parseBlastXml <- function (blast_output) {
   return(res)
 }
 
-##' read a blast hit table
-##' 
-##' @param blast_output Blast output in XML format
-##' (File or character vector)
-##' 
-##' @return A \code{\link{blastReport-class}} object.
-##' 
-##' @export
+#' read a blast hit table
+#' 
+#' @param blast_output Blast output in XML format
+#' (File or character vector)
+#' 
+#' @return A \code{\link{blastReport-class}} object.
+#' 
+#' @export
 parseBlastTabular <- function (blast_output) {
   res <- list()
   for (blout in blast_output) {

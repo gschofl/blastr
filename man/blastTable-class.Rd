@@ -1,16 +1,16 @@
 \name{blastTable-class}
-\alias{[,blastReport-method}
-\alias{[[,blastReport-method}
-\alias{$,blastReport-method}
+\alias{$,blastTable-method}
+\alias{[,blastTable-method}
+\alias{[[,blastTable-method}
 \alias{blastTable-class}
-\alias{names,blastReport-method}
-\alias{show,blastReport-method}
+\alias{names,blastTable-method}
+\alias{show,blastTable-method}
 \title{blastTable class}
 \usage{
   .blastTable(...)
 }
 \arguments{
-  \item{...}{Slots for 'blastTable' objects.}
+  \item{...}{Slots for \sQuote{blastTable} instances.}
 }
 \description{
   blastTable is an S4 class that provides a container for

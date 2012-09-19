@@ -1,7 +1,18 @@
+#' @import rmisc
 #' @import XML
-#' @import stringr
-#' @import biofiles
-#' 
+#' @importFrom RCurl getForm
+#' @importFrom biofiles sequence
+#' @importFrom biofiles strand
+#' @importFrom biofiles index
+#' @importFrom biofiles qualif
+#' @importFrom stringr str_split_fixed
+#' @importFrom stringr str_extract_all
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_match
+#' @importFrom stringr perl
+#' @importFrom Biostrings translate
+#' @importFrom Biostrings reverseComplement
+#' @importFrom Biostrings BStringSet
 NULL
 
 #' display a html file in a browser
@@ -29,15 +40,30 @@ displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE) {
 }
 
 
-is_empty <- function (x) length(x) == 0L || !nzchar(x)
-  
+#' @keywords internal
+.escape <- function (s, httpPOST=FALSE) {
+  if (httpPOST) {
+    s <- gsub("\\s+", " ", s)
+    s <- gsub("+", " ", s, fixed=TRUE)
+  } else {
+    s <- gsub("\\s+", "\\+", s)
+  }
+  s <- paste(strsplit(s, '\"', fixed=TRUE)[[1L]], collapse="%22")
+  s <- gsub(">", "%3E", s)
+  s <- gsub("\\n", "%0D%0A", s)
+  s <- gsub("\\|", "%7C", s)
+  s <- gsub("\\#", "%23", s)
+  s <- gsub("\\+(and)\\+|\\+(or)\\+|\\+(not)\\+","\\+\\U\\1\\U\\2\\U\\3\\+", s, perl=TRUE)
+  s
+}
+
 
 #' Parse fasta definition lines
 #' 
 #' @param defline List or character vector of NCBI fasta deflines.
 #' @param species Parse out species designations.
 #' 
-#' @export
+#' @keywords internal
 parseDeflines <- function (defline, species=FALSE) {
   # first split into identifier and description at the first blank space
   x <- str_split_fixed(unlist(defline), " ", 2)
@@ -65,10 +91,9 @@ parseDeflines <- function (defline, species=FALSE) {
   
   str_split_list <- function (string, pattern) {  
     Map( function (string, pattern) {
-      rm_empty(str_split(string, paste(pattern, collapse="|")))[[1L]]
+      rm_empty(strsplit(string, paste(pattern, collapse="|")))[[1L]]
     }, string=string, pattern=pattern, USE.NAMES=FALSE) 
   }
-  
   
   ids <- str_split_list(id, db_tag)
   id_list <- list()
@@ -83,6 +108,13 @@ parseDeflines <- function (defline, species=FALSE) {
   }
 }
 
+
+#' deparse NCBI fasta definition lines
+#' 
+#' @param ids List of identifiers.
+#' @param descs List of description lines.
+#' 
+#' @keywords internal
 deparseDeflines <- function(ids, descs) {
 
   deflines <- list()
@@ -97,100 +129,80 @@ deparseDeflines <- function(ids, descs) {
   return(deflines)
 }
 
-##' Format paragraphs
-##' 
-##' Similar to \code{\link{strwrap}} but returns a single string with
-##' linefeeds inserted
-##' 
-##' @param s a character vector or a list of character vectors
-##' @param width a positive integer giving the column for inserting
-##' linefeeds
-##' @param indent an integer giving the indentation of the first line of
-##' the paragraph; negative values of \code{indent} are allowed and reduce
-##' the width for the first line by that value.
-##' @param offset a non-negative integer giving the indentation of all
-##' but the first line
-##' @param split regular expression used for splitting. Defaults to
-##' a whitespace character.
-##' @param FORCE if \code{TRUE} words are force split if the available width
-##' is too small.
-##' @param FULL_FORCE Always split at the specified position.
-##' 
-##' @return a character vector
-##' @keywords internal
-linebreak <- function (s, width=getOption("width") - 2, indent=0, offset=0,
-                       split=" ", FORCE=FALSE, FULL_FORCE=FALSE) {
-  if (!is.character(s)) 
-    s <- as.character(s)
-  
-  if (length(s) == 0L)
-    return("")
-  
-  # set indent string to "" if a negative value is given
-  # this lets us shrink the available width for the first line by that value
-  indent_string <- blanks(ifelse(indent < 0, 0, indent))
-  offset_string <- paste0("\n", blanks(offset))
-  
-  s <- mapply(function (s, width, offset, indent, indent_string, split, FORCE, FULL_FORCE) {
-    # remove leading and trailing blanks
-    # convert newlines, tabs, spaces to " "
-    # find first position where 'split' applies
-    if (!FULL_FORCE) {
-      s <- gsub("[[:space:]]+", " ", gsub("^[[:blank:]]+|[[:blank:]]+$", "", s), perl=TRUE)
+
+#' Construct deflines
+#' @keywords internal
+make_deflines <- function (x, prefix = "lcl") {
+  if (is(x, "gbFeature") || is(x, "gbFeatureList")) {
+    id <- paste0(prefix, "|", index(x))
+    desc <- paste0(unlist(qualif(x, "locus_tag")),
+                   " [", unlist(qualif(x, "product")), "]")
+    parse_defline <- TRUE
+  } else if (is(x, "XStringSet")) {
+    # test if the XStrings follow the naming convention
+    # from biofiles: accn.key.idx
+    p <- "[[:alnum:]]+\\.[[:alnum:]]+\\.[[:digit:]]+"
+    n <- names(x)
+    if (!is.null(n) && all(grepl(p, n))) {
+      sp <- vapply(n, function (x) strsplit(x, "\\.")[[1L]], character(3))
+      id <- paste0(prefix, "|", sp[3L, ])
+      desc <- paste0(sp[1L, ], " [", sp[2L, ], "]")
+      parse_defline <- TRUE
+    } else {
+      id <- names(x)
+      desc <- NULL
+      parse_defline <- FALSE
     }
-    fws <- regexpr(split, s, perl=TRUE)
-    if (offset + indent + nchar(s) > width) {
-      # if not everything fits on one line
-      if (FULL_FORCE ||
-        (fws == -1 || fws >= (width - offset - indent)) && FORCE) {
-        # if no whitespace or first word too long and force break
-        # cut through the middle of a word
-        pat1 <- paste0("^.{", width - offset - indent, "}(?=.+)")
-        pat2 <- paste0("(?<=^.{", width - offset - indent, "}).+")
-        leading_string <- regmatches(s, regexpr(pat1, s, perl=TRUE))
-        trailing_string <- regmatches(s, regexpr(pat2, s, perl=TRUE)) 
-        s <- paste0(indent_string, leading_string, offset_string,
-                    linebreak(s=trailing_string, width=width, indent=0,
-                              offset=offset, split=split, FORCE=FORCE,
-                              FULL_FORCE=FULL_FORCE))
-      } 
-      else if ((fws == -1 || fws >= (width - offset + indent)) && !FORCE) {
-        # if no whitespace or first word too long and NO force break
-        # stop right here
-        stop("Can't break in the middle of a word. Use the force!")
-      }
-      else {
-        # break the line
-        s_split <- unlist(strsplit(s, split))
-        s_cum <- cumsum(nchar(s_split) + 1)
-        leading_string <- 
-          paste0(s_split[s_cum < width - offset - indent],
-                 ifelse(split == " ", "", split), collapse=split)
-        trailing_string <- 
-          paste0(s_split[s_cum >= width - offset - indent], collapse=split)
-        s <- paste0(indent_string, leading_string, offset_string,
-                    linebreak(s=trailing_string, width=width, indent=0,
-                              offset=offset, split=split, FORCE=FORCE, FULL_FORCE=FULL_FORCE))
-      }
-    } else
-      # if everything fits on one line go with the string
-      s
-  }, s, width, offset, abs(indent), indent_string, split, FORCE, FULL_FORCE,
-              SIMPLIFY=FALSE, USE.NAMES=FALSE)
-  unlist(s)
+  } else {
+    id <- names(x)
+    desc <- NULL
+    parse_defline <- FALSE
+    
+  }
+  
+  list(defline=paste(id, desc), parse_defline=parse_defline)
 }
 
 
-##' create blank strings with a given number of characters
-##' @seealso Examples for \code{\link{regmatches}}
-##' @keywords internal
-blanks <- function(n) {
-  vapply(Map(rep.int, rep.int(" ", length(n)), n, USE.NAMES=FALSE),
-         paste, "", collapse="")
+#' @keywords internal
+make_blast_query <- function (x, transl = FALSE) {
+  
+  if (is.vector(x) && file.exists(x)) {
+    return( list(query=x, input=NULL, parse_defline=FALSE) )
+  }
+  
+  if (is(x, "gbFeatureList") || is(x, "gbFeature")) {
+    seq <- biofiles::sequence(x)
+  } else if (is(x, "XString") || is(x, "XStringSet")) {
+    seq <- as(x, "XStringSet")
+  } else if (is.vector(x) && !all(file.exists(x))) {
+    seq <- x
+  } else {
+    stop(sprintf("Objects of class %s are not supported as query",
+                 sQuote(class(query))))
+  }
+  
+  seqnames <- make_deflines(x, prefix="lcl")
+  
+  if (length(seqnames$defline) == 0) {
+    seqnames$defline <- paste0("Query_", seq_along(seq))
+  }
+  
+  if (transl && class(x) %in% c("gbFeature","gbFeatureList")) {
+    plus <- biofiles::strand(x) == 1
+    minus <- !plus
+    seq <- c(translate(reverseComplement(seq[minus])), translate(seq[plus]))
+    seqnames$defline <- c(seqnames$defline[minus], seqnames$defline[plus])
+  }
+  
+  input <- setNames(paste0(">", seqnames$defline, "\n", as.character(seq)),
+                    nm=seqnames$defline)
+  
+  list(query=NULL, input=input, parse_deflines=seqnames$parse_defline) 
 }
 
 
-##' @keywords internal
+#' @keywords internal
 wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
                      start=c(1), reverse=c(FALSE), sep=2) {
   # seqs <- c(seq1, list(seq2, seq3))
@@ -207,7 +219,7 @@ wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   
   # break up sequences  
   s <- linebreak(seqs, getOption("width") - offset, FULL_FORCE=TRUE)
-  s <- str_split(s, "\n")  
+  s <- strsplit(s, "\n")  
   seq_widths <- nchar(s[[1L]])
   max_seq_width <- max(seq_widths)
   
@@ -235,15 +247,11 @@ wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   pasteAln <- function(prefix, seq_starts, s, seq_ends, suffix) {
     seq_starts[is_empty(seq_starts)] <- ""
     seq_ends[is_empty(seq_ends)] <- ""
-    paste0(str_pad(prefix, pref_width, side="right"),
-           blanks(sep),
-           str_pad(as.character(seq_starts), aln_start_width, side="left"),
-           blanks(1),
-           str_pad(s, max_seq_width, side="right"),
-           blanks(1),
-           str_pad(as.character(seq_ends), aln_start_width, side="left"),
-           blanks(sep),
-           str_pad(suffix, suf_width, side="right"))
+    paste0(pad(prefix, pref_width, "right"), blanks(sep),
+           pad(seq_starts, aln_start_width, "left"), blanks(1),
+           pad(s, max_seq_width, "right"), blanks(1),
+           pad(seq_ends, aln_start_width, "left"), blanks(sep),
+           pad(suffix, suf_width, "right"))
   }
   
   s <- mapply(pasteAln, prefix=prefix, seq_starts=seq_starts, s=s,
@@ -254,6 +262,4 @@ wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
               collapse="\n\n")
   s
 }
-
-
 

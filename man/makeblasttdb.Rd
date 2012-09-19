@@ -2,9 +2,8 @@
 \alias{makeblasttdb}
 \title{Wrapper for NCBI makeblastdb}
 \usage{
-  makeblasttdb(input_file,
-    input_type = c("fasta", "blastdb", "asn1_bin", "asn1_txt"),
-    dbtype = c("nucl", "prot"), ..., show_log = TRUE,
+  makeblasttdb(input_file, input_type = "fasta",
+    dbtype = "nucl", ..., show_log = TRUE,
     show_cmd = FALSE)
 }
 \arguments{
@@ -14,7 +13,8 @@
 
   \item{input_type}{Type of data specified in input file.}
 
-  \item{dbtype}{Molecule type of target db.}
+  \item{dbtype}{Molecule type of target db. (\sQuote{nucl}
+  or \sQuote{prot})}
 
   \item{...}{further arguments passed to makeblastdb.}
 

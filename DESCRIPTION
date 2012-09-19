@@ -13,6 +13,8 @@ Depends:
     R (>= 2.15),
     methods
 Imports:
+    rmisc,
+    biofiles,
     XML,
     RCurl,
     stringr,

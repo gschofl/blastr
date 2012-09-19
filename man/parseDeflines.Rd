@@ -13,4 +13,5 @@
 \description{
   Parse fasta definition lines
 }
+\keyword{internal}
 

@@ -2,10 +2,9 @@
 \alias{blast}
 \title{Wrapper for the new NCBI BLAST+ tools}
 \usage{
-  blast(program = c("blastn", "blastp", "blastx", "tblastn", "tblastx"),
-    query, db, outfmt, max_hits,
-    strand = c("both", "plus", "minus"), ...,
-    intern = FALSE, input = NULL, show_cmd = FALSE)
+  blast(program = "blastn", query, db, outfmt, max_hits,
+    strand = "both", ..., intern = FALSE, input = NULL,
+    show_cmd = FALSE)
 }
 \arguments{
   \item{program}{One of blastn, blastp, blastx, tblastn, or

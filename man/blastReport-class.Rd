@@ -1,17 +1,16 @@
 \name{blastReport-class}
 \alias{blastReport-class}
-\alias{hits,blastReport-method}
 \alias{show,blastReport-method}
 \title{blastReport class}
 \usage{
   .blastReport(...)
 }
 \arguments{
-  \item{...}{Slots for \sQuote{blastReport} objects.}
+  \item{...}{Slots for \sQuote{blastReport} instances.}
 }
 \description{
   blastReport is an S4 class that provides a container for
-  data retrived by calls to the NCBI Blast utility.
+  data retrieved by calls to the NCBI Blast utility.
 }
 \details{
   blastReport objects have eleven slots: \describe{
