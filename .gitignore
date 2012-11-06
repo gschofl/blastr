@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+*.Rproj
+data/
+doc/
+inst/
+scripts/
+test/
+scratch.r
+

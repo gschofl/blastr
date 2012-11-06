@@ -1,5 +1,5 @@
 Package: blastr
-Version: 0.0-1
+Version: 0.0-2
 Date: 2012-07-30
 Type: Package
 Title: A wrapper arpound NCBI Blast.
@@ -18,7 +18,8 @@ Imports:
     XML,
     RCurl,
     stringr,
-    Biostrings
+    Biostrings,
+    ape
 Collate:
     'blast-utils.r'
     'blast-classes.r'
@@ -26,3 +27,4 @@ Collate:
     'blast-parser.r'
     'blast.r'
     'package.r'
+    'utils.r'
