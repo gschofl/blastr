@@ -64,6 +64,9 @@ displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE) {
 #' @param species Parse out species designations.
 #' 
 #' @keywords internal
+#' @importFrom stringr str_split_fixed
+#' @importFrom stringr str_extract_all
+#' @importFrom stringr perl
 parseDeflines <- function (defline, species=FALSE) {
   # first split into identifier and description at the first blank space
   x <- str_split_fixed(unlist(defline), " ", 2)
@@ -81,8 +84,8 @@ parseDeflines <- function (defline, species=FALSE) {
   # letters followed by a pipe.
   db_pattern <- perl("([[:lower:]]{2,3})(?=\\|)")
   db_tag <- str_extract_all(unlist(id), db_pattern)
-  db_tag[vapply(db_tag, is_empty, logical(1))] <- "identifier"
-  
+  db_tag[vapply(db_tag, all_empty, logical(1))] <- "identifier"
+
   # next we split the identifier along the database tags
   rm_empty <- function (x) {
     if (is.atomic(x)) x <- list(x)

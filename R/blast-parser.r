@@ -14,46 +14,41 @@ NULL
 #' 
 #' @importFrom Biostrings BStringSet
 #' @importFrom Biostrings BString
+#' @importFrom rmisc xvalue
+#' @importFrom rmisc xname
 #' @export
 parseBlastXml <- function (blast_output) {
   res <- list()
+#   blout <- blast_output[[1]]
   for (blout in blast_output) {
     doc <- xmlRoot(xmlParse(blout))
-    program <- xpathSApply(doc, "//BlastOutput_program", xmlValue)
-    version <- xpathSApply(doc, "//BlastOutput_version", xmlValue)
-    reference <- xpathSApply(doc, "//BlastOutput_reference", xmlValue)
-    db <- xpathSApply(doc, "//BlastOutput_db", xmlValue)
-    iter_num <- as.integer(xpathSApply(doc, "//BlastOutput_iter-num", xmlValue))
-    message <- as.character(xpathSApply(doc, "//BlastOutput_message", xmlValue))
+    program <- xvalue(doc, '//BlastOutput_program')
+    version <- xvalue(doc, '//BlastOutput_version')
+    reference <- xvalue(doc, '//BlastOutput_reference')
+    db <- xvalue(doc, '//BlastOutput_db')
+    iter_num <- xvalue(doc, '//BlastOutput_iter-num', as="integer")
+    message <- xvalue(doc, '//BlastOutput_message')
     
     # BlastOutput_query
-    qid <- parseDeflines(xpathSApply(doc, "//Iteration_query-ID", xmlValue))$id
-    qdef <- xpathSApply(doc, "//Iteration_query-def", xmlValue)
-    qlen <- xpathSApply(doc, "//Iteration_query-len", xmlValue)
-    qseq <- xpathSApply(doc, "//Iteration_query-seq", xmlValue) # optional
+    qid <- parseDeflines(xvalue(doc, '//Iteration_query-ID'))[["id"]]
+    qdef <- xvalue(doc, '//Iteration_query-def')
+    qlen <- xvalue(doc, '//Iteration_query-len', as='integer')
+    qseq <- xvalue(doc, '//Iteration_query-seq') # optional
     query <- merge_list(qid[[1L]], list(
       def=qdef,
-      len=as.integer(qlen),
-      seq=if (length(qseq) > 0L) BString(qseq) else NULL
+      len=qlen,
+      seq=if (not.na(qseq)) BString(qseq) else NULL
     ))
     
     # BlastOutput/BlastOutput_param/Parameters
-    params <- xpathApply(doc, "//Parameters/*", xmlValue)
-    names(params) <-
-      gsub("-", "_", 
-           sapply(xpathApply(doc, "//Parameters/*", xmlName), function (x) {
-             strsplit(x, "_")[[1L]][2L]
-           }))
+    params <- as.list(setNames(xvalue(doc, '//Parameters/*'),
+                               gsub("-", "_", strsplitN(xname(doc, '//Parameters/*'),
+                                                        "_", 2))))
     
     ## BlastOutput/BlastOutput_Iterations//Statistics
-    stats <- xpathApply(doc, "//Statistics/*", function (x) {
-      as.numeric(xmlValue(x))
-    })
-    names(stats) <-
-      gsub("-", "_", 
-           sapply(xpathApply(doc, "//Statistics/*", xmlName), function (x) {
-             strsplit(x, "_")[[1L]][2L]
-           }))
+    stats <- as.list(setNames(xvalue(doc, '//Statistics/*', as='numeric'),
+                              gsub("-", "_", strsplitN(xname(doc, '//Statistics/*'),
+                                                       "_", 2))))
     
     ## Hits
     hits <- getNodeSet(doc, "//Hit")
@@ -61,45 +56,44 @@ parseBlastXml <- function (blast_output) {
     for (i in seq_along(hits)) {
       hit <- xmlDoc(hits[[i]]) 
       ## parse HSPs
-      hsp_obj <- .hsp(num=as.integer(xpathSApply(hit, "//Hsp_num", xmlValue)),
-                      bit_score=as.numeric(xpathSApply(hit, "//Hsp_bit-score", xmlValue)),
-                      score=as.integer(xpathSApply(hit, "//Hsp_score", xmlValue)),
-                      evalue=as.numeric(xpathSApply(hit, "//Hsp_evalue", xmlValue)),
-                      query_from=as.integer(xpathSApply(hit, "//Hsp_query-from", xmlValue)),
-                      query_to=as.integer(xpathSApply(hit, "//Hsp_query-to", xmlValue)),
-                      hit_from=as.integer(xpathSApply(hit, "//Hsp_hit-from", xmlValue)),
-                      hit_to=as.integer(xpathSApply(hit, "//Hsp_hit-to", xmlValue)),
-                      pattern_from=as.integer(xpathSApply(hit, "//Hsp_pattern-from", xmlValue)),
-                      pattern_to=as.integer(xpathSApply(hit, "//Hsp_pattern-to", xmlValue)),
-                      query_frame=as.integer(xpathSApply(hit, "//Hsp_query-frame", xmlValue)),
-                      hit_frame=as.integer(xpathSApply(hit, "//Hsp_hit-frame", xmlValue)),
-                      identity=as.integer(xpathSApply(hit, "//Hsp_identity", xmlValue)),
-                      positive=as.integer(xpathSApply(hit, "//Hsp_positive", xmlValue)),
-                      gaps=as.integer(xpathSApply(hit, "//Hsp_gaps", xmlValue)),
-                      density=as.numeric(xpathSApply(hit, "//Hsp_density", xmlValue)),
-                      align_len=as.integer(xpathSApply(hit, "//Hsp_align-len", xmlValue)),
-                      qseq={
-                        qseq <- BStringSet(xpathSApply(hit, "//Hsp_qseq", xmlValue))
-                        names(qseq) <- paste0("hsp", xpathSApply(hit, "//Hsp_num", xmlValue))
-                        qseq}, 
-                      hseq={
-                        hseq <- BStringSet(xpathSApply(hit, "//Hsp_hseq", xmlValue))
-                        names(hseq) <- paste0("hsp", xpathSApply(hit, "//Hsp_num", xmlValue))
-                        hseq},
-                      midline=as.character(xpathSApply(hit, "//Hsp_midline", xmlValue)),
-                      percent_identity=as.numeric(xpathSApply(hit, "//Hsp_percent-identity", xmlValue)),
-                      mismatch_count=as.integer(xpathSApply(hit, "//Hsp_mismatch-count", xmlValue)))
+      hsp_obj <- .hsp(num = xvalue(hit, '//Hsp_num', as='integer'),
+                      bit_score = xvalue(hit, '//Hsp_bit-score', as='numeric'),
+                      score = xvalue(hit, "//Hsp_score", as='integer'),
+                      evalue = xvalue(hit, "//Hsp_evalue",, as='numeric'),
+                      query_from = xvalue(hit, "//Hsp_query-from", as='integer'),
+                      query_to = xvalue(hit, "//Hsp_query-to", as='integer'),
+                      hit_from = xvalue(hit, "//Hsp_hit-from", as='integer'),
+                      hit_to = xvalue(hit, "//Hsp_hit-to", as='integer'),
+                      pattern_from = xvalue(hit, "//Hsp_pattern-from", as='integer'),
+                      pattern_to = xvalue(hit, "//Hsp_pattern-to", as='integer'),
+                      query_frame = xvalue(hit, "//Hsp_query-frame", as='integer'),
+                      hit_frame = xvalue(hit, "//Hsp_hit-frame", as='integer'),
+                      identity = xvalue(hit, "//Hsp_identity", as='integer'),
+                      positive = xvalue(hit, "//Hsp_positive", as='integer'),
+                      gaps = xvalue(hit, "//Hsp_gaps", as='integer'),
+                      density = xvalue(hit, "//Hsp_density", as='numeric'),
+                      align_len = xvalue(hit, "//Hsp_align-len", as='integer'),
+                      qseq = {
+                        qseq <- BStringSet(xvalue(hit, "//Hsp_qseq"))
+                        names(qseq) <- paste0("hsp", xvalue(hit, "//Hsp_num"))
+                        qseq }, 
+                      hseq = {
+                        hseq <- BStringSet(xvalue(hit, "//Hsp_hseq"))
+                        names(hseq) <- paste0("hsp", xvalue(hit, "//Hsp_num"))
+                        hseq },
+                      midline = xvalue(hit, "//Hsp_midline"),
+                      percent_identity = xvalue(hit, "//Hsp_percent-identity", as='numeric'),
+                      mismatch_count = xvalue(hit, "//Hsp_mismatch-count", as='integer'))
       
       ## parse hits
-      id <- paste(xpathSApply(hit, "//Hit_id", xmlValue),
-                  xpathSApply(hit, "//Hit_def", xmlValue))
+      id <- paste(xvalue(hit, "//Hit_id"), xvalue(hit, "//Hit_def"))
       id <- parseDeflines(defline=strsplit(id, " >")[[1L]])
-      hit_obj <- .hit(num=as.integer(xpathSApply(hit, "//Hit_num", xmlValue)),
-                      id=id$id,
-                      desc=id$desc,
-                      accn=as.character(xpathSApply(hit, "//Hit_accession", xmlValue)),
-                      len=as.integer(xpathSApply(hit, "//Hit_len", xmlValue)),
-                      hsp=hsp_obj)
+      hit_obj <- .hit(num = xvalue(hit, "//Hit_num", as='integer'),
+                      id = id$id,
+                      desc = id$desc,
+                      accn = xvalue(hit, "//Hit_accession"),
+                      len = xvalue(hit, "//Hit_len",as='integer'),
+                      hsp = hsp_obj)
       
       hit_list[[i]] <- hit_obj
     }
@@ -174,7 +168,7 @@ parseBlastTabular <- function (blast_output) {
   neg_log_evalue <- with(hit_table, -log(as.numeric(evalue)))
   neg_log_evalue[is.infinite(neg_log_evalue)] <- -log(1e-323)
   
-  if (!is.null(comStr) && length(comStr) == 5) {
+  if (not.null(comStr) && length(comStr) == 5) {
     program <- comStr[1]
     query <- str_split_fixed(comStr[2], "Query: ", 2)[,2]
     db <- str_split_fixed(comStr[3], "Database: ", 2)[,2]
