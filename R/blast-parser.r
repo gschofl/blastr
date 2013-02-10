@@ -14,8 +14,6 @@ NULL
 #' 
 #' @importFrom Biostrings BStringSet
 #' @importFrom Biostrings BString
-#' @importFrom rmisc xvalue
-#' @importFrom rmisc xname
 #' @export
 parseBlastXml <- function (blast_output) {
   res <- list()
