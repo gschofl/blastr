@@ -6,9 +6,6 @@
 \alias{names,blastTable-method}
 \alias{show,blastTable-method}
 \title{blastTable class}
-\usage{
-  .blastTable(...)
-}
 \arguments{
   \item{...}{Slots for \sQuote{blastTable} instances.}
 }

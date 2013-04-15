@@ -14,11 +14,12 @@ Depends:
     methods
 Imports:
     rmisc,
+    IRanges,
+    Biostrings,
     biofiles,
     XML,
     RCurl,
     stringr,
-    Biostrings,
     ape
 Collate:
     'blast-utils.r'

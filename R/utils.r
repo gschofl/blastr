@@ -24,6 +24,7 @@ setAs("DNAbin", "DNAStringSet", function (from) {
   to
 })
 
+
 setAs("DNAbin", "DNAMultipleAlignment", function (from) {
   tmp <- tempfile()
   on.exit(unlink(tmp))

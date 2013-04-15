@@ -1,5 +1,12 @@
 #' @include blast-utils.r
 #' @include blast-classes.r
+#' @importFrom RCurl getForm
+#' @importFrom XML htmlParse
+#' @importFrom rmisc SysCall
+#' @importFrom rmisc Curry
+#' @importFrom rmisc merge_list
+#' @importFrom Biostrings toString
+#' @importFrom stringr str_match
 NULL
 
 
@@ -119,7 +126,7 @@ blast <- function (program = 'blastn', query, db, outfmt, max_hits,
     num_alignments <- NULL
     max_target_seqs <- max_hits
   }
-  
+ 
   args <- merge_list(list(...),
                      list(query=query,
                           db=db,
@@ -504,10 +511,9 @@ qblast <- function(query, program = 'megablast', db = 'nr', outfmt = 'xml',
   names(.params) <- toupper(names(.params)) 
   base_url <- "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi"   
   response <- getForm(base_url, .params=.params, style="post")
-  
   # parse out the request id and the estimated time to completion
-  xpath <- "/descendant::comment()[contains(.,'RID =')]"
-  r <- xpathSApply(htmlParse(response), xpath, xmlValue)
+  r <- xvalue(htmlParse(response),
+              "/descendant::comment()[contains(.,'RID =')]")
   rid <- str_match(r, "RID = (.[^(\n)]*)")[,2]
   
   # poll for results
@@ -519,10 +525,9 @@ qblast <- function(query, program = 'megablast', db = 'nr', outfmt = 'xml',
                         RID=rid,
                         FORMAT_OBJECT="SearchInfo",
                         CMD="Get",
-                        style="post")
-    
-    xpath <- "/descendant::comment()[contains(.,'Status=')]"
-    status <- xpathSApply(htmlParse(response), xpath, xmlValue)
+                        style="post") 
+    status <- xvalue(htmlParse(response),
+                     "/descendant::comment()[contains(.,'Status=')]")
     status <- str_match(status, "Status=(.[^(\n)]*)")[,2]
     cat(sprintf("Status: %s\n", status))
     
@@ -539,8 +544,8 @@ qblast <- function(query, program = 'megablast', db = 'nr', outfmt = 'xml',
     }
     
     if (status == "READY") {
-      xpath <- "/descendant::comment()[contains(.,'ThereAreHits=')]"
-      there_are_hits <- xpathSApply(htmlParse(response), xpath, xmlValue)
+      there_are_hits <- xvalue(htmlParse(response),
+                               "/descendant::comment()[contains(.,'ThereAreHits=')]")
       there_are_hits <- str_match(there_are_hits, "ThereAreHits=(.[^(\n)]*)")[,2]
       if (there_are_hits == "yes") {
         break
@@ -572,7 +577,7 @@ qblast <- function(query, program = 'megablast', db = 'nr', outfmt = 'xml',
   }
   else if (outfmt == "tabular") {
     if (display) displayHTML(response)
-    response <- xpathApply(htmlParse(response), "//pre", xmlValue)[[1L]]
+    response <- xvalue(htmlParse(response), "//pre")
     return(response)
   }
   else if (outfmt == "xml") {

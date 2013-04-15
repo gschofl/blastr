@@ -1,10 +1,9 @@
-#' @import rmisc
-#' @import XML
-#' @importFrom RCurl getForm
 #' @importFrom biofiles sequence
 #' @importFrom biofiles strand
 #' @importFrom biofiles index
 #' @importFrom biofiles qualif
+#' @importFrom rmisc linebreak
+#' @importFrom rmisc pad
 #' @importFrom stringr str_split_fixed
 #' @importFrom stringr str_extract_all
 #' @importFrom stringr str_detect
@@ -14,6 +13,7 @@
 #' @importFrom Biostrings reverseComplement
 #' @importFrom Biostrings BStringSet
 NULL
+
 
 #' display a html file in a browser
 #' 

@@ -3,6 +3,15 @@
 
 #' @include blast-utils.r
 #' @include blast-classes.r
+#' @importFrom Biostrings BStringSet
+#' @importFrom Biostrings BString
+#' @importFrom rmisc xvalue
+#' @importFrom rmisc xname
+#' @importFrom rmisc strsplitN
+#' @importFrom XML xmlParse
+#' @importFrom XML xmlRoot
+#' @importFrom XML getNodeSet
+#' @importFrom XML xmlDoc
 NULL
 
 #' Parse xml blast output
@@ -11,9 +20,6 @@ NULL
 #' (File or character vector) 
 #' 
 #' @return A \code{\link{blastReport-class}} object.
-#' 
-#' @importFrom Biostrings BStringSet
-#' @importFrom Biostrings BString
 #' @export
 parseBlastXml <- function (blast_output) {
   res <- list()
@@ -54,53 +60,53 @@ parseBlastXml <- function (blast_output) {
     for (i in seq_along(hits)) {
       hit <- xmlDoc(hits[[i]]) 
       ## parse HSPs
-      hsp_obj <- .hsp(num = xvalue(hit, '//Hsp_num', as='integer'),
-                      bit_score = xvalue(hit, '//Hsp_bit-score', as='numeric'),
-                      score = xvalue(hit, "//Hsp_score", as='integer'),
-                      evalue = xvalue(hit, "//Hsp_evalue",, as='numeric'),
-                      query_from = xvalue(hit, "//Hsp_query-from", as='integer'),
-                      query_to = xvalue(hit, "//Hsp_query-to", as='integer'),
-                      hit_from = xvalue(hit, "//Hsp_hit-from", as='integer'),
-                      hit_to = xvalue(hit, "//Hsp_hit-to", as='integer'),
-                      pattern_from = xvalue(hit, "//Hsp_pattern-from", as='integer'),
-                      pattern_to = xvalue(hit, "//Hsp_pattern-to", as='integer'),
-                      query_frame = xvalue(hit, "//Hsp_query-frame", as='integer'),
-                      hit_frame = xvalue(hit, "//Hsp_hit-frame", as='integer'),
-                      identity = xvalue(hit, "//Hsp_identity", as='integer'),
-                      positive = xvalue(hit, "//Hsp_positive", as='integer'),
-                      gaps = xvalue(hit, "//Hsp_gaps", as='integer'),
-                      density = xvalue(hit, "//Hsp_density", as='numeric'),
-                      align_len = xvalue(hit, "//Hsp_align-len", as='integer'),
-                      qseq = {
-                        qseq <- BStringSet(xvalue(hit, "//Hsp_qseq"))
-                        names(qseq) <- paste0("hsp", xvalue(hit, "//Hsp_num"))
-                        qseq }, 
-                      hseq = {
-                        hseq <- BStringSet(xvalue(hit, "//Hsp_hseq"))
-                        names(hseq) <- paste0("hsp", xvalue(hit, "//Hsp_num"))
-                        hseq },
-                      midline = xvalue(hit, "//Hsp_midline"),
-                      percent_identity = xvalue(hit, "//Hsp_percent-identity", as='numeric'),
-                      mismatch_count = xvalue(hit, "//Hsp_mismatch-count", as='integer'))
+      hsp_obj <- new('hsp', num = xvalue(hit, '//Hsp_num', as='integer'),
+                     bit_score = xvalue(hit, '//Hsp_bit-score', as='numeric'),
+                     score = xvalue(hit, "//Hsp_score", as='integer'),
+                     evalue = xvalue(hit, "//Hsp_evalue",, as='numeric'),
+                     query_from = xvalue(hit, "//Hsp_query-from", as='integer'),
+                     query_to = xvalue(hit, "//Hsp_query-to", as='integer'),
+                     hit_from = xvalue(hit, "//Hsp_hit-from", as='integer'),
+                     hit_to = xvalue(hit, "//Hsp_hit-to", as='integer'),
+                     pattern_from = xvalue(hit, "//Hsp_pattern-from", as='integer'),
+                     pattern_to = xvalue(hit, "//Hsp_pattern-to", as='integer'),
+                     query_frame = xvalue(hit, "//Hsp_query-frame", as='integer'),
+                     hit_frame = xvalue(hit, "//Hsp_hit-frame", as='integer'),
+                     identity = xvalue(hit, "//Hsp_identity", as='integer'),
+                     positive = xvalue(hit, "//Hsp_positive", as='integer'),
+                     gaps = xvalue(hit, "//Hsp_gaps", as='integer'),
+                     density = xvalue(hit, "//Hsp_density", as='numeric'),
+                     align_len = xvalue(hit, "//Hsp_align-len", as='integer'),
+                     qseq = {
+                       qseq <- BStringSet(xvalue(hit, "//Hsp_qseq"))
+                       names(qseq) <- paste0("hsp", xvalue(hit, "//Hsp_num"))
+                       qseq }, 
+                     hseq = {
+                       hseq <- BStringSet(xvalue(hit, "//Hsp_hseq"))
+                       names(hseq) <- paste0("hsp", xvalue(hit, "//Hsp_num"))
+                       hseq },
+                     midline = xvalue(hit, "//Hsp_midline"),
+                     percent_identity = xvalue(hit, "//Hsp_percent-identity", as='numeric'),
+                     mismatch_count = xvalue(hit, "//Hsp_mismatch-count", as='integer'))
       
       ## parse hits
       id <- paste(xvalue(hit, "//Hit_id"), xvalue(hit, "//Hit_def"))
       id <- parseDeflines(defline=strsplit(id, " >")[[1L]])
-      hit_obj <- .hit(num = xvalue(hit, "//Hit_num", as='integer'),
-                      id = id$id,
-                      desc = id$desc,
-                      accn = xvalue(hit, "//Hit_accession"),
-                      len = xvalue(hit, "//Hit_len",as='integer'),
-                      hsp = hsp_obj)
+      hit_obj <- new('hit', num = xvalue(hit, "//Hit_num", as='integer'),
+                     id = id$id,
+                     desc = id$desc,
+                     accn = xvalue(hit, "//Hit_accession"),
+                     len = xvalue(hit, "//Hit_len",as='integer'),
+                     hsp = hsp_obj)
       
       hit_list[[i]] <- hit_obj
     }
     
     
-    res <- c(res, .blastReport(program=program, version=version,
-                               reference=reference, db=db, query=query,
-                               iter_num=iter_num, hits=hit_list, params=params,
-                               stats=stats, message=message, data=blout))  
+    res <- c(res, new('blastReport', program=program, version=version,
+                      reference=reference, db=db, query=query,
+                      iter_num=iter_num, hits=hit_list, params=params,
+                      stats=stats, message=message, data=blout))  
   }
   
   return(res)
@@ -176,13 +182,13 @@ parseBlastTabular <- function (blast_output) {
     
     close(file_path)
     
-    res <- c(res, .blastTable(program = program, db = db, query = query,
-                              bitscore = as.numeric(hit_table[["bitscore"]]),
-                              evalue = as.numeric(hit_table[["evalue"]]),
-                              mlog.evalue = neg_log_evalue,
-                              gi = gi,
-                              accession = accn,
-                              table = hit_table))
+    res <- c(res, new('blastTable', program = program, db = db, query = query,
+                      bitscore = as.numeric(hit_table[["bitscore"]]),
+                      evalue = as.numeric(hit_table[["evalue"]]),
+                      mlog.evalue = neg_log_evalue,
+                      gi = gi,
+                      accession = accn,
+                      table = hit_table))
   }
   
   return(res)

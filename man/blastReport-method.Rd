@@ -1,53 +1,19 @@
+\docType{methods}
 \name{query}
 \alias{getAccn}
-\alias{getAccn-methods}
 \alias{getBitscore}
-\alias{getBitscore-methods}
 \alias{getDesc}
-\alias{getDesc-methods}
 \alias{getEvalue}
-\alias{getEvalue-methods}
 \alias{getHitFrame}
-\alias{getHitFrame-methods}
 \alias{getHitRange}
-\alias{getHitRange-methods}
 \alias{getHitSeq}
-\alias{getHitSeq-methods}
 \alias{getId}
-\alias{getId-methods}
 \alias{getQueryRange}
-\alias{getQueryRange-methods}
 \alias{getQuerySeq}
-\alias{getQuerySeq-methods}
 \alias{hits}
-\alias{hits-methods}
-\alias{index,blastReport-method}
+\alias{index}
 \alias{query}
-\alias{query-methods}
 \title{Getter methods for blast records}
-\usage{
-  \S4method{index}{blastReport}(x, attributes = FALSE, ...)
-
-  getId(x, db="gi")
-
-  getDesc(x)
-
-  getAccn(x)
-
-  getBitscore(x)
-
-  getEvalue(x)
-
-  getQueryRange(x)
-
-  getHitRange(x)
-
-  getHitFrame(x)
-
-  getQuerySeq(x)
-
-  getHitSeq(x)
-}
 \arguments{
   \item{x}{A \code{\linkS4class{blastRecord}} object.}
 

@@ -1,7 +1,6 @@
 #' @include blast-utils.r
 NULL
 
-
 # blastReport-class ------------------------------------------------------
 
 
@@ -30,29 +29,29 @@ NULL
 #' @rdname blastReport-class
 #' @exportClass blastReport
 #' @aliases show,blastReport-method
-.blastReport <- setClass("blastReport",
-                         representation(program = "character",
-                                        version = "character",
-                                        reference = "character",
-                                        db = "character",
-                                        iter_num = "integer",
-                                        query = "list",
-                                        hits = "list",
-                                        params = "list",
-                                        stats = "list",
-                                        message = "character",
-                                        data = "character"),
-                         prototype(program = NA_character_,
-                                   version = NA_character_,
-                                   reference = NA_character_,
-                                   db = NA_character_,
-                                   iter_num = NA_integer_,
-                                   query = list(),
-                                   hits = list(),
-                                   params = list(),
-                                   stats = list(),
-                                   message = NA_character_,
-                                   data = NA_character_))
+setClass("blastReport",
+         representation(program = "character",
+                        version = "character",
+                        reference = "character",
+                        db = "character",
+                        iter_num = "integer",
+                        query = "list",
+                        hits = "list",
+                        params = "list",
+                        stats = "list",
+                        message = "character",
+                        data = "character"),
+         prototype(program = NA_character_,
+                   version = NA_character_,
+                   reference = NA_character_,
+                   db = NA_character_,
+                   iter_num = NA_integer_,
+                   query = list(),
+                   hits = list(),
+                   params = list(),
+                   stats = list(),
+                   message = NA_character_,
+                   data = NA_character_))
 
 
 # show-method, blastReport ####
@@ -93,31 +92,31 @@ setMethod("show", "blastReport",
 #' @keywords internal
 #' @name hsp-class
 #' @rdname hsp-class
-.hsp <- setClass("hsp",
-                 representation(
-                   num = "integer",          # HSP numbers
-                   bit_score = "numeric",    # bit scores of HSP
-                   score =  "integer",       # scores of HSPs
-                   evalue = "numeric",       # e-value
-                   query_from = "integer",   # start of HSPs in query
-                   query_to = "integer",     # end of HSPs in query
-                   hit_from = "integer",     # start of HSPs in subject
-                   hit_to = "integer",       # end of HSPs in subect
-                   pattern_from = "integer", # start of PHI-BLAST pattern
-                   pattern_to = "integer",   # end of PHI-BLAST pattern
-                   query_frame = "integer",  # translation frame of query
-                   hit_frame = "integer",    # translation frame of subject
-                   identity = "integer",     # numbers of identities
-                   positive = "integer",     # numbers of positives
-                   gaps = "integer",         # numbers of gaps
-                   align_len = "integer",    # lengths of alignments
-                   density = "numeric",      # score density
-                   qseq = "XStringSet",      # Alignment string for query (with gaps)
-                   hseq = "XStringSet",      # Alignment string for subject (with gaps)
-                   midline = "character",    # formatting middle line
-                   percent_identity = "numeric", # '-m 8' format output
-                   mismatch_count = "integer"    # '-m 8' format  output
-                 ))
+setClass("hsp",
+         representation(
+           num = "integer",          # HSP numbers
+           bit_score = "numeric",    # bit scores of HSP
+           score =  "integer",       # scores of HSPs
+           evalue = "numeric",       # e-value
+           query_from = "integer",   # start of HSPs in query
+           query_to = "integer",     # end of HSPs in query
+           hit_from = "integer",     # start of HSPs in subject
+           hit_to = "integer",       # end of HSPs in subect
+           pattern_from = "integer", # start of PHI-BLAST pattern
+           pattern_to = "integer",   # end of PHI-BLAST pattern
+           query_frame = "integer",  # translation frame of query
+           hit_frame = "integer",    # translation frame of subject
+           identity = "integer",     # numbers of identities
+           positive = "integer",     # numbers of positives
+           gaps = "integer",         # numbers of gaps
+           align_len = "integer",    # lengths of alignments
+           density = "numeric",      # score density
+           qseq = "XStringSet",      # Alignment string for query (with gaps)
+           hseq = "XStringSet",      # Alignment string for subject (with gaps)
+           midline = "character",    # formatting middle line
+           percent_identity = "numeric", # '-m 8' format output
+           mismatch_count = "integer"    # '-m 8' format  output
+         ))
 
 
 # hit-class --------------------------------------------------------------
@@ -129,14 +128,14 @@ setMethod("show", "blastReport",
 #' @name hit-class
 #' @rdname hit-class
 #' @aliases show,hit-method
-.hit <- setClass("hit",
-           representation(
-             num = "integer",         # hit number
-             id = "list",             # SeqIds
-             desc = "list",           # Description line
-             accn = "character",      # accession number
-             len = "integer",         # length of subject
-             hsp = "hsp"))            # hit HSPs
+setClass("hit",
+         representation(
+           num = "integer",         # hit number
+           id = "list",             # SeqIds
+           desc = "list",           # Description line
+           accn = "character",      # accession number
+           len = "integer",         # length of subject
+           hsp = "hsp"))            # hit HSPs
 
 
 # show-method, hit ####
@@ -216,26 +215,25 @@ setMethod("show", "hit",
 #' @aliases [,blastTable-method
 #' @aliases [[,blastTable-method
 #' @aliases names,blastTable-method
-.blastTable <-
-  setClass("blastTable",
-           representation(program = "character",
-                          query = "character",
-                          db = "character",
-                          bitscore = "numeric",
-                          evalue = "numeric",
-                          mlog.evalue = "numeric",
-                          accession = "character",
-                          gi = "character",
-                          table = "data.frame"),
-           prototype(program = NA_character_,
-                     query = NA_character_,
-                     db = NA_character_,
-                     bitscore = NA_real_,
-                     evalue = NA_real_,
-                     mlog.evalue = NA_real_,
-                     accession = NA_character_,
-                     gi = NA_character_,
-                     table = data.frame()))
+setClass("blastTable",
+         representation(program = "character",
+                        query = "character",
+                        db = "character",
+                        bitscore = "numeric",
+                        evalue = "numeric",
+                        mlog.evalue = "numeric",
+                        accession = "character",
+                        gi = "character",
+                        table = "data.frame"),
+         prototype(program = NA_character_,
+                   query = NA_character_,
+                   db = NA_character_,
+                   bitscore = NA_real_,
+                   evalue = NA_real_,
+                   mlog.evalue = NA_real_,
+                   accession = NA_character_,
+                   gi = NA_character_,
+                   table = data.frame()))
 
 
 # show-method, blastTable ####

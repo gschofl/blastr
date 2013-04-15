@@ -2,9 +2,6 @@
 \alias{blastReport-class}
 \alias{show,blastReport-method}
 \title{blastReport class}
-\usage{
-  .blastReport(...)
-}
 \arguments{
   \item{...}{Slots for \sQuote{blastReport} instances.}
 }

@@ -1,6 +1,10 @@
 
 # Blast-Getters -------------------------------------------------------------
 
+#' @importFrom IRanges IRanges
+#' @importFrom IRanges RangedData
+NULL
+
 # query ============================
 #
 #' Getter methods for blast records
@@ -214,9 +218,9 @@ setGeneric("getQueryRange", function (x) standardGeneric("getQueryRange"))
 #' @export
 setMethod("getQueryRange", "hit", function (x) {
   frame <- x@hsp@query_frame
-  start <- as.integer(ifelse(frame == 1, x@hsp@query_from, x@hsp@query_to))
-  end <- as.integer(ifelse(frame == 1, x@hsp@query_to, x@hsp@query_from))
-  new("gbRange", start = start, width = end - start + 1L, strand = frame)
+  start <- as.integer(ifelse(frame >= 0, x@hsp@query_from, x@hsp@query_to))
+  end <- as.integer(ifelse(frame >= 0, x@hsp@query_to, x@hsp@query_from))
+  RangedData(IRanges(start, end), frame = frame)
 }) 
 
 
@@ -245,10 +249,11 @@ setGeneric("getHitRange", function (x) standardGeneric("getHitRange"))
 #' @export
 setMethod("getHitRange", "hit", function (x) {
   frame <- x@hsp@hit_frame
-  start <- as.integer(ifelse(frame == 1, x@hsp@hit_from, x@hsp@hit_to))
-  end <- as.integer(ifelse(frame == 1, x@hsp@hit_to, x@hsp@hit_from))
-  new("gbRange", start = start, width = end - start + 1L, strand = frame)
+  start <- as.integer(ifelse(frame >= 0, x@hsp@hit_from, x@hsp@hit_to))
+  end <- as.integer(ifelse(frame >= 0, x@hsp@hit_to, x@hsp@hit_from))
+  RangedData(IRanges(start, end), frame = frame)
 })
+
 
 
 #' @export
