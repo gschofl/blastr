@@ -41,7 +41,7 @@ parseBlastXml <- function (blast_output) {
     query <- merge_list(qid[[1L]], list(
       def=qdef,
       len=qlen,
-      seq=if (not.na(qseq)) BString(qseq) else NULL
+      seq=if (!is.na(qseq)) BString(qseq) else NULL
     ))
     
     # BlastOutput/BlastOutput_param/Parameters
@@ -63,7 +63,7 @@ parseBlastXml <- function (blast_output) {
       hsp_obj <- new('hsp', num = xvalue(hit, '//Hsp_num', as='integer'),
                      bit_score = xvalue(hit, '//Hsp_bit-score', as='numeric'),
                      score = xvalue(hit, "//Hsp_score", as='integer'),
-                     evalue = xvalue(hit, "//Hsp_evalue",, as='numeric'),
+                     evalue = xvalue(hit, "//Hsp_evalue", as='numeric'),
                      query_from = xvalue(hit, "//Hsp_query-from", as='integer'),
                      query_to = xvalue(hit, "//Hsp_query-to", as='integer'),
                      hit_from = xvalue(hit, "//Hsp_hit-from", as='integer'),

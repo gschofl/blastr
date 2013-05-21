@@ -10,17 +10,18 @@ Description: A set of classes and functions to manage
 License: MIT
 Encoding: latin1
 Depends:
-    R (>= 2.15),
-    methods
+    R (>= 2.15)
 Imports:
-    rmisc,
-    IRanges,
-    Biostrings,
+    ape,
+    assertthat,
     biofiles,
-    XML,
+    Biostrings,
+    IRanges,
+    methods,
     RCurl,
+    rmisc,
     stringr,
-    ape
+    XML
 Collate:
     'blast-utils.r'
     'blast-classes.r'
@@ -29,3 +30,4 @@ Collate:
     'blast.r'
     'package.r'
     'utils.r'
+    'blast-parser-db.r'
