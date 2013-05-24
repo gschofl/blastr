@@ -4,6 +4,8 @@ NULL
 # blastReport-class ------------------------------------------------------
 
 
+
+
 #' blastReport class
 #'
 #' blastReport is an S4 class that provides a container for data retrieved
@@ -52,6 +54,7 @@ setClass("blastReport",
                    stats = list(),
                    message = NA_character_,
                    data = NA_character_))
+
 
 
 # show-method, blastReport ####
