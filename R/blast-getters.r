@@ -705,3 +705,4 @@ setMethod("getMidline", "blastReportDB", function (con,query_id) {
     db_query(con, sql, 1L)
   })
 })
+

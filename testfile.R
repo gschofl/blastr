@@ -26,15 +26,19 @@ setValidity('blastReportDB', function (object) {
 })
 
 
-# getter für jeden slot der table
-
-# methoden für coverage query und hit
 # metode für perc_ident
+# methoden für coverage query und hit
+
 
 # methode für connect (blastReportDB)
 #  - connection erstellen
+blastReportDB <- function( dbname ) {
+  con <- db_connect(dbName=dbname, message="")
+  new('blastReportDB', con)
+}
 # methode für disconect
 
+db_disconnect(con)
 
 
 # connect do db
@@ -46,10 +50,7 @@ require(rmisc)
 con <- blastReportDB("/home/psehnert/daten/SPICEIII/miseq/sample64/blast.test.db")
 
 con
-blastReportDB <- function( dbname ) {
-  con <- db_connect(dbName=dbname, message="")
-  new('blastReportDB', con)
-}
+
 
 # show methode ausbauen für object beschreibung
 setMethod("show",
