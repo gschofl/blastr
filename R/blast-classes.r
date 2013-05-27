@@ -276,3 +276,41 @@ setMethod("names", "blastTable",
             names(slot(x, "table"))
           })
 
+
+
+setClass('blastReportDB', contains='SQLiteConnection')
+
+setValidity('blastReportDB', function (object) {
+  if (!all(c("hit","hsp","query") %in% dbListTables(object)))
+    return("Table missing from 'blastReportDB'")
+  if (!all(c("query_id","query_def","query_len") %in% dbListFields(object, "query")))
+    return("Field missing from table 'query'")
+  if (!all(c("query_id","hit_id","hit_num","gene_id","accession",
+             "definition","length") %in% dbListFields(object, "hit")))
+    return("Field missing from table 'query'")
+  if (!all(c("query_id","hit_id","hsp_id","hsp_num","bit_score",
+             "score","evalue","query_from","query_to","hit_from",
+             "hit_to","query_frame","hit_frame","identity","positive",
+             "gaps","align_len","qseq","hseq","midline") 
+           %in% dbListFields(object, "hsp")))   
+    return("Field missing from table 'query'")
+  TRUE
+})
+
+setMethod("show",
+          signature(object = "blastReportDB"),
+          function (object) 
+          {
+            n <- db_count(object, "query")
+            showme <- sprintf('%s object with %s query rows',
+                              sQuote(class(object)), n)
+            cat(showme, sep="\n")
+          }
+)
+
+setMethod("blastReportDB",signature=(object = "blastReportDB"),
+          function(dbname)  
+            {
+            con <- db_connect(dbName=dbname, message="")
+            new('blastReportDB', con)
+          })

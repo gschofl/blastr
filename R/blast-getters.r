@@ -339,7 +339,369 @@ setMethod("getHitSeq", "blastReport", function (x) {
 #' @export
 setMethod("getHitSeq", "hit", function (x) x@hsp@hseq)
 
+# BlastDB-Getters -------------------------------------------------------------
+
+## Query Table
+
+setGeneric("getQueryDef", function (con, query_id) standardGeneric("getQueryDef"))
+
+
+#' @export
+setMethod("getQueryDef", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT query_def 
+                  FROM query 
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getQueryLen", function (con, query_id) standardGeneric("getQueryLen"))
+
+#' @export
+setMethod("getQueryLen", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT query_len 
+                  FROM query 
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+## Hit Table
+
+setGeneric("getHitID", function (con, query_id) standardGeneric("getHitID"))
+
+#' @export
+setMethod("getHitID", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_id
+                  FROM hit
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHitNum", function (con, query_id) standardGeneric("getHitNum"))
+
+#' @export
+setMethod("getHitNum", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_num
+                  FROM hit
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getGeneID", function (con, query_id) standardGeneric("getGeneID"))
+
+#' @export
+setMethod("getGeneID", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT gene_id
+                  FROM hit
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getAccn", function (con, query_id) standardGeneric("getAccn"))
+
+#' @export
+setMethod("getAccn", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT accession
+                  FROM hit
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHitDef", function (con, query_id) standardGeneric("getHitDef"))
+
+#' @export
+setMethod("getHitDef", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT definition
+                  FROM hit
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHitLen", function (con, query_id) standardGeneric("getHitLen"))
+
+#' @export
+setMethod("getHitLen", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT length
+                  FROM hit
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+## Hsp Table
+
+setGeneric("getHspHitID", function (con, query_id) standardGeneric("getHspHitID"))
+
+#' @export
+setMethod("getHspHitID", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_id
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHspID", function (con, query_id) standardGeneric("getHspID"))
+
+#' @export
+setMethod("getHspID", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hsp_id
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHspNum", function (con, query_id) standardGeneric("getHspNum"))
+
+#' @export
+setMethod("getHspNum", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_num
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getBitscore", function (con, query_id) standardGeneric("getBitscore"))
+
+#' @export
+setMethod("getBitscore", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT bit_score
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getScore", function (con, query_id) standardGeneric("getScore"))
+
+#' @export
+setMethod("getScore", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT score
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getEvalue", function (con, query_id) standardGeneric("getEvalue"))
+
+#' @export
+setMethod("getEvalue", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT evalue
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getQueryStart", function (con, query_id) standardGeneric("getQueryStart"))
+
+#' @export
+setMethod("getQueryStart", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT query_from
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getQueryEnd", function (con, query_id) standardGeneric("getQueryEnd"))
+
+#' @export
+setMethod("getQueryEnd", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT query_to
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHitStart", function (con, query_id) standardGeneric("getHitStart"))
+
+#' @export
+setMethod("getHitStart", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_from
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHitEnd", function (con, query_id) standardGeneric("getHitEnd"))
+
+#' @export
+setMethod("getHitEnd", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_to
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
 
 
 
+setGeneric("getQueryFrame", function (con, query_id) standardGeneric("getQueryFrame"))
 
+#' @export
+setMethod("getQueryFrame", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT query_frame
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getHitFrame", function (con, query_id) standardGeneric("getHitFrame"))
+
+#' @export
+setMethod("getHitFrame", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hit_frame
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getIdentity", function (con, query_id) standardGeneric("getIdentity"))
+
+#' @export
+setMethod("getIdentity", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT identity
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+setGeneric("getPositive", function (con, query_id) standardGeneric("getPositive"))
+
+#' @export
+setMethod("getPositive", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT positive
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+
+setGeneric("getGaps", function (con, query_id) standardGeneric("getGaps"))
+
+#' @export
+setMethod("getGaps", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT gaps
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+
+setGeneric("getAlignLen", function (con, query_id) standardGeneric("getAlignLen"))
+
+#' @export
+setMethod("getAlignLen", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT align_len
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+
+setGeneric("getQSeq", function (con, query_id) standardGeneric("getQSeq"))
+
+#' @export
+setMethod("getQSeq", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT qseq
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+
+setGeneric("getHSeq", function (con, query_id) standardGeneric("getHSeq"))
+
+#' @export
+setMethod("getHSeq", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT hseq
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
+
+
+setGeneric("getMidline", function (con, query_id) standardGeneric("getMidline"))
+
+#' @export
+setMethod("getMidline", "blastReportDB", function (con,query_id) {
+  lapply(query_id, function(x) {
+    sql <- paste0("SELECT midline
+                  FROM hsp
+                  WHERE query_id = ", 
+                  x)
+    db_query(con, sql, 1L)
+  })
+})
