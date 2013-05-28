@@ -98,7 +98,10 @@ setMethod("show", "blastReport",
 
 
 con <- blastReportDB("/home/psehnert/daten/SPICEIII/miseq/sample64/blast.test.db")
-con
+con 
+
+hit <- dbGetQuery(con,"SELECT * FROM hit")
+perc <- getHitLen/getal
 
 
 

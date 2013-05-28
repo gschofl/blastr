@@ -297,7 +297,7 @@ setValidity('blastReportDB', function (object) {
   TRUE
 })
 
-setMethod("show",
+setMethod('show',
           signature(object = "blastReportDB"),
           function (object) 
           {
@@ -307,8 +307,9 @@ setMethod("show",
             cat(showme, sep="\n")
           }
 )
-
-setMethod("blastReportDB",signature=(object = "blastReportDB"),
+##hier noch Fehler: Fehler in setMethod("blastReportDB", signature = (object = "blastReportDB"),  : 
+#                   keine exisitierende Definition für Funktion ‘blastReportDB’
+setMethod('blastReportDB',signature=(object = 'blastReportDB'),
           function(dbname)  
             {
             con <- db_connect(dbName=dbname, message="")
