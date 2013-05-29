@@ -27,6 +27,8 @@ setValidity('blastReportDB', function (object) {
 
 
 # metode für perc_ident
+perc <- as.list(100* unlist(getIdentity(con,query_id))/
+                  unlist(getAlignLen(con,query_id)))
 # methoden für coverage query und hit
 
 
@@ -101,7 +103,9 @@ con <- blastReportDB("/home/psehnert/daten/SPICEIII/miseq/sample64/blast.test.db
 con 
 
 hit <- dbGetQuery(con,"SELECT * FROM hit")
-perc <- getHitLen/getal
+hsp <- dbGetQuery(con,"SELECT * FROM hsp")
+
+
 
 
 
