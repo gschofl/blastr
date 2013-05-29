@@ -278,6 +278,19 @@ setMethod("names", "blastTable",
 
 
 
+#' blastReportDB class
+#' 
+#' blastReportDB is an S4 class that provides a connection to a database of blast 
+#' records organised in three tables: query, hit and hsp
+#' 
+#' @name blastReportDB-class
+#' @rdname blastReportDB-class
+#' @exportClass blastReportDB
+#' @aliases show,blastTable-method
+#' @aliases $,blastTable-method
+#' @aliases [,blastTable-method
+#' @aliases [[,blastTable-method
+#' @aliases names,blastTable-method
 setClass('blastReportDB', contains='SQLiteConnection')
 
 setValidity('blastReportDB', function (object) {
@@ -297,6 +310,7 @@ setValidity('blastReportDB', function (object) {
   TRUE
 })
 
+# show-method, blastReportDB ####
 setMethod('show',
           signature(object = "blastReportDB"),
           function (object) 
@@ -309,9 +323,9 @@ setMethod('show',
 )
 ##hier noch Fehler: Fehler in setMethod("blastReportDB", signature = (object = "blastReportDB"),  : 
 #                   keine exisitierende Definition für Funktion ‘blastReportDB’
-setMethod('blastReportDB',signature=(object = 'blastReportDB'),
-          function(dbname)  
-            {
-            con <- db_connect(dbName=dbname, message="")
-            new('blastReportDB', con)
-          })
+#setMethod('blastReportDB',signature=(object = 'blastReportDB'),
+#          function(dbname)  
+#            {
+#            con <- db_connect(dbName=dbname, message="")
+#            new('blastReportDB', con)
+#          })

@@ -1,8 +1,8 @@
 \name{blastTable-class}
-\alias{$,blastTable-method}
+\alias{blastTable-class}
 \alias{[,blastTable-method}
 \alias{[[,blastTable-method}
-\alias{blastTable-class}
+\alias{$,blastTable-method}
 \alias{names,blastTable-method}
 \alias{show,blastTable-method}
 \title{blastTable class}
