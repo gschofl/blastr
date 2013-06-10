@@ -96,7 +96,7 @@ setClass("hsp",
          representation(
            num = "integer",          # HSP numbers
            bit_score = "numeric",    # bit scores of HSP
-           score =  "integer",       # scores of HSPs
+           score = "integer",       # scores of HSPs
            evalue = "numeric",       # e-value
            query_from = "integer",   # start of HSPs in query
            query_to = "integer",     # end of HSPs in query

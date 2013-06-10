@@ -200,7 +200,7 @@ make_blast_query <- function (x, transl = FALSE) {
   
   input <- setNames(paste0(">", seqnames$defline, "\n", as.character(seq)),
                     nm=seqnames$defline)
-  
+  input <- paste0(input, collapse="\n")
   list(query=NULL, input=input, parse_deflines=seqnames$parse_defline) 
 }
 

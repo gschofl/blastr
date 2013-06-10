@@ -73,7 +73,7 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' instead of passing it to \code{\link{system}}.
 #' 
 #' @keywords internal
-blast <- function (program = 'blastn', query, db, outfmt, max_hits,
+blast <- function (program = 'blastp', query, db, outfmt, max_hits,
                    strand = 'both', ..., intern = FALSE, input = NULL,
                    show_cmd = FALSE) {
   

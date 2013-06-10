@@ -61,10 +61,10 @@ BlastOutput.Iterations <- function (dbPath = NULL,
     strsplitN(def, "|", 2L, fixed=TRUE)  
   }
   
-  getLast <- function(tag, env, init) {
+  getLast <- function(tag, env, init_val) {
     val <- tryCatch(get(tag, envir=env, inherits=TRUE),
                     error=function (e) NULL)
-    val[length(val)] %||% init
+    val[length(val)] %||% init_val
   }
   
   getHspRuns <- function(hsp_num) {
@@ -208,7 +208,7 @@ BlastOutput.Iterations <- function (dbPath = NULL,
 
 blast_db.sql <- '
 CREATE TABLE query(
-  query_id      INT,
+query_id      INT,
 query_def     VARCHAR(80),
 query_len     INT,
 PRIMARY KEY (query_id)
@@ -287,3 +287,5 @@ parseBlastToDB <- function (blastFile, dbPath = "blast.db", max_hit = NULL,
   assert_that( db_bulk_insert(con, "hsp", handler$getHsp()) )
   con
 }
+
+
