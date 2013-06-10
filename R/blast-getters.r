@@ -1083,7 +1083,7 @@ setMethod("getMidline", "blastReportDB", function (con,query_id) {
 #' @rdname blastReport-method
 #' @docType methods
 #' @export
-setGeneric("getPercIdent", function (con, query_id) standardGeneric("getPercIdent"))
+setGeneric("getPercIdentity", function (con, query_id) standardGeneric("getPercIdentity"))
 
 #' @export
 setMethod("getPercIdent", "blastReportDB", function (con,query_id) {
@@ -1108,10 +1108,10 @@ setMethod("getPercIdent", "blastReportDB", function (con,query_id) {
 #' @rdname blastReport-method
 #' @docType methods
 #' @export
-setGeneric("getQueryCov", function (con, query_id) standardGeneric("getQueryCov"))
+setGeneric("getQueryCoverage", function (con, query_id) standardGeneric("getQueryCoverage"))
 
 #' @export
-setMethod("getQueryCov", "blastReportDB", function (con,query_id) {
+setMethod("getQueryCoverage", "blastReportDB", function (con,query_id) {
  
 })
 
@@ -1129,9 +1129,9 @@ setMethod("getQueryCov", "blastReportDB", function (con,query_id) {
 #' @rdname blastReport-method
 #' @docType methods
 #' @export
-setGeneric("getHitCov", function (con, query_id) standardGeneric("getHitCov"))
+setGeneric("getHitCoverage", function (con, query_id) standardGeneric("getHitCoverage"))
 
 #' @export
-setMethod("getHitCov", "blastReportDB", function (con,query_id) {
+setMethod("getHitCoverage", "blastReportDB", function (con,query_id) {
   
 })
