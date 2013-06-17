@@ -59,14 +59,36 @@ listclassValidator <- function (listClass, elemClass) {
   }
 }
 
-getterConstructor <- function(SELECT, FROM, WHERE) {
-  function (x, id) {
-    lapply(id, function(id) {
-      SQL <- paste("SELECT", SELECT, "FROM", FROM, "WHERE", WHERE, "=", id) 
-      db_query(x, SQL, 1L)
+getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
+  function (x, id, verbose = FALSE) {
+    args <- list(...)
+    stmts <- trim(paste("SELECT", SELECT, "FROM", FROM,
+                        if (!is.null(args$WHERE)) {
+                          paste("WHERE", args$WHERE, "=", id)
+                        },
+                        if (!is.null(args$VAL) && !is.null(args$FUN)) {
+                          paste("AND", args$VAL, "= (SELECT", args$FUN,
+                                "(", args$VAL, ") FROM", FROM, "WHERE", args$WHERE, "=", id, ")")
+                        }))
+
+    if (verbose) cat(stmts)
+    AS <- match.fun(paste0('as.', as))
+    lapply(stmts, function(stmt) {
+      AS( db_query(x, stmt, 1L) %||% NA_character_ )
     })
   }
 }
+
+# advancedGetterConstructor <- function(SELECT,FROM,WHERE,SQL_FUNCTION,VALUE) {
+#   function(x,id) {
+#     lapply(id,function(id) {
+#       SQL <- paste("SELECT", SELECT, "FROM", FROM, "WHERE", WHERE, "=",id,
+#                    "AND", VALUE, "= (SELECT",SQL_FUNCTION,"(",VALUE,") FROM", 
+#                     FROM, "WHERE",WHERE, "=",id,")")
+#       db_query(x,SQL,1L) %||% NA_character_
+#     })
+#   }
+# }
 
 ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
   str <- encodeString(obj)
