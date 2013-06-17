@@ -2,7 +2,7 @@
 \alias{blast}
 \title{Wrapper for the new NCBI BLAST+ tools}
 \usage{
-  blast(program = "blastn", query, db, outfmt, max_hits,
+  blast(program = "blastp", query, db, outfmt, max_hits,
     strand = "both", ..., intern = FALSE, input = NULL,
     show_cmd = FALSE)
 }

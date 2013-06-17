@@ -1,5 +1,4 @@
-#' @include blast-utils.r
-#' @include blast-classes.r
+#' @include blastReport-class.r
 #' @importFrom RCurl getForm
 #' @importFrom XML htmlParse
 #' @importFrom rmisc SysCall

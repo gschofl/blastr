@@ -1,19 +1,37 @@
 \name{blastReport-class}
 \alias{blastReport-class}
-\alias{show,blastReport-method}
-\title{blastReport class}
-\arguments{
-  \item{...}{Slots for \sQuote{blastReport} instances.}
-}
+\title{blastReport-class}
 \description{
-  blastReport is an S4 class that provides a container for
-  data retrieved by calls to the NCBI Blast utility.
+  \code{"blastReport"} is the top-level container for data
+  parsed from NCBI Blast XML output. It contains the
+  component data classes: \code{\linkS4class{BlastHeader}},
+  \code{\linkS4class{BlastParameters}}, and
+  \code{\linkS4class{IterationList}}.
 }
 \details{
-  blastReport objects have eleven slots: \describe{
-  \item{program}{} \item{version}{} \item{reference}{}
-  \item{db}{} \item{iter_num}{} \item{query}{}
-  \item{hits}{} \item{params}{} \item{stats}{}
-  \item{message}{} \item{data}{} }
+  The \code{\linkS4class{Iteration}} elements store results
+  from individual BLAST queries. Each \code{Iteration}
+  holds a \code{\linkS4class{HitList}} with possibly
+  multiple \code{\linkS4class{Hit}s}, which, in turn, can
+  contain multiple high-scoring pairs
+  (\code{\linkS4class{Hsp}s}).
+
+  Iterations, Hits, and Hsps can be extracted using the
+  accessors \code{\link{getIteration}},
+  \code{\link{getHit}}, and \code{\link{getHsp}}, or by
+  directly subsetting a \code{blastReport} object.
+
+  E.g. \code{report[[1]][[1]]} will return the first hit in
+  the first query.
+
+  \section{Slots}{ \describe{ \item{\code{header}:}{Header
+  information; \code{"BlastHeader"}.}
+  \item{\code{params}:}{Blast parameters and statistics
+  \code{"BlastParameters"}.}
+  \item{\code{iterations}:}{Iterations;
+  \code{"IterationListOrChar"}.} } }
+}
+\seealso{
+  The constructor \code{\link{blastReport}}
 }
 

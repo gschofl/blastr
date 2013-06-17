@@ -1,12 +1,12 @@
 Package: blastr
-Version: 0.0-2
-Date: 2012-07-30
+Version: 0.1-0
+Date: 2013-06-13
 Type: Package
 Title: A wrapper arpound NCBI Blast.
 Authors@R: person("Gerhard", "Schöfl", role=c("aut","cre"),
     email="gschofl@yahoo.de")
 Description: A set of classes and functions to manage
-    NCBI Blast web service queries via R.
+    NCBI Blast locally or via web service queries.
 License: MIT
 Encoding: latin1
 Depends:
@@ -16,18 +16,26 @@ Imports:
     assertthat,
     biofiles,
     Biostrings,
+    DBI,
     IRanges,
     methods,
     RCurl,
     rmisc,
+    RSQLite,
     stringr,
     XML
 Collate:
+    'utils.r'
+    'all-generics.r'
     'blast-utils.r'
-    'blast-classes.r'
-    'blast-getters.r'
+    'defline.r'
+    'Hsp-class.r'
+    'Hit-class.r'
+    'Iteration-class.r'
+    'blastReport-class.r'
+    'blastReportDB-class.r'
+    'blastTable-class.r'
     'blast-parser.r'
     'blast.r'
     'package.r'
-    'utils.r'
     'blast-parser-db.r'
