@@ -56,62 +56,6 @@ displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE) {
   s <- gsub("\\+(and)\\+|\\+(or)\\+|\\+(not)\\+","\\+\\U\\1\\U\\2\\U\\3\\+", s, perl=TRUE)
   s
 }
-
-
-#' Parse fasta definition lines
-#' 
-#' @param defline List or character vector of NCBI fasta deflines.
-#' @param species Parse out species designations.
-#' 
-#' @keywords internal
-#' @importFrom stringr str_split_fixed
-#' @importFrom stringr str_extract_all
-#' @importFrom stringr perl
-parseDeflines <- function (defline, species=FALSE) {
-  # first split into identifier and description at the first blank space
-  x <- str_split_fixed(unlist(defline), " ", 2)
-  id <- as.list(x[,1])
-  desc <- as.list(x[,2])
-  
-  if (species) {
-    x <- str_split_fixed(unlist(desc), " \\[|\\]", 3)
-    desc <- x[,1]
-    sp <- x[,2]
-  }
-  
-  # parse identifier patterns
-  # first we extract the database tags which always are 2 or 3 lowercase
-  # letters followed by a pipe.
-  db_pattern <- perl("([[:lower:]]{2,3})(?=\\|)")
-  db_tag <- str_extract_all(unlist(id), db_pattern)
-  db_tag[vapply(db_tag, all_empty, logical(1))] <- "identifier"
-
-  # next we split the identifier along the database tags
-  rm_empty <- function (x) {
-    if (is.atomic(x)) x <- list(x)
-    Map(function (x) x[nzchar(x)], x=x)
-  }
-  
-  str_split_list <- function (string, pattern) {  
-    Map( function (string, pattern) {
-      rm_empty(strsplit(string, paste(pattern, collapse="|")))[[1L]]
-    }, string=string, pattern=pattern, USE.NAMES=FALSE) 
-  }
-  
-  ids <- str_split_list(id, db_tag)
-  id_list <- list()
-  for (i in seq_along(ids)) {
-    id_list[[i]] <- structure(str_split_list(ids[[i]], "\\|"), names=db_tag[[i]])
-  }
-  
-  if (species) {
-    return(list(id=id_list, desc=desc, species=sp))
-  } else {
-    return(list(id=id_list, desc=desc))
-  }
-}
-
-
 #' deparse NCBI fasta definition lines
 #' 
 #' @param ids List of identifiers.
@@ -206,11 +150,11 @@ make_blast_query <- function (x, transl = FALSE) {
 
 
 #' @keywords internal
-wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
-                     start=c(1), reverse=c(FALSE), sep=2) {
+wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
+                           start=c(1), reverse=c(FALSE), sep=2) {
   # seqs <- c(seq1, list(seq2, seq3))
-  seqs <- c(seq1, list(...))
-  lseqs <- vapply(seqs, nchar, numeric(1))
+  seqs <- c(list(seq1), list(...))
+  lseqs <- vapply(seqs, nchar, FUN.VALUE=numeric(1))
   
   if (!length(unique(lseqs)) == 1L)
     stop("Sequences are of different length")
@@ -221,7 +165,7 @@ wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   offset <- pref_width + sep + aln_start_width + 1 + 1 + aln_end_width + sep + suf_width  
   
   # break up sequences  
-  s <- linebreak(seqs, getOption("width") - offset, FULL_FORCE=TRUE)
+  s <- linebreak(seqs, getOption("width") - offset - 2, FULL_FORCE=TRUE)
   s <- strsplit(s, "\n")  
   seq_widths <- nchar(s[[1L]])
   max_seq_width <- max(seq_widths)
@@ -247,7 +191,7 @@ wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   seq_ends[reverse] <- seq_starts[reverse]
   seq_starts[reverse] <- tmp
   
-  pasteAln <- function(prefix, seq_starts, s, seq_ends, suffix) {
+  pasteAlignment <- function(prefix, seq_starts, s, seq_ends, suffix) {
     seq_starts[is_empty(seq_starts)] <- ""
     seq_ends[is_empty(seq_ends)] <- ""
     paste0(pad(prefix, pref_width, "right"), blanks(sep),
@@ -257,7 +201,7 @@ wrapAln <- function (seq1, ...,  prefix=c(""), suffix=c(""),
            pad(suffix, suf_width, "right"))
   }
   
-  s <- mapply(pasteAln, prefix=prefix, seq_starts=seq_starts, s=s,
+  s <- mapply(pasteAlignment, prefix=prefix, seq_starts=seq_starts, s=s,
               seq_ends=seq_ends, suffix=suffix,
               SIMPLIFY=FALSE, USE.NAMES=FALSE)
   

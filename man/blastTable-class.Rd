@@ -1,10 +1,5 @@
 \name{blastTable-class}
 \alias{blastTable-class}
-\alias{[,blastTable-method}
-\alias{[[,blastTable-method}
-\alias{$,blastTable-method}
-\alias{names,blastTable-method}
-\alias{show,blastTable-method}
 \title{blastTable class}
 \arguments{
   \item{...}{Slots for \sQuote{blastTable} instances.}

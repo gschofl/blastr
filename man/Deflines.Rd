@@ -1,0 +1,15 @@
+\name{Deflines}
+\alias{Deflines}
+\title{Parse fasta definition lines}
+\usage{
+  Deflines(x)
+}
+\arguments{
+  \item{x}{List or character vector of NCBI fasta
+  deflines.}
+}
+\description{
+  Parse fasta definition lines
+}
+\keyword{internal}
+

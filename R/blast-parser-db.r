@@ -1,3 +1,4 @@
+#' @include blastReportDB-class.r
 #' @importFrom assertthat assert_that
 #' @importFrom assertthat is.readable
 #' @importFrom assertthat has_extension
@@ -12,7 +13,7 @@
 #' @importFrom XML xmlValue
 #' @importFrom XML xmlStopParser
 #' @importFrom XML xpathApply
-
+NULL
 
 BlastOutput.Iterations <- function (dbPath = NULL,
                                     max_hit = NULL,
