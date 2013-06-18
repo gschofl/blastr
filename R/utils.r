@@ -60,7 +60,7 @@ listclassValidator <- function (listClass, elemClass) {
 }
 
 getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
-  function (x, id, verbose = FALSE) {
+  function (x, id) {
     args <- list(...)
     stmts <- trim(paste("SELECT", SELECT, "FROM", FROM,
                         if (!is.null(args$WHERE)) {
@@ -70,13 +70,34 @@ getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
                           paste("AND", args$VAL, "= (SELECT", args$FUN,
                                 "(", args$VAL, ") FROM", FROM, "WHERE", args$WHERE, "=", id, ")")
                         }))
-
-    if (verbose) cat(stmts)
     AS <- match.fun(paste0('as.', as))
     lapply(stmts, function(stmt) {
       AS( db_query(x, stmt, 1L) %||% NA_character_ )
     })
   }
+}
+
+getterFromToRange <- function(x, id, type='query', max=FALSE) {
+  if (max) {
+    if (type=='query') {
+      pos <- db_query(x,paste('SELECT query_frame, query_from, query_to from hsp 
+                                WHERE query_id=',id, 'AND bit_score = (SELECT
+                                MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
+    } else {
+      pos <- db_query(x,paste('SELECT hit_frame, hit_from, hit_to from hsp 
+                                WHERE query_id=',id, 'AND bit_score = (SELECT
+                                MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
+    }
+  } else {
+    if (type=='query') {
+      pos <- db_query(x,paste('SELECT query_frame, query_from, query_to from hsp 
+                              WHERE query_id =',id))
+    } else {
+      pos <- db_query(x,paste('SELECT hit_frame, hit_from, hit_to from hsp 
+                              WHERE query_id =',id))
+    }
+  }
+  pos
 }
 
 # advancedGetterConstructor <- function(SELECT,FROM,WHERE,SQL_FUNCTION,VALUE) {
