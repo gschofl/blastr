@@ -4,8 +4,10 @@
 #' @importFrom rmisc SysCall
 #' @importFrom rmisc Curry
 #' @importFrom rmisc merge_list
+#' @importFrom rmisc has_command
 #' @importFrom Biostrings toString
 #' @importFrom stringr str_match
+#' @importFrom assertthat has_attr
 NULL
 
 
@@ -20,16 +22,16 @@ NULL
 #' @param show_cmd print the command line instead of executing it.
 #' 
 #' @family blast applications
-#' 
 #' @export
 makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
                          ..., show_log=TRUE, show_cmd=FALSE) {
+  assert_that(has_command('makeblastdb'))
+  
   if (missing(input_file))
     return(SysCall("makeblastdb", help=TRUE, redirection=FALSE))
-  
-  if (any(!file.exists(input_file)))
-    stop(sprintf("File %s does not exist", 
-                 sQuote(input_file[!file.exists(input_file)])))
+
+  ## assert that multiple input files are present
+  lapply(input_file, assert_that %.% is.readable)
   
   if (length(input_file) > 1) {
     input_file <- sprintf("\"%s\"", paste(input_file, collapse=" "))
@@ -39,16 +41,60 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
   dbtype <- match.arg(dbtype, c("nucl","prot"))
   
   o <- list(...)
-  if (!is.null(o$logfile)) logfile <- o$logfile else logfile <- ""
-  
-  logfile <- "logfile"
-  
+  if (!is.null(o$logfile))
+    logfile <- o$logfile
+  else
+    logfile <- replace_ext(input_file[[1]], "log")
+
   SysCall(exec="makeblastdb", infile=NULL, outfile=NULL,
           `in`=input_file, input_type=input_type,
-          dbtype=dbtype, ..., style="unix", show_cmd=show_cmd)
+          dbtype=dbtype, logfile=logfile, ..., style="unix",
+          show_cmd=show_cmd)
   
-  if (nzchar(logfile) && isTRUE(show_log))
+  if (show_log && assert_that(is.readable(logfile)))
     cat(paste(readLines(logfile), collapse="\n"))
+}
+
+#' Wrapper for update_blastdb.pl
+#' 
+#' Download pre-formatted BLAST databases from NCBI ftp site.
+#' 
+#' @param ... Blast db to download
+#' @param destdir Destination directory for databases.
+#' @param decompress if \code{TRUE}, decompresses the archives in \code{destdir}
+#' and deletes the downloaded archives.
+#' @param showall if \code{TRUE}, show all available pre-formatted BLAST
+#' databases
+#' @param passive Use passive FTP
+#' @param timeout Timeout on connection to NCBI (default: 120 seconds)
+#' @force force Force download even if there is a archive already on local
+#' directory
+#' 
+#' @family blast applications
+#' @export
+update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
+                           passive=FALSE, timeout=120, force=FALSE) {
+  assert_that(has_command("update_blastdb"))
+  args <- list(decompress=decompress, passive=passive, force=force, timeout=timeout)
+  if (showall) {
+    ans <- SysCall('update_blastdb', showall=TRUE, style='gnu', intern=TRUE)
+    return( ans[-1] )
+  } else if (all(are_false(args)[-4])) {
+    SysCall('update_blastdb')
+  } else {
+    available_dbs <- SysCall('update_blastdb', showall=TRUE,
+                             style='gnu', intern=TRUE)[-1]
+    blastdb <- c(...)
+    if (!all(idx <- blastdb %in% available_dbs)) {
+      stop(sQuote(paste0(blastdb[!idx], collapse=", ")),
+           " not among the available databases")
+    }
+    cwd <- setwd(destdir)
+    on.exit(setwd(cwd))
+    SysCall('update_blastdb', verbose=TRUE, stdin=paste0(blastdb, collapse=' '),
+            args=args, style="gnu", redirection=FALSE, show_cmd=FALSE,
+            intern=FALSE)
+  }
 }
 
 
@@ -74,9 +120,10 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' @keywords internal
 blast <- function (program = 'blastp', query, db, outfmt, max_hits,
                    strand = 'both', ..., intern = FALSE, input = NULL,
-                   show_cmd = FALSE) {
+                   show_cmd = FALSE, parse = TRUE) {
   
   program <- match.arg(program, c("blastn", "blastp", "blastx", "tblastn", "tblastx"))
+  assert_that(has_command(program))
   strand <- match.arg(strand, c("both", "plus", "minus"))
   
   # dealing with query
@@ -91,9 +138,10 @@ blast <- function (program = 'blastp', query, db, outfmt, max_hits,
     transl <- FALSE
   }
   
-  inp <- make_blast_query(query, transl)
+  inp <- make_blast_query(x=query, transl)
   input <- inp[["input"]]
   query <- inp[["query"]]
+  deflines <- inp[["deflines"]]
   parse_deflines <- inp[["parse_deflines"]]
 
   # set a number of defaults different from the internal defaults of
@@ -144,37 +192,16 @@ blast <- function (program = 'blastp', query, db, outfmt, max_hits,
   
   # check if 'out' is specified, otherwise return results internally
   intern <- if (is.null(args[["out"]])) TRUE else FALSE
-  
-  # loop over input
-  res <- list()
-  if (is.null(args$query) && !is.null(input)) {
-    for (i in seq_along(input)) {
-      cat("Blasting ", names(input[i]), " [", program, "]", "\n", sep="")
-      res[[i]] <- 
-        SysCall(exec=program, args=args,
-                stdin=stdin, stdout=stdout,
-                redirection=if (is.null(stdin) && is.null(stdout))
-                  FALSE 
-                else
-                  TRUE,
-                style="unix", show_cmd=show_cmd,
-                intern=intern, input=input[[i]])
-      res[[i]] <- paste0(res[[i]], collapse="\n")
-    }
-  } else {
-    res[[1]] <- 
-      SysCall(exec=program, args=args,
-              stdin=stdin, stdout=stdout,
-              redirection=if (is.null(stdin) && is.null(stdout))
-                FALSE
-              else
-                TRUE,
-              style="unix", show_cmd=show_cmd,
-              intern=intern, input=NULL)
-    res[[1]] <- paste0(res[[1]], collapse="\n")
-  }
-  
-  return(res)
+  cat(paste0("Blasting ", length(deflines), " queries [", program, "]", "\n"), sep="")
+  res <- SysCall(exec=program, args=args,
+                 stdin=stdin, stdout=stdout,
+                 redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
+                 style="unix", show_cmd=show_cmd,
+                 intern=intern, input=input)
+  if (intern && outfmt == 5 && parse && !has_attr(res, 'status')) 
+    return( blastReport(res, asText=TRUE) )
+  else
+    return( res )
 }
 
 #' Wrapper for the NCBI Nucleotide-Nucleotide BLAST
@@ -200,8 +227,8 @@ blast <- function (program = 'blastp', query, db, outfmt, max_hits,
 #' \code{\link[Biostrings]{XString}} or \code{\link[Biostrings]{XStringSet}}
 #' object, or as a character vector.
 #' @param db The database to BLAST against.
-#' @param out Output file for alignment. If \code{NULL} the BLAST result
-#' is returned as an R character vector.
+#' @param out Output file for alignment. If \code{NULL} and \code{outfmt=5}
+#' (XML) the BLAST result is returned as \code{\linkS4class{blastReport}}.
 #' @param outfmt Output format, Integer 1-11. Default is 5 for XML output.
 #' Other options include 6 or 7 for tabular output and 0 for the
 #' traditional pairwise alignment view.

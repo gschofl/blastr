@@ -26,6 +26,9 @@
 
   \S4method{show}{blastTable}(object)
 }
+\arguments{
+  \item{object}{Any R object}
+}
 \description{
   The \code{show} methods for various blast objects can be
   modified by a number of global options. Specifically, the

@@ -8,4 +8,5 @@ inst/
 scripts/
 test/
 scratch.r
+testfile.R
 
