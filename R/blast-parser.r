@@ -66,7 +66,7 @@ parseBlastDatabaseReport  <- function(doc) {
                    c(k = k, lambda = lambda, h = h)
                  }
     ),
-    message = xvalue(doc, '/BlastOutput/BlastOutput_message', NULL)
+    message = xvalue(doc, '//Iteration_message', NULL)
   )
 }
 

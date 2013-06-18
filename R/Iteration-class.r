@@ -548,39 +548,45 @@ setMethod("[[", "IterationList",
 # show, Iteration, IterationList -----------------------------------------
 
 .show_Iteration <- function (it) {
-  offset <- nchar(getIterNum(it)) + 8
-  indent <- blanks(3)
-  desc_ <- linebreak(getQueryDef(it), indent = -offset, offset = offset)
-  header <- sprintf("Query %s: %s", getIterNum(it), desc_)
-  width <- getOption("width") - 44 - nchar(indent)
-  if (width < 16) {
-    showme <- paste0(header, "\n\nNot enough space to display hits")
+  if (is.string(it)) {
+    heaf <- tail <- NULL
+    showme <- it
   } else {
-    tail <- "\n"
-    n <- getOption("showHits", default = 12)
-    assert_that(is.numeric(n), length(n) == 1, n > 0)
-    nhits <- length(it@hits)
-    if (n >= nhits) {
-      n <- nhits
+    offset <- nchar(getIterNum(it)) + 8
+    indent <- blanks(3)
+    desc_ <- linebreak(getQueryDef(it), indent = -offset, offset = offset)
+    header <- sprintf("Query %s: %s", getIterNum(it), desc_)
+    width <- getOption("width") - 44 - nchar(indent)
+    if (width < 16) {
+      showme <- paste0(header, "\n\nNot enough space to display hits")
     } else {
-      tail <- paste0(" ... and ", nhits - n, " more hits.\n")
+      tail <- "\n"
+      n <- getOption("showHits", default = 12)
+      assert_that(is.numeric(n), length(n) == 1, n > 0)
+      nhits <- length(it@hits)
+      if (n >= nhits) {
+        n <- nhits
+      } else {
+        tail <- paste0(" ... and ", nhits - n, " more hits.\n")
+      }
+      n <- seq_len(n)
+      hits <- getHit(it, n = n)
+      desc <- getPrimaryHitDef(hits)
+      mBSc <- getMaxBitscore(hits)
+      tBSc <- getTotalBitscore(hits)
+      qCov <- getQueryCoverage(hits)*100
+      eVal <- getEvalue(hits, max = TRUE)
+      accn <- getAccession(hits)
+      c1 <- c(format("Description", width = width), blanks(width), format(ellipsize(desc, width), width=width))
+      c2 <- c(" Max ", "Score", formatC(mBSc, digits=3, width=5, format='fg'))
+      c3 <- c(" Total", " Score", formatC(tBSc, digits=3, width=6, format='fg'))
+      c4 <- c(" Query", "  Cov ", paste0(formatC(qCov, digits=0, width=5, format='d'), '%'))
+      c5 <- c("   E  ", " Value", formatC(eVal, digits=0, width=6, format='e'))
+      c6 <- c("Accession   ", blanks(12), format(accn, width = 12))
+      showme <- sprintf("%s%s %s %s %s %s  %s", indent, c1, c2, c3, c4, c5, c6)
     }
-    n <- seq_len(n)
-    hits <- getHit(it, n = n)
-    desc <- getPrimaryHitDef(hits)
-    mBSc <- getMaxBitscore(hits)
-    tBSc <- getTotalBitscore(hits)
-    qCov <- getQueryCoverage(hits)*100
-    eVal <- getEvalue(hits, max = TRUE)
-    accn <- getAccession(hits)
-    c1 <- c(format("Description", width = width), blanks(width), format(ellipsize(desc, width), width=width))
-    c2 <- c(" Max ", "Score", formatC(mBSc, digits=3, width=5, format='fg'))
-    c3 <- c(" Total", " Score", formatC(tBSc, digits=3, width=6, format='fg'))
-    c4 <- c(" Query", "  Cov ", paste0(formatC(qCov, digits=0, width=5, format='d'), '%'))
-    c5 <- c("   E  ", " Value", formatC(eVal, digits=0, width=6, format='e'))
-    c6 <- c("Accession   ", blanks(12), format(accn, width = 12))
-    showme <- sprintf("%s%s %s %s %s %s  %s", indent, c1, c2, c3, c4, c5, c6)
   }
+  
   cat(header, showme, tail, sep="\n")
 }
 

@@ -232,6 +232,7 @@ setMethod("[[", "blastReport",
   options(op)
 }
 
+
 #' Method extensions to show for blast objects.
 #'
 #' The \code{show} methods for various blast objects can be modified by

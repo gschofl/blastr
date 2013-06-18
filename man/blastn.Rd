@@ -29,8 +29,9 @@
 
   \item{db}{The database to BLAST against.}
 
-  \item{out}{Output file for alignment. If \code{NULL} the
-  BLAST result is returned as an R character vector.}
+  \item{out}{Output file for alignment. If \code{NULL} and
+  \code{outfmt=5} (XML) the BLAST result is returned as
+  \code{\linkS4class{blastReport}}.}
 
   \item{outfmt}{Output format, Integer 1-11. Default is 5
   for XML output. Other options include 6 or 7 for tabular
@@ -75,6 +76,7 @@
   Other blast.applications: \code{\link{blastp}},
   \code{\link{blastp_short}}, \code{\link{blastx}},
   \code{\link{makeblasttdb}}, \code{\link{qblast}},
-  \code{\link{tblastn}}, \code{\link{tblastx}}
+  \code{\link{tblastn}}, \code{\link{tblastx}},
+  \code{\link{update_blastdb}}
 }
 

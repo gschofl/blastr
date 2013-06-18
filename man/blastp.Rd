@@ -61,6 +61,7 @@
   \code{\link{blastn_short}}, \code{\link{blastx}},
   \code{\link{dc_megablast}}, \code{\link{makeblasttdb}},
   \code{\link{megablast}}, \code{\link{qblast}},
-  \code{\link{tblastn}}, \code{\link{tblastx}}
+  \code{\link{tblastn}}, \code{\link{tblastx}},
+  \code{\link{update_blastdb}}
 }
 

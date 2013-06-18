@@ -4,7 +4,7 @@
 \usage{
   blast(program = "blastp", query, db, outfmt, max_hits,
     strand = "both", ..., intern = FALSE, input = NULL,
-    show_cmd = FALSE)
+    show_cmd = FALSE, parse = TRUE)
 }
 \arguments{
   \item{program}{One of blastn, blastp, blastx, tblastn, or

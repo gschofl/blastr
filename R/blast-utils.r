@@ -104,25 +104,25 @@ make_deflines <- function (x, prefix = "lcl") {
     id <- names(x)
     desc <- NULL
     parse_defline <- FALSE
-    
   }
-  
+  if (is.null(id)) {
+    id <- paste0("Query_", seq_along(x))
+  }
   list(defline=paste(id, desc), parse_defline=parse_defline)
 }
 
 
 #' @keywords internal
 make_blast_query <- function (x, transl = FALSE) {
-  
-  if (is.vector(x) && file.exists(x)) {
+  ## when x is a path to a FASTA file
+  if (is.string(x) && is.readable(x)) {
     return( list(query=x, input=NULL, parse_defline=FALSE) )
   }
-  
   if (is(x, "gbFeatureList") || is(x, "gbFeature")) {
     seq <- biofiles::sequence(x)
   } else if (is(x, "XString") || is(x, "XStringSet")) {
     seq <- as(x, "XStringSet")
-  } else if (is.vector(x) && !all(file.exists(x))) {
+  } else if (is.vector(x) && is.character(x)) {
     seq <- x
   } else {
     stop(sprintf("Objects of class %s are not supported as query",
@@ -131,10 +131,6 @@ make_blast_query <- function (x, transl = FALSE) {
   
   seqnames <- make_deflines(x, prefix="lcl")
   
-  if (length(seqnames$defline) == 0) {
-    seqnames$defline <- paste0("Query_", seq_along(seq))
-  }
-  
   if (transl && class(x) %in% c("gbFeature","gbFeatureList")) {
     plus <- biofiles::strand(x) == 1
     minus <- !plus
@@ -142,10 +138,10 @@ make_blast_query <- function (x, transl = FALSE) {
     seqnames$defline <- c(seqnames$defline[minus], seqnames$defline[plus])
   }
   
-  input <- setNames(paste0(">", seqnames$defline, "\n", as.character(seq)),
-                    nm=seqnames$defline)
-  input <- paste0(input, collapse="\n")
-  list(query=NULL, input=input, parse_deflines=seqnames$parse_defline) 
+  input <- paste0(paste0(">", seqnames$defline, "\n", as.character(seq)),
+                  collapse="\n")
+  list(query=NULL, input=input, deflines=seqnames$defline,
+       parse_deflines=seqnames$parse_defline) 
 }
 
 
