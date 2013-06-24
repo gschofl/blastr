@@ -11,18 +11,17 @@
 #' @importFrom XML xmlDoc
 NULL
 
-#' Parse XML NCBI BLAST files
+#' Parse NCBI BLAST XML files into \linkS4class{blastReport} objects.
 #' 
-#' @param blast_file Blast output in XML format
-#' (File or character vector)
+#' @param blastfile Blast output in XML format (file path or character vector)
 #' @param asText If \code{TRUE} the XML blast output is passed in as a string
 #' instead of a file path.
 #' 
 #' @return A \code{\linkS4class{blastReport}} object.
 #' @rdname blastReport
 #' @export
-blastReport <- function (blast_file, asText = FALSE) {
-  doc <- xmlRoot(xmlInternalTreeParse(blast_file, asText = asText))
+blastReport <- function (blast, asText = FALSE) {
+  doc <- xmlRoot(xmlInternalTreeParse(blast, asText = asText))
   d <- parseBlastDatabaseReport(doc)
   iter_elems <- xpathApply(doc, '/BlastOutput/BlastOutput_iterations/Iteration')
   new('blastReport',
@@ -142,81 +141,82 @@ parseHsps <- function (hsp_elems, query_env) {
 }
 
 
-#' read a blast hit table
+#' Parse NCBI BLAST table files into \linkS4class{blastTable} objects.
 #' 
-#' @param blast_output Blast output in XML format
-#' (File or character vector)
+#' @param blastfile Blast output in tabular format
+#' (file path or character vector)
 #' 
-#' @return A \code{\link{blastReport-class}} object.
-#' 
+#' @return A \code{\linkS4class{blastTable}} object.
+#' @rdname blastTable
 #' @export
-parseBlastTabular <- function (blast_output) {
+blastTable <- function (blastfile) {
   res <- list()
-  for (blout in blast_output) {
+  for (blout in blastfile) {
     if (is.character(blout) && file.exists(blout)) {
-    cf <- count.fields(blout, sep="\t", comment.char="#")
-    file_path <- file(blout, open="r")
-  } else {
-    cf <- count.fields(textConnection(as.character(blout)),
-                       sep="\t", comment.char="#")
-    file_path <- textConnection(as.character(blout))
-  }
-
-  if (!all(cf == 12)) {
-    stop(sprintf("Malformed blast table. %s columns in row %s.\n",
-                 sQuote(cf[cf > 12]), sQuote(which(cf > 12))))
-  }
-  
-  hasComment <- TRUE
-  comStr <- NULL
-  while (hasComment) {
-    line <- readLines(file_path, n=1)
-    if (hasComment <- str_detect(line, "^#")) {
-      comStr <- c(comStr, str_match(line, "[^(# *)].*"))
+      cf <- count.fields(blout, sep="\t", comment.char="#")
+      file_path <- file(blout, open="r")
+    } else {
+      cf <- count.fields(textConnection(as.character(blout)),
+                         sep="\t", comment.char="#")
+      file_path <- textConnection(as.character(blout))
     }
-  }
-  
-  pushBack(line, connection=file_path)  
-  hit_table <- 
-    read.table(file_path, header=FALSE, sep="\t",
-               as.is=TRUE, nrows=length(cf),
-               col.names=c("qid", "sid", "pident",
-                           "length", "mismatch", "gapopen",
-                           "qstart", "qend", "sstart",
-                           "send","evalue","bitscore"),
-               colClasses=c("character", "character", "numeric",
-                            "integer", "integer", "integer",
-                            "integer", "integer", "integer",
-                            "integer", "numeric", "numeric"))
-
-  ## parse subjectIds in 'hit_table'
-  all_ids <- with(hit_table, strsplit(sid, "\\|"))
-  gi  <- vapply(all_ids, '[', 2, FUN.VALUE=character(1))
-  source_tag <- vapply(all_ids, '[', 3, FUN.VALUE=character(1))
-  accn <- ifelse(grepl("pdb", source_tag),
-                 paste0(sapply(all_ids, '[', 4), "_", sapply(all_ids, '[', 5)),
-                 sapply(all_ids, '[', 4))
-  if (all(is.na(accn)))
-    accn <- hit_table[["sid"]]
-  
-  neg_log_evalue <- with(hit_table, -log(as.numeric(evalue)))
-  neg_log_evalue[is.infinite(neg_log_evalue)] <- -log(1e-323)
-  
-  if (not.null(comStr) && length(comStr) == 5) {
-    program <- comStr[1]
-    query <- str_split_fixed(comStr[2], "Query: ", 2)[,2]
-    db <- str_split_fixed(comStr[3], "Database: ", 2)[,2]
-  } else {
-    program <- query <- db <- NA_character_
-  }
+    
+    if (!all(cf == 12)) {
+      stop(sprintf("Malformed blast table. %s columns in row %s.\n",
+                   sQuote(cf[cf > 12]), sQuote(which(cf > 12))))
+    }
+    
+    hasComment <- TRUE
+    comStr <- NULL
+    while (hasComment) {
+      line <- readLines(file_path, n=1)
+      if (hasComment <- str_detect(line, "^#")) {
+        comStr <- c(comStr, str_match(line, "[^(# *)].*"))
+      }
+    }
+    
+    pushBack(line, connection=file_path)  
+    hit_table <- 
+      read.table(file_path, header=FALSE, sep="\t",
+                 as.is=TRUE, nrows=length(cf),
+                 col.names=c("qid", "sid", "pident",
+                             "length", "mismatch", "gapopen",
+                             "qstart", "qend", "sstart",
+                             "send","evalue","bit_score"),
+                 colClasses=c("character", "character", "numeric",
+                              "integer", "integer", "integer",
+                              "integer", "integer", "integer",
+                              "integer", "numeric", "numeric"))
+    
+    ## parse subjectIds in 'hit_table'
+    all_ids <- with(hit_table, strsplit(sid, "\\|"))
+    gi  <- vapply(all_ids, '[', 2, FUN.VALUE=character(1))
+    source_tag <- vapply(all_ids, '[', 3, FUN.VALUE=character(1))
+    accn <- ifelse(grepl("pdb", source_tag),
+                   paste0(sapply(all_ids, '[', 4), "_", sapply(all_ids, '[', 5)),
+                   sapply(all_ids, '[', 4))
+    if (all(is.na(accn)))
+      accn <- hit_table[["sid"]]
+    
+    neg_log_evalue <- with(hit_table, -log(as.numeric(evalue)))
+    neg_log_evalue[is.infinite(neg_log_evalue)] <- -log(1e-323)
+    
+    if (not.null(comStr) && length(comStr) == 5) {
+      program <- comStr[1]
+      query <- str_split_fixed(comStr[2], "Query: ", 2)[,2]
+      database <- str_split_fixed(comStr[3], "Database: ", 2)[,2]
+    } else {
+      program <- query <- db <- NA_character_
+    }
     
     close(file_path)
     
-    res <- c(res, new('blastTable', program = program, db = db, query = query,
-                      bitscore = as.numeric(hit_table[["bitscore"]]),
+    res <- c(res, new('blastTable', program = program, database = database,
+                      query = query,
+                      bit_score = as.numeric(hit_table[["bit_score"]]),
                       evalue = as.numeric(hit_table[["evalue"]]),
                       mlog.evalue = neg_log_evalue,
-                      gi = gi,
+                      geneid = gi,
                       accession = accn,
                       table = hit_table))
   }

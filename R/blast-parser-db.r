@@ -209,50 +209,47 @@ BlastOutput.Iterations <- function (dbPath = NULL,
 
 blast_db.sql <- '
 CREATE TABLE query(
-query_id      INT,
-query_def     VARCHAR(80),
-query_len     INT,
-PRIMARY KEY (query_id)
+        query_id      INTEGER,
+        query_def     TEXT,
+        query_len     INTEGER,
+        PRIMARY KEY (query_id)
 );
-
 CREATE TABLE hit(
-query_id      INT,
-hit_id        INT,
-hit_num       SMALLINT UNSIGNED,
-gene_id       CHAR(10),
-accession     CHAR(12),
-definition    VARCHAR(255),
-length        INT,
-PRIMARY KEY (hit_id),
-FOREIGN KEY (query_id) REFERENCES query (query_id) 
+        query_id      INTEGER,
+        hit_id        INTEGER,
+        hit_num       INTEGER,
+        gene_id       TEXT,
+        accession     TEXT,
+        definition    TEXT,
+        length        INTEGER,
+        PRIMARY KEY (hit_id),
+        FOREIGN KEY (query_id) REFERENCES query (query_id)
 );
-
 CREATE TABLE hsp(
-query_id      INT,
-hit_id        INT,
-hsp_id        INT,
-hsp_num       SMALLINT UNSIGNED,
-bit_score     FLOAT,
-score         SMALLINT UNSIGNED,
-evalue        DOUBLE,
-query_from    SMALLINT UNSIGNED,
-query_to      SMALLINT UNSIGNED,
-hit_from      INT UNSIGED,
-hit_to        INT UNSIGED,
-query_frame   TINYINT,
-hit_frame     TINYINT,
-identity      SMALLINT UNSIGNED,
-positive      SMALLINT UNSIGNED,
-gaps          SMALLINT UNSIGNED,
-align_len     SMALLINT UNSIGNED,
-qseq          VARCHAR,
-hseq          VARCHAR,
-midline       VARCHAR,
-PRIMARY KEY (hsp_id),
-FOREIGN KEY (hit_id) REFERENCES hit (hit_id)
-FOREIGN KEY (query_id) REFERENCES query (query_id)
+        query_id      INTEGER,
+        hit_id        INTEGER,
+        hsp_id        INTEGER,
+        hsp_num       INTEGER,
+        bit_score     FLOAT,
+        score         INTEGER,
+        evalue        FLOAT,
+        query_from    INTEGER,
+        query_to      INTEGER,
+        hit_from      INTEGER,
+        hit_to        INTEGER,
+        query_frame   INTEGER,
+        hit_frame     INTEGER,
+        identity      INTEGER,
+        positive      INTEGER,
+        gaps          INTEGER,
+        align_len     INTEGER,
+        qseq          TEXT,
+        hseq          TEXT,
+        midline       TEXT,
+        PRIMARY KEY (hsp_id),
+        FOREIGN KEY (hit_id) REFERENCES hit (hit_id)
+        FOREIGN KEY (query_id) REFERENCES query (query_id)
 );
-
 CREATE INDEX Fquery ON query (query_id);
 CREATE INDEX Fhit ON hit (hit_id);
 CREATE INDEX Fhit_query ON hit (query_id);
@@ -263,30 +260,41 @@ CREATE INDEX Fhsp_hit ON hsp (hit_id);
 CREATE INDEX Fhsp_hit_query ON hsp (query_id, hit_id, hsp_id);
 '
 
-
-#' Parse large BLAST Reports into SQLite DB
+#' Parse NCBI BLAST XML files into \linkS4class{blastReportDB} objects.
 #' 
-#' @param blastFile an XML BLAST Report.
-#' @param dbPath Path to database.
+#' Create (or connect to) a  blastReport SQLite database.
+#' 
+#' @param blastfile an XML BLAST Report.
+#' @param db_path Path to an blastReport SQLite database.
 #' @param max_hit How many hits should be parsed (default: all available)
 #' @param max_hsp How many hsps should be parsed (default: all available)
 #' @param reset_at After how many iterations should the parser dump the
 #' data into the db before continuing.
 #'
-#' @return a connection object
-#' @export 
-parseBlastToDB <- function (blastFile, dbPath = "blast.db", max_hit = NULL,
-                            max_hsp = NULL, reset_at = 1000)
+#' @return A \code{\linkS4class{blastReportDB}} object.
+#' @rdname blastReportDB
+#' @export
+blastReportDB <- function (blastfile, db_path = "blast.db", max_hit = NULL,
+                           max_hsp = NULL, reset_at = 1000)
 {
-  assert_that(is.readable(blastFile), has_extension(blastFile, 'xml'))
-  con <- db_create(dbPath, blast_db.sql)
-  handler <- BlastOutput.Iterations(dbPath, max_hit, max_hsp, reset_at)
-  out <- xmlEventParse(blastFile, list(), branches=handler)
+  assert_that(is.readable(blastfile), has_extension(blastfile, 'xml'))
+  con <- db_create(db_path, blast_db.sql)
+  handler <- BlastOutput.Iterations(db_path, max_hit, max_hsp, reset_at)
+  out <- xmlEventParse(blastfile, list(), branches=handler)
   ## load final part into db
   assert_that( db_bulk_insert(con, "query", handler$getQuery()) )
   assert_that( db_bulk_insert(con, "hit", handler$getHit()) )
   assert_that( db_bulk_insert(con, "hsp", handler$getHsp()) )
-  con
+  new("blastReportDB", con)
 }
 
 
+#' @usage blastReportDBConnect(db_path)
+#' @return A \code{\linkS4class{blastReportDB}} object.
+#' @rdname blastReportDB
+#' @export
+blastReportDBConnect <- function (db_path) {
+  assert_that(is.readable(db_path))
+  con <- db_connect(db_path)
+  new("blastReportDB", con)
+}

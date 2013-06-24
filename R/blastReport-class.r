@@ -9,13 +9,11 @@ NULL
 #' 
 #' A container for blast header information:
 #'
-#'  \section{Slots}{ 
-#'    \describe{
-#'      \item{\code{version}:}{Version of BLAST used;  \code{"character"}.}
-#'      \item{\code{reference}:}{Reference for BLAST; \code{"character"}.}
-#'      \item{\code{database}:}{Name of the database; \code{"character"}.}
-#'    }
-#'  }
+#' \describe{
+#'   \item{\code{version}:}{Version of BLAST used; \code{"character"}.}
+#'   \item{\code{reference}:}{Reference for BLAST; \code{"character"}.}
+#'   \item{\code{database}:}{Name of the database; \code{"character"}.}
+#' }
 #'
 #' @keywords internal
 setClass("BlastHeader",
@@ -38,23 +36,21 @@ setMethod('show', 'BlastHeader',
 #'
 #' A container for blast parameters and statistics.
 #' 
-#'  \section{Slots}{ 
-#'    \describe{
-#'      \item{\code{program}:}{The BLAST flavour that generated the data; \code{"character"}.}
-#'      \item{\code{matrix}:}{Name of the matrix (\code{NA} for nucleotide blast); \code{"character"}.}
-#'      \item{\code{expect}:}{Cutoff value; \code{"numeric"}.}
-#'      \item{\code{penalties}:}{Open and extend penalties; \code{"numeric"}.}
-#'      \item{\code{sc_match}:}{Match score for nucleotide-nucleotide comparison; \code{"integer"}.}
-#'      \item{\code{sc_mismatch}:}{Mismatch penalty for nucleotide-nucleotide comparison; \code{"integer"}.}
-#'      \item{\code{filter}:}{Filter string; \code{"character"}.}
-#'      \item{\code{num_sequences}:}{Number of sequences in the database; \code{"character"}.}
-#'      \item{\code{num_letters}:}{Number of letters in the database; \code{"character"}.}
-#'      \item{\code{hsp_length}:}{Effective HSP length; \code{"numeric"}.}
-#'      \item{\code{effective_space}:}{Effective search space; \code{"numeric"}.} 
-#'      \item{\code{ka_params}:}{kappa, lambda, entropy; \code{"numeric"}.} 
-#'    }
-#'  }
-#'
+#' \describe{
+#'  \item{\code{program}:}{The BLAST flavour that generated the data; \code{"character"}.}
+#'  \item{\code{matrix}:}{Name of the matrix (\code{NA} for nucleotide blast); \code{"character"}.}
+#'  \item{\code{expect}:}{Cutoff value; \code{"numeric"}.}
+#'  \item{\code{penalties}:}{Open and extend penalties; \code{"numeric"}.}
+#'  \item{\code{sc_match}:}{Match score for nucleotide-nucleotide comparison; \code{"integer"}.}
+#'  \item{\code{sc_mismatch}:}{Mismatch penalty for nucleotide-nucleotide comparison; \code{"integer"}.}
+#'  \item{\code{filter}:}{Filter string; \code{"character"}.}
+#'  \item{\code{num_sequences}:}{Number of sequences in the database; \code{"character"}.}
+#'  \item{\code{num_letters}:}{Number of letters in the database; \code{"character"}.}
+#'  \item{\code{hsp_length}:}{Effective HSP length; \code{"numeric"}.}
+#'  \item{\code{effective_space}:}{Effective search space; \code{"numeric"}.} 
+#'  \item{\code{ka_params}:}{kappa, lambda, entropy; \code{"numeric"}.} 
+#' }
+#'    
 #' @keywords internal
 setClass("BlastParameters",
          representation(program = "character",
@@ -124,16 +120,15 @@ setClassUnion("IterationListOrChar", members=c("IterationList", "character"))
 #'  
 #'  E.g. \code{report[[1]][[1]]} will return the first hit in the first query.
 #'  
-#'  \section{Slots}{ 
-#'    \describe{
-#'      \item{\code{header}:}{Header information; \code{"BlastHeader"}.}
-#'      \item{\code{params}:}{Blast parameters and statistics \code{"BlastParameters"}.}
-#'      \item{\code{iterations}:}{Iterations; \code{"IterationListOrChar"}.}
-#'    }
+#'  \describe{
+#'    \item{\code{header}:}{Header information; \code{"BlastHeader"}.}
+#'    \item{\code{params}:}{Blast parameters and statistics \code{"BlastParameters"}.}
+#'    \item{\code{iterations}:}{Iterations; \code{"IterationListOrChar"}.}
 #'  }
 #'
 #' @seealso
-#'  The constructor \code{\link{blastReport}} 
+#'  The constructor \code{\link{blastReport}}; the BLAST classes
+#'  \code{\linkS4class{blastReportDB}} and \code{\linkS4class{blastTable}} 
 #' @name blastReport-class
 #' @rdname blastReport-class
 #' @exportClass blastReport

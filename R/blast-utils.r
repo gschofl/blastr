@@ -1,4 +1,4 @@
-#' @importFrom biofiles sequence
+#' @importFrom biofiles getSequence
 #' @importFrom biofiles strand
 #' @importFrom biofiles index
 #' @importFrom biofiles qualif
@@ -13,31 +13,6 @@
 #' @importFrom Biostrings reverseComplement
 #' @importFrom Biostrings BStringSet
 NULL
-
-
-#' display a html file in a browser
-#' 
-#' @param html file path or html encoded character string
-#' @param browser browser
-#' @param unlink remove temporary file
-#' 
-#' @export 
-displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE) {
-  if (!file.exists(html)) { 
-    f_tmp <- tempfile(fileext=".html")
-    writeLines(html, f_tmp)
-  } else {
-    f_tmp <- html
-    unlink <- FALSE
-  }
-  
-  browseURL(url=f_tmp, browser=browser)
-  
-  if (unlink) {
-    Sys.sleep(2)
-    unlink(f_tmp)
-  }
-}
 
 
 #' @keywords internal
@@ -56,31 +31,12 @@ displayHTML <- function (html, browser=getOption("browser"), unlink=TRUE) {
   s <- gsub("\\+(and)\\+|\\+(or)\\+|\\+(not)\\+","\\+\\U\\1\\U\\2\\U\\3\\+", s, perl=TRUE)
   s
 }
-#' deparse NCBI fasta definition lines
-#' 
-#' @param ids List of identifiers.
-#' @param descs List of description lines.
-#' 
-#' @keywords internal
-deparseDeflines <- function(ids, descs) {
-
-  deflines <- list()
-  for (i in seq_along(ids)) {
-    deflines[[i]] <-
-      paste0(
-        paste0(names(ids[[i]]), "|", paste0(ids[[i]][[1]], collapse="|") , collapse="|"),
-        "| ",
-        descs[[i]])
-  }
-  
-  return(deflines)
-}
 
 
 #' Construct deflines
 #' @keywords internal
-make_deflines <- function (x, prefix = "lcl") {
-  if (is(x, "gbFeature") || is(x, "gbFeatureList")) {
+make_deflines <- function (query, prefix = "lcl") {
+  if (class(query) %in% c("gbFeatureList","gbFeature")) {
     id <- paste0(prefix, "|", index(x))
     desc <- paste0(unlist(qualif(x, "locus_tag")),
                    " [", unlist(qualif(x, "product")), "]")
@@ -113,35 +69,29 @@ make_deflines <- function (x, prefix = "lcl") {
 
 
 #' @keywords internal
-make_blast_query <- function (x, transl = FALSE) {
-  ## when x is a path to a FASTA file
-  if (is.string(x) && is.readable(x)) {
-    return( list(query=x, input=NULL, parse_defline=FALSE) )
-  }
-  if (is(x, "gbFeatureList") || is(x, "gbFeature")) {
-    seq <- biofiles::sequence(x)
-  } else if (is(x, "XString") || is(x, "XStringSet")) {
-    seq <- as(x, "XStringSet")
-  } else if (is.vector(x) && is.character(x)) {
-    seq <- x
-  } else {
-    stop(sprintf("Objects of class %s are not supported as query",
-                 sQuote(class(query))))
+make_blast_query <- function (query, transl = FALSE) {
+  
+  if (is.string(query) && is.readable(query)) {
+    # x is the path to a FASTA file
+    return( list(query=query, input=NULL, parse_defline=FALSE) )
   }
   
-  seqnames <- make_deflines(x, prefix="lcl")
-  
-  if (transl && class(x) %in% c("gbFeature","gbFeatureList")) {
-    plus <- biofiles::strand(x) == 1
-    minus <- !plus
-    seq <- c(translate(reverseComplement(seq[minus])), translate(seq[plus]))
-    seqnames$defline <- c(seqnames$defline[minus], seqnames$defline[plus])
+  if (class(query) %in% c("gbReportList","gbReport","gbFeatureList","gbFeature")) {
+    seq <- getSequence(query)
+  }
+  else if (class(query) %in% c("XStringSet", "XString")) {
+    seq <- as(query, "XStringSet")
+  }
+  else if (is.vector(query) && is.character(query)) {
+    seq <- query
+  }
+  else {
+    stop("Objects of class ", sQuote(class(query)), " are not supported as query.")
   }
   
-  input <- paste0(paste0(">", seqnames$defline, "\n", as.character(seq)),
-                  collapse="\n")
-  list(query=NULL, input=input, deflines=seqnames$defline,
-       parse_deflines=seqnames$parse_defline) 
+  seqnames <- make_deflines(seq, prefix="lcl")
+  input <- paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse="\n")
+  list(query=NULL, input=input, parse_deflines=seqnames$parse_defline) 
 }
 
 
