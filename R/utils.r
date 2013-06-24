@@ -4,6 +4,10 @@
 #' @importFrom Biostrings writeXStringSet
 #' @importFrom Biostrings readDNAStringSet
 #' @importFrom Biostrings readDNAMultipleAlignment
+#' @importFrom rmisc compose
+#' @importFrom rmisc trim
+#' @importFrom rmisc "%|%"
+#' @importFrom rmisc "%||%"
 #' @import methods
 NULL
 
@@ -13,15 +17,8 @@ setOldClass("DNAbin")
 .tags  <- c("lcl","gb","emb","pir","sp","ref","gnl",
             "gi","dbj","prf","pdb","pat","bbs")
 
-## vectorised %||%
-"%|%" <- function (a, b) {
-  ifelse(is_empty(a), b, a)
-}
-
 ## vectorised %|na|%
-"%|NA|%" <- function (a, b) {
-  ifelse(is.na(a), b, a)
-}
+"%|NA|%" <- Curry(`%|%`, filter = "is.na")
 
 listclassConstructor <- function (listClass, elemClass) {
   assert_that(is.string(listClass), is.string(elemClass))
@@ -99,17 +96,6 @@ getterFromToRange <- function(x, id, type='query', max=FALSE) {
   }
   pos
 }
-
-# advancedGetterConstructor <- function(SELECT,FROM,WHERE,SQL_FUNCTION,VALUE) {
-#   function(x,id) {
-#     lapply(id,function(id) {
-#       SQL <- paste("SELECT", SELECT, "FROM", FROM, "WHERE", WHERE, "=",id,
-#                    "AND", VALUE, "= (SELECT",SQL_FUNCTION,"(",VALUE,") FROM", 
-#                     FROM, "WHERE",WHERE, "=",id,")")
-#       db_query(x,SQL,1L) %||% NA_character_
-#     })
-#   }
-# }
 
 ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
   str <- encodeString(obj)

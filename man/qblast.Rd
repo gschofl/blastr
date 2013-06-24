@@ -2,26 +2,25 @@
 \alias{qblast}
 \title{Do a BLAST search using the QBLAST URL API}
 \usage{
-  qblast(query, program = "megablast", db = "nr",
+  qblast(query, program = "megablast", db = "nt",
     outfmt = "xml", max_hits = 20, entrez_query = "",
-    evalue = 10, ..., .params = list(), display = FALSE,
-    update_time = 4)
+    evalue = 10, ..., .params = list(), update_time = 4)
 }
 \arguments{
-  \item{query}{An accession number, a gi, or a fasta
-  sequence provided either as an
-  \code{\link[Biostrings]{XString}} or
-  \code{\link[Biostrings]{XStringSet}} object, or as a
-  named character vector.}
+  \item{query}{Query sequences as path to a FASTA file, an
+  \code{\linkS4class{XStringSet}} object, or a character
+  vector.}
+
+  \item{db}{The database to BLAST against.}
 
   \item{program}{The blast application to use. One of
   'megablast' (default), 'blastn', 'blastp', 'rpsblast',
   blastx', 'tblastn', 'tblastx'.}
 
-  \item{db}{Blast database name. Defaults to 'nr'.}
+  \item{db}{Blast database name. (defaults: 'nt').}
 
-  \item{outfmt}{Output format. One of 'xml', 'tabular', or
-  'html'. See Details.}
+  \item{outfmt}{Output format. One of 'xml' or 'tabular'.
+  See Details.}
 
   \item{max_hits}{The maximum number of hits to return.}
 
@@ -36,9 +35,6 @@
 
   \item{.params}{A named list of parameters passed on to
   the QBLAST URL API.}
-
-  \item{display}{Display the query result in a web
-  browser.}
 
   \item{update_time}{How often to poll the blast server for
   results.}

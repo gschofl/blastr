@@ -24,14 +24,15 @@
   E.g. \code{report[[1]][[1]]} will return the first hit in
   the first query.
 
-  \section{Slots}{ \describe{ \item{\code{header}:}{Header
-  information; \code{"BlastHeader"}.}
-  \item{\code{params}:}{Blast parameters and statistics
-  \code{"BlastParameters"}.}
+  \describe{ \item{\code{header}:}{Header information;
+  \code{"BlastHeader"}.} \item{\code{params}:}{Blast
+  parameters and statistics \code{"BlastParameters"}.}
   \item{\code{iterations}:}{Iterations;
-  \code{"IterationListOrChar"}.} } }
+  \code{"IterationListOrChar"}.} }
 }
 \seealso{
-  The constructor \code{\link{blastReport}}
+  The constructor \code{\link{blastReport}}; the BLAST
+  classes \code{\linkS4class{blastReportDB}} and
+  \code{\linkS4class{blastTable}}
 }
 

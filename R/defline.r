@@ -2,6 +2,7 @@
 #' @include utils.r
 #' @include blast-utils.r
 #' @importFrom stringr str_split_fixed
+#' @importFrom stringr str_extract_all
 #' @importFrom stringr perl
 #' @importFrom rmisc compact
 NULL
@@ -135,8 +136,8 @@ setAs('DeflineSet', 'character', function (from) {
       x <- rmisc::compact(unlist(strsplit(i, paste(t, collapse="|"))), 'all_empty')
       if (!all(is.na(t))) {
         x <- str_split_fixed(x, '\\|', 3)
-        accn <- x[,2] %|% NA_character_
-        loc <- x[,3] %|% NA_character_
+        accn <- x[, 2L] %|% NA_character_
+        loc <- x[, 3L] %|% NA_character_
       } else {
         accn <- x
         loc <- NA_character_

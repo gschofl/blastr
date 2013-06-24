@@ -1,11 +1,11 @@
 \name{blastReport}
 \alias{blastReport}
-\title{Parse XML NCBI BLAST files}
+\title{Parse NCBI BLAST XML files into \linkS4class{blastReport} objects.}
 \usage{
-  blastReport(blast_file, asText = FALSE)
+  blastReport(blast, asText = FALSE)
 }
 \arguments{
-  \item{blast_file}{Blast output in XML format (File or
+  \item{blastfile}{Blast output in XML format (file path or
   character vector)}
 
   \item{asText}{If \code{TRUE} the XML blast output is
@@ -15,6 +15,7 @@
   A \code{\linkS4class{blastReport}} object.
 }
 \description{
-  Parse XML NCBI BLAST files
+  Parse NCBI BLAST XML files into \linkS4class{blastReport}
+  objects.
 }
 

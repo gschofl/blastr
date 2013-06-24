@@ -6,12 +6,11 @@
   A container for blast header information:
 }
 \details{
-  \section{Slots}{ \describe{
-  \item{\code{version}:}{Version of BLAST used;
+  \describe{ \item{\code{version}:}{Version of BLAST used;
   \code{"character"}.} \item{\code{reference}:}{Reference
   for BLAST; \code{"character"}.}
   \item{\code{database}:}{Name of the database;
-  \code{"character"}.} } }
+  \code{"character"}.} }
 }
 \keyword{internal}
 
