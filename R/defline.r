@@ -75,14 +75,27 @@ setMethod(".getDeflineID", 'Defline', function (x, db = 'any') {
   db <- match.arg(db, c('any', .tags))
   if (db == 'any') {
     "Not implemented"
-  } else {
+  } 
+  else if (db == 'gnl') {
+    # General database identifier: gnl|database|identifier
+    ans <- x@locus[x@tag == 'gnl']
+    attr(ans, 'database') <- x@accession
+    ans
+  }
+  else {
     x@accession[x@tag == db] %||% NA_character_
   }
 })
 setMethod(".getDeflineID", 'DeflineSet', function (x, db = 'any') {
   if (db == 'any') {
     "Not implemented"
-  } else {
+  }
+  else if (db == 'gnl') {
+    ans <- vapply(x, .getDeflineID, db = 'gnl', FUN.VALUE=character(1))
+    attr(ans, 'database') <- vapply(x, slot, 'accession', FUN.VALUE=character(1))
+    ans
+  }
+  else {
     vapply(x, .getDeflineID, db = db, FUN.VALUE=character(1))
   }
 })
@@ -154,7 +167,7 @@ setAs('DeflineSet', 'character', function (from) {
 #' @keywords internal
 Deflines <- function (x) {
   # first split into identifier and description at the first blank space
-  x <- rmisc::compact(unlist(strsplit(unlist(x), ">", fixed=TRUE)), 'all_empty')
+  x <- rmisc::compact(unlist(strsplit(unlist(x), "^>")), 'all_empty')
   x <- str_split_fixed(x, " ", 2)
   ids <- x[,1]
   x <- x[,2]

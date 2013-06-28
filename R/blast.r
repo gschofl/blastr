@@ -102,7 +102,7 @@ update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
 #' 
 #' @param program One of blastn, blastp, blastx, tblastn, or tblastx
 #' @param query Query sequences as path to a FASTA file,
-#' an \code{\link[Biostrings]{XStringSet}} object, or a character vector.
+#' an \code{\linkS4class{XStringSet}} object, or a character vector.
 #' @param db Blast database name (defaults to 'nt' for blastn and 'nr' for
 #' the rest).
 #' @param outfmt XML or table (default: XML)
@@ -122,7 +122,8 @@ update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
                     strand = 'both', ..., intern = FALSE, input = NULL,
                     show_cmd = FALSE, parse = TRUE) {
   
-  program <- match.arg(program, c("blastn", "blastp", "blastx", "tblastn", "tblastx"))
+  program <- match.arg(program, c("blastn", "blastp", "blastx", "tblastn",
+                                  "tblastx", "rpsblast+", 'rpstblastn'))
   assert_that(has_command(program))
   strand <- match.arg(strand, c("both", "plus", "minus"))
   outfmt <- switch(match.arg(outfmt, c('xml', 'table')), xml=5, table=7)
@@ -131,7 +132,7 @@ update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
   if (missing(query))
     return( SysCall(program, help=TRUE, intern=FALSE) )
   
-  if (program %in% c("blastp","blastp_short")) {
+  if (program %in% c("blastp","blastp_short","rpsblast+")) {
     strand <- NULL
   }
   
@@ -144,17 +145,13 @@ update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
   # set a number of defaults different from the internal defaults of
   # the blast applications
   if (missing(db)) {
-    if (program == "blastn")
-      db <- "nt"
-    else
-      db <- "nr"
+    db <- switch(program, blastn='nt', `rpsblast+`='Cdd', 'nr')
   }
   args <- merge_list(list(...),
                      list(query=query, db=db, outfmt=outfmt,
                           num_descriptions=NULL, num_alignments=NULL,
                           max_target_seqs=max_hits, strand=strand,
-                          parse_deflines=parse_deflines)
-  )
+                          parse_deflines=parse_deflines))
   # remove stdin', 'stdout' from the arguments list
   stdin <- args[["stdin"]]
   args[["stdin"]] <- NULL
@@ -374,6 +371,38 @@ tblastx <- Curry(.blast, program = "tblastx")
 #' @examples
 #' ##
 tblastn <- Curry(.blast, program = "tblastn")
+
+
+#' Wrapper for the NCBI Reversed Position Specific Blast
+#' 
+#' Run \code{rpsblast()} without arguments to print usage and
+#' arguments description.
+#' 
+#' @usage rpsblast(query, db="Cdd", out=NULL, outfmt="xml", max_hits=20,
+#' evalue=10, remote=FALSE, ...)
+#' 
+#' @param query Query sequences as path to a FASTA file,
+#' an \code{\linkS4class{XStringSet}} object, or a character vector.
+#' @param db The database to BLAST against (default: Cdd).
+#' @param out (optional) Output file for alignment.
+#' If \code{NULL} and the BLAST result is returned as
+#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' object.
+#' @param outfmt Output format, \code{'xml'} or \code{'table'}.
+#' @param max_hits How many hits to return (default: 20).
+#' @param evalue Expect value cutoff (default: 10).
+#' @param remote Execute search remotely.
+#' @param ... Additional parameters passed on to the BLAST commmand line
+#' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
+#' for a description of common options.
+#' 
+#' @family blast applications
+#' @export rpsblast
+#' @aliases rpsblast
+#' @examples
+#' ##
+rpsblast <- Curry(.blast, program = "rpsblast+")
+
 
 #' Do a BLAST search using the QBLAST URL API
 #' 

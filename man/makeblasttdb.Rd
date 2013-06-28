@@ -31,7 +31,8 @@
   \code{\link{blastn_short}}, \code{\link{blastp}},
   \code{\link{blastp_short}}, \code{\link{blastx}},
   \code{\link{dc_megablast}}, \code{\link{megablast}},
-  \code{\link{qblast}}, \code{\link{tblastn}},
-  \code{\link{tblastx}}, \code{\link{update_blastdb}}
+  \code{\link{qblast}}, \code{\link{rpsblast}},
+  \code{\link{tblastn}}, \code{\link{tblastx}},
+  \code{\link{update_blastdb}}
 }
 

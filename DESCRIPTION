@@ -1,5 +1,5 @@
 Package: blastr
-Version: 0.1-0
+Version: 0.1.1
 Date: 2013-06-13
 Type: Package
 Title: A wrapper arpound NCBI Blast.

@@ -7,6 +7,10 @@ doc/
 inst/
 scripts/
 test/
+cache/
+*.R
+*.html
+*.Rmd
 scratch.r
 testfile.R
 
