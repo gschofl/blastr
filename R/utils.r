@@ -77,25 +77,25 @@ getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
 getterFromToRange <- function(x, id, type='query', max=FALSE) {
   if (max) {
     if (type=='query') {
-      pos <- db_query(x,paste('SELECT query_frame, query_from, query_to from hsp 
-                                WHERE query_id=',id, 'AND bit_score = (SELECT
-                                MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
+      pos <- db_query(x,paste('SELECT hit_id, query_frame, query_from, query_to from hsp 
+                              WHERE query_id=',id, 'AND bit_score = (SELECT
+                              MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
     } else {
-      pos <- db_query(x,paste('SELECT hit_frame, hit_from, hit_to from hsp 
-                                WHERE query_id=',id, 'AND bit_score = (SELECT
-                                MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
+      pos <- db_query(x,paste('SELECT hit_id, hit_frame, hit_from, hit_to from hsp 
+                              WHERE query_id=',id, 'AND bit_score = (SELECT
+                              MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
     }
-  } else {
-    if (type=='query') {
-      pos <- db_query(x,paste('SELECT query_frame, query_from, query_to from hsp 
-                              WHERE query_id =',id))
     } else {
-      pos <- db_query(x,paste('SELECT hit_frame, hit_from, hit_to from hsp 
-                              WHERE query_id =',id))
-    }
-  }
+      if (type=='query') {
+        pos <- db_query(x,paste('SELECT hit_id, query_frame, query_from, query_to from hsp 
+                                WHERE query_id =',id))
+      } else {
+        pos <- db_query(x,paste('SELECT hit_id, hit_frame, hit_from, hit_to from hsp 
+                                WHERE query_id =',id))
+      }
+      }
   pos
-}
+    }
 
 ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
   str <- encodeString(obj)
