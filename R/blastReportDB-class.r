@@ -450,22 +450,30 @@ setMethod("getMaxPercIdentity", "blastReportDB", function (x, id) {
   unlist(.getMaxPercIdentity(x, paste(id,')')))
 })
 
-.rangeDB <- function(x, id, type, width=FALSE, max=FALSE) {
-  pos <- getterFromToRange(x, id, type, max)
-  colnames(pos) <- c('frame', 'from', 'to')
-  .range(pos$frame, pos$from, pos$to, width=width)
+.rangeDB <- function(x, id, type, width = FALSE, max=FALSE) {
+   pos <- getterFromToRange(x, id, type, max)
+   colnames(pos) <- c('id', 'frame', 'from','to')
+   pos <- split(pos, pos[["id"]]) 
+   Map(function (p) {
+     start <- ifelse(p[["frame"]] >= 0L, p[["from"]], p[["to"]])
+     end <- ifelse(p[["frame"]] >= 0L, p[["to"]], p[["from"]])
+     r <- IRanges(start, end)
+     if (width) width(reduce(r)) else r
+   }, p=pos, USE.NAMES=FALSE)
 }
 
 #' @rdname QueryCoverage-methods
 #' @aliases getQueryCoverage,blastReportDB-method
 setMethod("getQueryCoverage", "blastReportDB", function (x, id) {
-  sum(.rangeDB(x, id, type='query', width=TRUE))/unlist(getQueryLen(x, id))
+  vapply(.rangeDB(x, id, type='query', width=TRUE), sum, numeric(1))/
+    unlist(getQueryLen(x,id))
 })
 
 #' @rdname HitCoverage-methods
 #' @aliases getHitCoverage,blastReportDB-method
 setMethod("getHitCoverage", "blastReportDB", function (x, id) {
-  sum(.rangeDB(x, id, type='hit', width=TRUE))/unlist(getQueryLen(x, id))
+  vapply(.rangeDB(x, id, type='hit', width=TRUE), sum, numeric(1))/
+    unlist(getQueryLen(x,id))
 })
 
 #' @aliases show,blastReportDB-method
