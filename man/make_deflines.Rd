@@ -2,7 +2,7 @@
 \alias{make_deflines}
 \title{Construct deflines}
 \usage{
-  make_deflines(x, prefix = "lcl")
+  make_deflines(query, prefix = "lcl")
 }
 \description{
   Construct deflines

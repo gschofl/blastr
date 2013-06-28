@@ -64,7 +64,7 @@
   Other blast.applications: \code{\link{blastp}},
   \code{\link{blastp_short}}, \code{\link{blastx}},
   \code{\link{makeblasttdb}}, \code{\link{qblast}},
-  \code{\link{tblastn}}, \code{\link{tblastx}},
-  \code{\link{update_blastdb}}
+  \code{\link{rpsblast}}, \code{\link{tblastn}},
+  \code{\link{tblastx}}, \code{\link{update_blastdb}}
 }
 

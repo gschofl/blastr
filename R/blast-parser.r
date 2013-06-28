@@ -99,7 +99,7 @@ parseHits <- function (hit_elems, query_env) {
       query_env[['hit_len']] <- hit_len
       new('Hit',
           hit_num = xvalue(doc, '/Hit/Hit_num', as='integer'),
-          hit_def = Deflines(paste(xvalue(doc, '/Hit/Hit_id'),
+          hit_def = Deflines(x=paste(xvalue(doc, '/Hit/Hit_id'),
                                    xvalue(doc, '/Hit/Hit_def'))
                              ),
           hit_acc = xvalue(doc, '/Hit/Hit_accession'),

@@ -37,32 +37,32 @@ NULL
 #' @keywords internal
 make_deflines <- function (query, prefix = "lcl") {
   if (class(query) %in% c("gbFeatureList","gbFeature")) {
-    id <- paste0(prefix, "|", index(x))
-    desc <- paste0(unlist(qualif(x, "locus_tag")),
-                   " [", unlist(qualif(x, "product")), "]")
+    id <- paste0(prefix, "|", index(query))
+    desc <- paste0(unlist(qualif(query, "locus_tag")),
+                   " [", unlist(qualif(query, "product")), "]")
     parse_defline <- TRUE
-  } else if (is(x, "XStringSet")) {
+  } else if (is(query, "XStringSet")) {
     # test if the XStrings follow the naming convention
     # from biofiles: accn.key.idx
     p <- "[[:alnum:]]+\\.[[:alnum:]]+\\.[[:digit:]]+"
-    n <- names(x)
+    n <- names(query)
     if (!is.null(n) && all(grepl(p, n))) {
       sp <- vapply(n, function (x) strsplit(x, "\\.")[[1L]], character(3))
       id <- paste0(prefix, "|", sp[3L, ])
       desc <- paste0(sp[1L, ], " [", sp[2L, ], "]")
       parse_defline <- TRUE
     } else {
-      id <- names(x)
+      id <- names(query)
       desc <- NULL
       parse_defline <- FALSE
     }
   } else {
-    id <- names(x)
+    id <- names(query)
     desc <- NULL
     parse_defline <- FALSE
   }
   if (is.null(id)) {
-    id <- paste0("Query_", seq_along(x))
+    id <- paste0("Query_", seq_along(query))
   }
   list(defline=paste(id, desc), parse_defline=parse_defline)
 }
@@ -71,7 +71,10 @@ make_deflines <- function (query, prefix = "lcl") {
 #' @keywords internal
 make_blast_query <- function (query, transl = FALSE) {
   
-  if (is.string(query) && is.readable(query)) {
+
+  
+  if (is.string(query) && tryCatch(is.readable(query),
+                                   assertError = function (e) FALSE )) {
     # x is the path to a FASTA file
     return( list(query=query, input=NULL, parse_defline=FALSE) )
   }
@@ -79,7 +82,7 @@ make_blast_query <- function (query, transl = FALSE) {
   if (class(query) %in% c("gbReportList","gbReport","gbFeatureList","gbFeature")) {
     seq <- getSequence(query)
   }
-  else if (class(query) %in% c("XStringSet", "XString")) {
+  else if (inherits(query, "XStringSet") || inherits(query, "XString")) {
     seq <- as(query, "XStringSet")
   }
   else if (is.vector(query) && is.character(query)) {
