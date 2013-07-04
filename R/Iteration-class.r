@@ -26,13 +26,13 @@ NULL
 #' @rdname Iteration-class
 #' @exportClass Iteration
 setClass("Iteration",
-         representation(iter_num = "integer",
-                        query_id = "character",
-                        query_def = "character",
-                        query_len = "integer",
-                        hits = "HitList",
-                        query_env = "environment"),
-         prototype(query_env=new.env(parent=emptyenv())))
+         slots = c(iter_num = "integer",
+                   query_id = "character",
+                   query_def = "character",
+                   query_len = "integer",
+                   hits = "HitList",
+                   query_env = "environment"),
+         prototype = prototype(query_env=new.env(parent=emptyenv())))
 
 
 #' IterationList-class

@@ -43,24 +43,15 @@ setOldClass("list")
 #' @rdname Hsp-class
 #' @exportClass Hsp
 setClass("Hsp",
-         representation(hsp_num = "integer",
-                        score = "numeric",        
-                        bit_score = "numeric",
-                        evalue = "numeric",
-                        identity = "integer",
-                        positive = "integer",
-                        gaps = "integer",
-                        align_len = "integer",
-                        query_from = "integer",
-                        query_to = "integer",
-                        hit_from = "integer",
-                        hit_to = "integer",
-                        query_frame = "integer",
-                        hit_frame = "integer",
-                        qseq = "XString",
-                        hseq = "XString",
-                        match = "XString",
-                        query_env = 'environment'))
+         slots = c(hsp_num = "integer", score = "numeric",        
+                   bit_score = "numeric", evalue = "numeric",
+                   identity = "integer", positive = "integer",
+                   gaps = "integer", align_len = "integer",
+                   query_from = "integer", query_to = "integer",
+                   hit_from = "integer", hit_to = "integer",
+                   query_frame = "integer", hit_frame = "integer",
+                   qseq = "XString", hseq = "XString",
+                   match = "XString", query_env = 'environment'))
 
 #' @name HspList-class
 #' @rdname Hsp-class

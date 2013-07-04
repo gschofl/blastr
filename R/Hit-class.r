@@ -25,12 +25,12 @@ NULL
 #' @rdname Hit-class
 #' @exportClass Hit
 setClass("Hit",
-         representation(hit_num = "integer",
-                        hit_def = "DeflineSet",
-                        hit_acc = "character",  
-                        hit_len = "integer",
-                        hsps = "HspList",
-                        query_env = 'environment'))  
+         slots = c(hit_num = "integer",
+                   hit_def = "DeflineSet",
+                   hit_acc = "character",  
+                   hit_len = "integer",
+                   hsps = "HspList",
+                   query_env = 'environment'))
 
 #' @name HitList-class
 #' @rdname Hit-class
