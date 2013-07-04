@@ -17,9 +17,9 @@ NULL
 #'
 #' @keywords internal
 setClass("BlastHeader",
-         representation(version = 'character',
-                        reference = 'character',
-                        database = 'character'))
+         slots = c(version = 'character',
+                   reference = 'character',
+                   database = 'character'))
 
 setMethod('show', 'BlastHeader',
           function(object) {
@@ -53,20 +53,14 @@ setMethod('show', 'BlastHeader',
 #'    
 #' @keywords internal
 setClass("BlastParameters",
-         representation(program = "character",
-                        matrix = "character",
-                        expect = "numeric",
-                        penalties = "numeric",
-                        sc_match = "integer",
-                        sc_mismatch = "integer",
-                        filter = "character",
-                        num_sequences = "character",
-                        num_letters = "character",
-                        hsp_length = "numeric",
-                        effective_space = "numeric", 
-                        ka_params = "numeric"),
-         prototype(penalties = c(open = NA_real_, extend = NA_real_),
-                   ka_params = c(k = NA_real_, lambda = NA_real_, h = NA_real_)))
+         slots = c(program = "character", matrix = "character",
+                   expect = "numeric", penalties = "numeric",
+                   sc_match = "integer", sc_mismatch = "integer",
+                   filter = "character", num_sequences = "character",
+                   num_letters = "character", hsp_length = "numeric",
+                   effective_space = "numeric", ka_params = "numeric"),
+         prototype = prototype(penalties = c(open = NA_real_, extend = NA_real_),
+                               ka_params = c(k = NA_real_, lambda = NA_real_, h = NA_real_)))
 
 setMethod('show', 'BlastParameters',
           function (object) {
@@ -133,10 +127,10 @@ setClassUnion("IterationListOrChar", members=c("IterationList", "character"))
 #' @rdname blastReport-class
 #' @exportClass blastReport
 setClass("blastReport",
-         representation(header = "BlastHeader",
-                        parameters = "BlastParameters",
-                        iterations = "IterationListOrChar"),
-         prototype(iterations = NULL))
+         slots = c(header = "BlastHeader",
+                   parameters = "BlastParameters",
+                   iterations = "IterationListOrChar"),
+         prototype = prototype(iterations = NULL))
 
 
 # getter, blastReport ----------------------------------------------------

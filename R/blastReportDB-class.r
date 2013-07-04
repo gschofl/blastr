@@ -16,7 +16,7 @@ NULL
 # blastReportDB-class ----------------------------------------------------
 
 
-.valid.blastReportDB <- function (object) {
+.valid_blastReportDB <- function (object) {
   errors <- character()
   if (!all(c("hit", "hsp", "query") %in% dbListTables(object))) {
     errors <- c(errors, "Table missing from 'blastReportDB'\n")
@@ -39,11 +39,10 @@ NULL
   if (length(errors) == 0L) TRUE else errors
 }
 
-
 #' blastReportDB-class
 #' 
-#' \sQuote{\code{blastReportDB}} is an S4 class that represents a connection
-#' to an SQLite database holding blast records organised in three tables:
+#' \sQuote{\bold{blastReportDB}}: A connection to an SQLite database
+#' containing blast records organised in three tables:
 #' 
 #' \bold{query} with fields:
 #' 
@@ -93,12 +92,25 @@ NULL
 #' @seealso
 #'  The constructors \code{\link{blastReportDB}} and \code{\link{blastReportDBConnect}},
 #'  and the BLAST classes \code{\linkS4class{blastReport}} and
-#'  \code{\linkS4class{blastTable}}.  
+#'  \code{\linkS4class{blastTable}}.
+#'   
 #' @name blastReportDB-class
 #' @rdname blastReportDB-class
 #' @exportClass blastReportDB
-setClass('blastReportDB', contains='SQLiteConnection',
-         validity=.valid.blastReportDB)
+new_blastReportDB <- setClass('blastReportDB',
+                              contains='SQLiteConnection',
+                              validity=.valid_blastReportDB)
+
+
+#' @aliases show,blastReportDB-method
+#' @rdname show-methods
+setMethod('show', 'blastReportDB',
+          function (object) {
+            n <- db_count(object, "query")
+            showme <- sprintf('%s object with %s query rows',
+                              sQuote(class(object)), n)
+            cat(showme, sep="\n")
+          })
 
 
 .getQueryDef <- getterConstructor('query_def', 'query', WHERE='query_id')
@@ -476,12 +488,3 @@ setMethod("getHitCoverage", "blastReportDB", function (x, id) {
     unlist(getQueryLen(x,id))
 })
 
-#' @aliases show,blastReportDB-method
-#' @rdname show-methods
-setMethod('show', 'blastReportDB',
-          function (object) {
-            n <- db_count(object, "query")
-            showme <- sprintf('%s object with %s query rows',
-                              sQuote(class(object)), n)
-            cat(showme, sep="\n")
-          })

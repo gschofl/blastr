@@ -30,24 +30,16 @@ NULL
 #' @rdname blastTable-class
 #' @exportClass blastTable
 setClass("blastTable",
-         representation(program = "character",
-                        query = "character",
-                        database = "character",
-                        bit_score = "numeric",
-                        evalue = "numeric",
-                        mlog.evalue = "numeric",
-                        accession = "character",
-                        geneid = "character",
-                        table = "data.frame"),
-         prototype(program = NA_character_,
-                   query = NA_character_,
-                   database = NA_character_,
-                   bit_score = NA_real_,
-                   evalue = NA_real_,
-                   mlog.evalue = NA_real_,
-                   accession = NA_character_,
-                   geneid = NA_character_,
-                   table = data.frame()))
+         slots = c(program = "character", query = "character",
+                   database = "character", bit_score = "numeric",
+                   evalue = "numeric", mlog.evalue = "numeric",
+                   accession = "character", geneid = "character",
+                   table = "data.frame"),
+         prototype = prototype(program = NA_character_, query = NA_character_,
+                               database = NA_character_, bit_score = NA_real_,
+                               evalue = NA_real_, mlog.evalue = NA_real_,
+                               accession = NA_character_, geneid = NA_character_,
+                               table = data.frame()))
 
 #' @aliases show,blastTable-method
 #' @rdname show-methods
