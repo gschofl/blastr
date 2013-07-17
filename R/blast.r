@@ -72,11 +72,16 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' 
 #' @family blast applications
 #' @export
-update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
+update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
                            passive=FALSE, timeout=120, force=FALSE) {
+  
+  destdir <- normalizePath(destdir)
   assert_that(has_command("update_blastdb"))
   blastdb <- c(...)
-  args <- list(decompress=decompress, passive=passive, force=force, timeout=timeout)
+  args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)
+  archives <- dir(destdir, pattern="gz$", full.names=TRUE)
+  before_time <- setNames(file.info(archives)$ctime, nm=archives)
+  
   if (showall) {
     ans <- SysCall('update_blastdb', showall=TRUE, style='gnu', intern=TRUE)
     return( ans[-1] )
@@ -94,6 +99,14 @@ update_blastdb <- function(..., destdir=".", decompress=FALSE, showall=FALSE,
     SysCall('update_blastdb', verbose=TRUE, stdin=paste0(blastdb, collapse=' '),
             args=args, style="gnu", redirection=FALSE, show_cmd=FALSE,
             intern=FALSE)
+  } 
+  
+  after_time <- setNames(file.info(archives)$ctime, nm=archives)
+  if (decompress && any(before_time < after_time)) {
+    which.decompress <- which(before_time < after_time)
+    sapply(which.decompress, function (i) {
+      untar(archives[i], compressed='gzip', exdir=destdir)
+    }) 
   }
 }
 

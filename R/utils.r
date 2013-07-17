@@ -8,6 +8,7 @@
 #' @importFrom rmisc trim
 #' @importFrom rmisc "%|%"
 #' @importFrom rmisc "%||%"
+#' @importFrom rmisc db_query
 #' @import methods
 NULL
 
