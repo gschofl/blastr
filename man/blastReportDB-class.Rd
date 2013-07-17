@@ -1,10 +1,13 @@
 \name{blastReportDB-class}
 \alias{blastReportDB-class}
 \title{blastReportDB-class}
+\usage{
+  new_blastReportDB(...)
+}
 \description{
-  \sQuote{\code{blastReportDB}} is an S4 class that
-  represents a connection to an SQLite database holding
-  blast records organised in three tables:
+  \sQuote{\bold{blastReportDB}}: A connection to an SQLite
+  database containing blast records organised in three
+  tables:
 }
 \details{
   \bold{query} with fields:
