@@ -67,7 +67,7 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' databases
 #' @param passive Use passive FTP
 #' @param timeout Timeout on connection to NCBI (default: 120 seconds)
-#' @force force Force download even if there is a archive already on local
+#' @param force Force download even if there is a archive already on local
 #' directory
 #' 
 #' @family blast applications

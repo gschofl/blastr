@@ -4,6 +4,7 @@
 #' @importFrom biofiles qualif
 #' @importFrom rmisc linebreak
 #' @importFrom rmisc pad
+#' @importFrom rmisc are_empty
 #' @importFrom stringr str_split_fixed
 #' @importFrom stringr str_extract_all
 #' @importFrom stringr str_detect
@@ -141,8 +142,8 @@ wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   seq_starts[reverse] <- tmp
   
   pasteAlignment <- function(prefix, seq_starts, s, seq_ends, suffix) {
-    seq_starts[is_empty(seq_starts)] <- ""
-    seq_ends[is_empty(seq_ends)] <- ""
+    seq_starts[are_empty(seq_starts)] <- ""
+    seq_ends[are_empty(seq_ends)] <- ""
     paste0(pad(prefix, pref_width, "right"), blanks(sep),
            pad(seq_starts, aln_start_width, "left"), blanks(1),
            pad(s, max_seq_width, "right"), blanks(1),
