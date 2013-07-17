@@ -22,6 +22,9 @@
 
   \item{timeout}{Timeout on connection to NCBI (default:
   120 seconds)}
+
+  \item{force}{Force download even if there is a archive
+  already on local directory}
 }
 \description{
   Download pre-formatted BLAST databases from NCBI ftp
