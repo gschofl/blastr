@@ -11,6 +11,7 @@
 #' @importFrom IRanges reduce
 #' @importFrom IRanges width
 #' @importFrom IRanges unlist
+#' @importFrom rmisc db_count
 NULL
 
 # blastReportDB-class ----------------------------------------------------
@@ -478,13 +479,13 @@ setMethod("getMaxPercIdentity", "blastReportDB", function (x, id) {
 #' @aliases getQueryCoverage,blastReportDB-method
 setMethod("getQueryCoverage", "blastReportDB", function (x, id) {
   vapply(.rangeDB(x, id, type='query', width=TRUE), sum, numeric(1))/
-    unlist(getQueryLen(x,id))
+    unlist(getQueryLen(x, id))
 })
 
 #' @rdname HitCoverage-methods
 #' @aliases getHitCoverage,blastReportDB-method
 setMethod("getHitCoverage", "blastReportDB", function (x, id) {
   vapply(.rangeDB(x, id, type='hit', width=TRUE), sum, numeric(1))/
-    unlist(getQueryLen(x,id))
+    unlist(getQueryLen(x, id))
 })
 
