@@ -12,6 +12,7 @@
 #' @importFrom IRanges width
 #' @importFrom IRanges unlist
 #' @importFrom rmisc db_count
+#' @importFrom rmisc is.empty
 NULL
 
 # blastReportDB-class ----------------------------------------------------
