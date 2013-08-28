@@ -2,7 +2,7 @@
 #' @importFrom RCurl getForm
 #' @importFrom XML htmlParse
 #' @importFrom rmisc SysCall
-#' @importFrom rmisc Curry
+#' @importFrom rmisc Partial
 #' @importFrom rmisc merge_list
 #' @importFrom rmisc has_command
 #' @importFrom Biostrings toString
@@ -31,7 +31,7 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
     return(SysCall("makeblastdb", help=TRUE, redirection=FALSE))
 
   ## assert that multiple input files are present
-  lapply(input_file, compose(assert_that, is.readable))
+  lapply(input_file, Compose(assert_that, is.readable))
   
   if (length(input_file) > 1) {
     input_file <- sprintf("\"%s\"", paste(input_file, collapse=" "))
@@ -229,25 +229,25 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
 #' @aliases blastn blastn_short megablast dc_megablast
 #' @examples
 #' ##
-blastn <- Curry(.blast, program = "blastn", task = "blastn")
+blastn <- Partial(.blast, program = "blastn", task = "blastn")
 
 #' @usage blastn_short(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, remote=FALSE, ...)
 #' @export
 #' @rdname blastn
-blastn_short <- Curry(.blast, program = "blastn", task = "blastn-short")
+blastn_short <- Partial(.blast, program = "blastn", task = "blastn-short")
 
 #' @usage megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, remote=FALSE, ...)
 #' @export
 #' @rdname blastn
-megablast <- Curry(.blast, program = "blastn", task = "megablast")
+megablast <- Partial(.blast, program = "blastn", task = "megablast")
 
 #' @usage dc_megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, remote=FALSE, ...)
 #' @export
 #' @rdname blastn
-dc_megablast <- Curry(.blast, program = "blastn", task = "dc-megablast")
+dc_megablast <- Partial(.blast, program = "blastn", task = "dc-megablast")
 
 #' Wrapper for the NCBI Protein-Protein BLAST
 #' 
@@ -281,14 +281,14 @@ dc_megablast <- Curry(.blast, program = "blastn", task = "dc-megablast")
 #' @aliases blastp blastp_short
 #' @examples
 #' ##
-blastp <- Curry(.blast, program = "blastp", task = "blastp")
+blastp <- Partial(.blast, program = "blastp", task = "blastp")
 
 #' @usage blastp_short(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
 #' @export
 #' @rdname blastp
 #' @inheritParams blastp
-blastp_short <- Curry(.blast, program = "blastp", task = "blastp-short")
+blastp_short <- Partial(.blast, program = "blastp", task = "blastp-short")
 
 #' Wrapper for the NCBI Translated Query-Protein Subject BLAST
 #' 
@@ -320,7 +320,7 @@ blastp_short <- Curry(.blast, program = "blastp", task = "blastp-short")
 #' @aliases blastx
 #' @examples
 #' ##
-blastx <- Curry(.blast, program = "blastx")
+blastx <- Partial(.blast, program = "blastx")
 
 #' Wrapper for the NCBI Translated Query-Protein Subject BLAST
 #' 
@@ -352,7 +352,7 @@ blastx <- Curry(.blast, program = "blastx")
 #' @aliases tblastx
 #' @examples
 #' ##
-tblastx <- Curry(.blast, program = "tblastx")
+tblastx <- Partial(.blast, program = "tblastx")
 
 #' Wrapper for the NCBI Protein Query-Translated Subject BLAST
 #' 
@@ -383,7 +383,7 @@ tblastx <- Curry(.blast, program = "tblastx")
 #' @aliases tblastn
 #' @examples
 #' ##
-tblastn <- Curry(.blast, program = "tblastn")
+tblastn <- Partial(.blast, program = "tblastn")
 
 
 #' Wrapper for the NCBI Reversed Position Specific Blast
@@ -414,7 +414,7 @@ tblastn <- Curry(.blast, program = "tblastn")
 #' @aliases rpsblast
 #' @examples
 #' ##
-rpsblast <- Curry(.blast, program = "rpsblast+")
+rpsblast <- Partial(.blast, program = "rpsblast+")
 
 
 #' Do a BLAST search using the QBLAST URL API

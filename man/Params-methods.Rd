@@ -1,6 +1,6 @@
+\docType{methods}
 \name{getParams}
 \alias{getParams}
-\alias{getParams-methods}
 \title{Extract BLAST parameters and statistics from a report}
 \usage{
   getParams(x, ...)

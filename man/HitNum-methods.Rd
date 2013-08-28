@@ -1,25 +1,14 @@
+\docType{methods}
 \name{getHitNum}
 \alias{HitNum,Iteration-method}
 \alias{getHitNum}
 \alias{getHitNum,Hit-method}
 \alias{getHitNum,HitList-method}
-\alias{getHitNum,Iteration-method}
 \alias{getHitNum,IterationList-method}
 \alias{getHitNum,blastReportDB-method}
-\alias{getHitNum-methods}
 \title{Access components of Blast Hits}
 \usage{
   getHitNum(x, ...)
-
-  \S4method{getHitNum}{Hit}(x, ...)
-
-  \S4method{getHitNum}{HitList}(x, ...)
-
-  \S4method{getHitNum}{Iteration}(x, ...)
-
-  \S4method{getHitNum}{IterationList}(x, ...)
-
-  \S4method{getHitNum}{blastReportDB}(x, ...)
 }
 \arguments{
   \item{x}{A \linkS4class{Hit} or \linkS4class{HitList}
