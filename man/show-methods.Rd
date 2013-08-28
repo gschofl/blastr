@@ -1,4 +1,6 @@
-\name{show,Hsp-method}
+\docType{methods}
+\name{show}
+\alias{show}
 \alias{show,Hit-method}
 \alias{show,HitList-method}
 \alias{show,Hsp-method}
@@ -9,23 +11,6 @@
 \alias{show,blastReportDB-method}
 \alias{show,blastTable-method}
 \title{Method extensions to show for blast objects.}
-\usage{
-  \S4method{show}{Hsp}(object)
-
-  \S4method{show}{HspList}(object)
-
-  \S4method{show}{Hit}(object)
-
-  \S4method{show}{HitList}(object)
-
-  \S4method{show}{Iteration}(object)
-
-  \S4method{show}{IterationList}(object)
-
-  \S4method{show}{blastReportDB}(object)
-
-  \S4method{show}{blastTable}(object)
-}
 \description{
   The \code{show} methods for various blast objects can be
   modified by a number of global options. Specifically, the

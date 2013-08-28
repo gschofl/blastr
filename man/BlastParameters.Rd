@@ -1,6 +1,5 @@
 \name{BlastParameters}
 \alias{BlastParameters}
-\alias{BlastParameters-class}
 \title{blastParameters-class}
 \description{
   A container for blast parameters and statistics.

@@ -4,7 +4,7 @@
 #' @importFrom Biostrings writeXStringSet
 #' @importFrom Biostrings readDNAStringSet
 #' @importFrom Biostrings readDNAMultipleAlignment
-#' @importFrom rmisc compose
+#' @importFrom rmisc Compose
 #' @importFrom rmisc trim
 #' @importFrom rmisc "%|%"
 #' @importFrom rmisc "%||%"
@@ -19,7 +19,7 @@ setOldClass("DNAbin")
             "gi","dbj","prf","pdb","pat","bbs")
 
 ## vectorised %|na|%
-"%|NA|%" <- Curry(`%|%`, filter = "is.na")
+"%|NA|%" <- Partial(`%|%`, filter = "is.na")
 
 listclassConstructor <- function (listClass, elemClass) {
   assert_that(is.string(listClass), is.string(elemClass))
