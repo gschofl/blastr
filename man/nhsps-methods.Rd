@@ -1,13 +1,13 @@
 \docType{methods}
-\name{hspLen}
-\alias{hspLen}
-\alias{hspLen,Hit-method}
-\alias{hspLen,HitList-method}
-\alias{hspLen,Iteration-method}
-\alias{hspLen,IterationList-method}
+\name{nhsps}
+\alias{nhsps}
+\alias{nhsps,Hit-method}
+\alias{nhsps,HitList-method}
+\alias{nhsps,Iteration-method}
+\alias{nhsps,IterationList-method}
 \title{Access components of Blast Hits}
 \usage{
-  hspLen(x)
+  nhsps(x)
 }
 \arguments{
   \item{x}{A \linkS4class{Hit} or \linkS4class{HitList}

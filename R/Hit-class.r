@@ -41,7 +41,7 @@ setClass("HitList", representation(query_env = 'environment'), contains="list",
 ## constructor
 HitList <- listclassConstructor('HitList', 'Hit')
 
-## Hsp, hspLen, HspNum ####
+## Hsp, nhsps, HspNum ####
 
 ## @return Hsp|HspList
 #' @rdname Hsp-methods
@@ -63,15 +63,15 @@ setMethod("getHsp", "HitList", function (x, n = NULL, drop = TRUE) {
 })
 
 ## @return numeric
-#' @rdname hspLen-methods
-#' @aliases hspLen,Hit-method
-setMethod('hspLen', 'Hit', function (x) length(x@hsps))
+#' @rdname nhsps-methods
+#' @aliases nhsps,Hit-method
+setMethod('nhsps', 'Hit', function (x) length(x@hsps))
 
 ## @return vector<numeric>
-#' @rdname hspLen-methods
-#' @aliases hspLen,HitList-method
-setMethod('hspLen', 'HitList', function (x) {
-  vapply(x, hspLen, numeric(1))
+#' @rdname nhsps-methods
+#' @aliases nhsps,HitList-method
+setMethod('nhsps', 'HitList', function (x) {
+  vapply(x, nhsps, numeric(1))
 })
 
 ## @return integer
@@ -685,7 +685,7 @@ setMethod("[[", "HitList",
   desc_ <- linebreak(.deflineDesc(hit@hit_def[[1L]]), indent=-offset, offset=offset)
   line1 <- sprintf("Hit %s: %s", getHitNum(hit), desc_)
   fmt2 <- "Id: %s, Length: %s, No. hsps: %s\n"
-  s <- sprintf(fmt2, id_, getHitLen(hit), hspLen(hit))
+  s <- sprintf(fmt2, id_, getHitLen(hit), nhsps(hit))
   line2 <- linebreak(s, indent = offset, offset = offset)
   cat(line1, line2, sep="\n")
   if (show_hsps) {

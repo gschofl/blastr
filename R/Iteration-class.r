@@ -57,7 +57,7 @@ setClass("IterationList", contains="list",
 ## constructor
 IterationList <- listclassConstructor('IterationList', 'Iteration')
 
-# Hsp, hspLen, HspNum ####
+# Hsp, nhsps, HspNum ####
 
 ## @return list<Hsp|HspList>
 #' @rdname Hsp-methods
@@ -67,21 +67,21 @@ setMethod("getHsp", "Iteration", function (x, n = NULL, drop = TRUE) {
 })
 
 ## @return vector<numeric>
-#' @rdname hspLen-methods
-#' @aliases hspLen,Iteration-method
-setMethod('hspLen', 'Iteration', function (x) {
-  vapply(x@hits, hspLen, numeric(1))
+#' @rdname nhsps-methods
+#' @aliases nhsps,Iteration-method
+setMethod('nhsps', 'Iteration', function (x) {
+  vapply(x@hits, nhsps, numeric(1))
 })
 
 ## @return list<vector<numeric>>
-#' @rdname hspLen-methods
-#' @aliases hspLen,IterationList-method
-setMethod('hspLen', 'IterationList', function (x) {
-  lapply(x, hspLen)
+#' @rdname nhsps-methods
+#' @aliases nhsps,IterationList-method
+setMethod('nhsps', 'IterationList', function (x) {
+  lapply(x, nhsps)
 })
 
 
-## Hit, hitLen, IterNum, QueryID, QueryDef, QueryLen ####
+## Hit, nhits, IterNum, QueryID, QueryDef, QueryLen ####
 
 ## @return Hit|HitList
 #' @rdname Hit-methods
@@ -104,15 +104,15 @@ setMethod("getHit", "IterationList",
           })
 
 ## @return numeric
-#' @rdname hitLen-methods
-#' @aliases hitLen,Iteration-method
-setMethod('hitLen', 'Iteration', function (x) length(x@hits))
+#' @rdname nhits-methods
+#' @aliases nhits,Iteration-method
+setMethod('nhits', 'Iteration', function (x) length(x@hits))
 
 ## @return vector<numeric>
-#' @rdname hitLen-methods
-#' @aliases hspLen,IterationList-method
-setMethod('hitLen', 'IterationList', function (x) {
-  vapply(x, hitLen, numeric(1))
+#' @rdname nhits-methods
+#' @aliases nhits,IterationList-method
+setMethod('nhits', 'IterationList', function (x) {
+  vapply(x, nhits, numeric(1))
 })
 
 ## @return integer
