@@ -1,11 +1,11 @@
 \docType{methods}
-\name{hitLen}
-\alias{hitLen}
-\alias{hitLen,Iteration-method}
-\alias{hspLen,IterationList-method}
+\name{nhits}
+\alias{nhits}
+\alias{nhits,Iteration-method}
+\alias{nhits,IterationList-method}
 \title{Access components of Blast Iterations (Queries)}
 \usage{
-  hitLen(x)
+  nhits(x)
 }
 \arguments{
   \item{x}{A \linkS4class{blastReport} or

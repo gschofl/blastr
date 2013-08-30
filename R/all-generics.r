@@ -441,13 +441,13 @@ setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
 #' 
 #' Extract the number of Hsps for each Hit.
 #' 
-#' @usage hspLen(x)
+#' @usage nhsps(x)
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @return An numeric vector.
-#' @rdname hspLen-methods
+#' @rdname nhsps-methods
 #' @export
 #' @docType methods
-setGeneric("hspLen", function (x, ...) standardGeneric("hspLen"))
+setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
 
 
 #' Access components of Blast Hits
@@ -655,13 +655,13 @@ setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
 #' 
 #' Extract the number of Hits for each Iteration/Query.
 #' 
-#' @usage hitLen(x)
+#' @usage nhits(x)
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @return An numeric vector.
-#' @rdname hitLen-methods
+#' @rdname nhits-methods
 #' @export
 #' @docType methods
-setGeneric("hitLen", function (x, ...) standardGeneric("hitLen"))
+setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
 
 
 # blastReport-accessor generics ------------------------------------------
