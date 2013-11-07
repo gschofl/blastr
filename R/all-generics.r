@@ -703,6 +703,12 @@ setGeneric("getIteration", function (x, ...) standardGeneric("getIteration"))
 setGeneric("getParams", function (x, ...) standardGeneric("getParams"))
 
 
+#' @keywords internal
+#' @export
+#' @docType methods
+setGeneric("path", function(object, ...) standardGeneric("path"))
+
+
 # Defline, DeflineSet ----------------------------------------------------
 
 

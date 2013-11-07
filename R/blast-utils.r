@@ -70,14 +70,11 @@ make_deflines <- function (query, prefix = "lcl") {
 
 
 #' @keywords internal
-make_blast_query <- function (query, transl = FALSE) {
-  
-
-  
+make_blast_query <- function (query, transl = FALSE) {  
   if (is.string(query) && tryCatch(is.readable(query),
                                    assertError = function (e) FALSE )) {
     # x is the path to a FASTA file
-    return( list(query=query, input=NULL, parse_defline=FALSE) )
+    return(list(query=query, defline=NULL, parse_defline=FALSE))
   }
   
   if (class(query) %in% c("gbReportList","gbReport","gbFeatureList","gbFeature")) {
@@ -95,7 +92,9 @@ make_blast_query <- function (query, transl = FALSE) {
   
   seqnames <- make_deflines(seq, prefix="lcl")
   input <- paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse="\n")
-  list(query=NULL, input=input, parse_deflines=seqnames$parse_defline) 
+  tmp <- tempfile(fileext=".fa")
+  writeLines(input, tmp)
+  list(query=tmp, defline=seqnames$defline, parse_deflines=seqnames$parse_defline) 
 }
 
 
@@ -120,22 +119,19 @@ wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   seq_widths <- nchar(s[[1L]])
   max_seq_width <- max(seq_widths)
   
-  seq_starts <-
-    mapply(function (start, rev) {
-      x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
-      x <- x[-which.max(x)]
-      x
-    }, start=start, rev=reverse, SIMPLIFY=FALSE, USE.NAMES=FALSE)
+  seq_starts <- .mapply(FUN=function(start, rev) {
+    x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
+    x <- x[-which.max(x)]
+    x
+  }, dots=list(start=start, rev=reverse), MoreArgs=NULL)
   
-  new_starts <- 
-    mapply( function (s, rev) if (rev) s[length(s) - 1] - 1 else s[2] - 1,
-            s=seq_starts, rev=reverse)
+  new_starts <- mapply(function (s, rev) if (rev) s[length(s) - 1] - 1 else s[2] - 1,
+                       s=seq_starts, rev=reverse)
   
-  seq_ends <-
-    mapply( function (start, rev) {
-      x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
-      x <- x[-which.max(x)]
-    }, start=new_starts, rev=reverse, SIMPLIFY=FALSE, USE.NAMES=FALSE)  
+  seq_ends <- .mapply(FUN=function (start, rev) {
+    x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
+    x <- x[-which.max(x)]
+  }, dots=list(start=new_starts, rev=reverse), , MoreArgs=NULL)  
   
   tmp <- seq_ends[reverse]
   seq_ends[reverse] <- seq_starts[reverse]
@@ -150,13 +146,8 @@ wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
            pad(seq_ends, aln_start_width, "left"), blanks(sep),
            pad(suffix, suf_width, "right"))
   }
-  
-  s <- mapply(pasteAlignment, prefix=prefix, seq_starts=seq_starts, s=s,
-              seq_ends=seq_ends, suffix=suffix,
-              SIMPLIFY=FALSE, USE.NAMES=FALSE)
-  
-  s <- paste0(do.call(function (...) paste(..., sep="\n"), s),
-              collapse="\n\n")
-  s
+  s <- .mapply(pasteAlignment, list(prefix=prefix, seq_starts=seq_starts, s=s,
+                                    seq_ends=seq_ends, suffix=suffix), NULL)
+  paste0(do.call(function (...) paste(..., sep="\n"), s),collapse="\n\n")
 }
 

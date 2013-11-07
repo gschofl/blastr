@@ -100,9 +100,11 @@ NULL
 #' @rdname blastReportDB-class
 #' @exportClass blastReportDB
 new_blastReportDB <- setClass('blastReportDB',
+                              slots=c(path="character"),
                               contains='SQLiteConnection',
                               validity=.valid_blastReportDB)
 
+setMethod("path", "blastReportDB", function(object, ...) object@path)
 
 #' @aliases show,blastReportDB-method
 #' @rdname show-methods
@@ -115,9 +117,19 @@ setMethod('show', 'blastReportDB',
           })
 
 
+.getQueryID <- getterConstructor("query_id", FROM='query', as='integer')
+.getMaxQueryID <- getterConstructor("max(query_id)", FROM='query', as='integer')
+.getMinQueryID <- getterConstructor("range(query_id)", FROM='query', as='integer')
+#' @rdname QueryID-methods
+#' @aliases getQueryID,blastReportDb-method
+setMethod("getQueryID", "blastReportDB", function (x) {
+  unlist(.getQueryID(x))
+})
+
+
 .getQueryDef <- getterConstructor('query_def', 'query', WHERE='query_id')
 #' @rdname QueryDef-methods
-#' @aliases getQueryDef,blastReportFb-method
+#' @aliases getQueryDef,blastReportDb-method
 setMethod("getQueryDef", "blastReportDB", function (x, id) {
   unlist(.getQueryDef(x, id))
 })
@@ -129,21 +141,21 @@ setMethod("getQueryLen", "blastReportDB", function (x, id) {
   unlist(.getQueryLen(x, id))
 })
 
-.getHitID <- getterConstructor('hit_id', 'hit', WHERE='query_id',as='integer')
+.getHitID <- getterConstructor('hit_id', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitID-methods
 #' @aliases getHitID,blastReportDB-method
 setMethod("getHitID", "blastReportDB", function (x, id) {
   unlist(.getHitID(x, id))
 })
 
-.getHitNum <- getterConstructor('hit_num', 'hit', WHERE='query_id',as='integer')
+.getHitNum <- getterConstructor('hit_num', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitNum-methods
 #' @aliases getHitNum,blastReportDB-method
 setMethod("getHitNum", "blastReportDB", function (x, id) {
   unlist(.getHitNum(x, id))
 })
 
-.getHitLen <- getterConstructor('length', 'hit', WHERE='query_id',as='integer')
+.getHitLen <- getterConstructor('length', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitLen-methods
 #' @aliases getHitLen,blastReportDB-method
 setMethod("getHitLen", "blastReportDB", function (x, id) {
@@ -466,7 +478,7 @@ setMethod("getMaxPercIdentity", "blastReportDB", function (x, id) {
 
 .rangeDB <- function(x, id, type, width = FALSE, max=FALSE) {
    pos <- getterFromToRange(x, id, type, max)
-   colnames(pos) <- c('id', 'frame', 'from','to')
+   colnames(pos) <- c('id', 'frame', 'from', 'to')
    pos <- split(pos, pos[["id"]]) 
    Map(function (p) {
      start <- ifelse(p[["frame"]] >= 0L, p[["from"]], p[["to"]])
