@@ -78,10 +78,7 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
   destdir <- normalizePath(destdir)
   assert_that(has_command("update_blastdb"))
   blastdb <- c(...)
-  args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)
-  archives <- dir(destdir, pattern="gz$", full.names=TRUE)
-  before_time <- setNames(file.info(archives)$ctime, nm=archives)
-  
+  args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)  
   if (showall) {
     ans <- SysCall('update_blastdb', showall=TRUE, style='gnu', intern=TRUE)
     return( ans[-1] )
@@ -100,13 +97,15 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
             args=args, style="gnu", redirection=FALSE, show_cmd=FALSE,
             intern=FALSE)
   } 
-  
-  after_time <- setNames(file.info(archives)$ctime, nm=archives)
-  if (decompress && any(before_time < after_time)) {
-    which.decompress <- which(before_time < after_time)
-    sapply(which.decompress, function (i) {
-      untar(archives[i], compressed='gzip', exdir=destdir)
-    }) 
+  if (decompress) {
+    assert_that(has_command("tar"))
+    archives <- dir(destdir, pattern="gz$", full.names=TRUE)
+    if (length(archives) > 0) {
+      sapply(archives, function (a) {
+        system(paste("tar zxvpf", a))
+        unlink(a)
+      })
+    }
   }
 }
 
@@ -125,7 +124,6 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
 #' @param ... Arguments passed on to the blast commmand line tools.
 #' @param intern Set \code{TRUE} if no '-out' argument is specified.
 #' Captures the blast output in an R character vector.
-#' @param input Used to pass a character vector to the standard input.
 #' @param show_cmd If \code{TRUE} print the constructed command line
 #' instead of passing it to \code{\link{system}}.
 #' @param parse
@@ -150,8 +148,8 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
   }
   
   inp <- make_blast_query(query)
-  input <- inp[["input"]]
   query <- inp[["query"]]
+  on.exit(unlink(query))
   deflines <- inp[["deflines"]]
   parse_deflines <- inp[["parse_deflines"]]
   
@@ -178,7 +176,7 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
                  stdin=stdin, stdout=stdout,
                  redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
                  style="unix", show_cmd=show_cmd,
-                 intern=intern, input=input)
+                 intern=intern)
   if (intern && parse && !has_attr(res, 'status')) {
     if (outfmt == 5) {
       blastReport(res, asText=TRUE)
