@@ -1,10 +1,10 @@
 #' @include all-generics.r
 #' @include utils.r
 #' @include blast-utils.r
+#' @include class-utils.r
 #' @importFrom stringr str_split_fixed
 #' @importFrom stringr str_extract_all
 #' @importFrom stringr perl
-#' @importFrom rmisc compact
 NULL
 
 
@@ -146,7 +146,7 @@ setAs('DeflineSet', 'character', function (from) {
 .parseDeflines <- function (tags, ids, descriptions, species) {  
   DeflineSet(
     Map( function (t, i, d, s) {
-      x <- rmisc::compact(unlist(strsplit(i, paste(t, collapse="|"))), 'all_empty')
+      x <- compactChar(unlist(strsplit(i, paste(t, collapse="|"))))
       if (!all(is.na(t))) {
         x <- str_split_fixed(x, '\\|', 3)
         accn <- x[, 2L] %|% NA_character_
@@ -167,13 +167,13 @@ setAs('DeflineSet', 'character', function (from) {
 #' @keywords internal
 Deflines <- function (x) {
   # first split into identifier and description at the first blank space
-  x <- rmisc::compact(unlist(strsplit(unlist(x), "^>")), 'all_empty')
+  x <- compactChar(unlist(strsplit(unlist(x), "^>")))
   x <- str_split_fixed(x, " ", 2)
   ids <- x[,1]
   x <- x[,2]
   x <- str_split_fixed(x, " \\[|\\]", 3)
-  descriptions <-  as.list( x[,1] %|% NA_character_ )
-  species <- as.list( x[,2] %|% NA_character_ )
+  descriptions <- as.list(x[,1] %|% NA_character_)
+  species <- as.list(x[,2] %|% NA_character_)
   
   # parse identifier patterns
   # first we extract the database tags which always are 2 or 3 lowercase

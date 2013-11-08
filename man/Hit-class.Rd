@@ -2,6 +2,9 @@
 \alias{Hit-class}
 \alias{HitList-class}
 \title{Hit-class}
+\usage{
+  new_Hit(...)
+}
 \description{
   A container for information parsed from an XML NCBI BLAST
   hit element. Information about multiple Blast hits within

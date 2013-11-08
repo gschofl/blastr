@@ -1,4 +1,3 @@
-\docType{methods}
 \name{getQueryDef}
 \alias{getQueryDef}
 \alias{getQueryDef,Iteration-method}
@@ -10,6 +9,14 @@
 \title{Access components of Blast Iterations (Queries)}
 \usage{
   getQueryDef(x, ...)
+
+  \S4method{getQueryDef}{Iteration}(x, ...)
+
+  \S4method{getQueryDef}{IterationList}(x, ...)
+
+  \S4method{getQueryDef}{blastReport}(x, ...)
+
+  \S4method{getQueryDef}{blastReportDB}(x, ...)
 }
 \arguments{
   \item{x}{A \linkS4class{blastReport} or

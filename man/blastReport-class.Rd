@@ -1,6 +1,9 @@
 \name{blastReport-class}
 \alias{blastReport-class}
 \title{blastReport-class}
+\usage{
+  new_blastReport(...)
+}
 \description{
   \code{"blastReport"} is the top-level container for data
   parsed from NCBI Blast XML output. It contains the
@@ -23,7 +26,8 @@
 
   E.g. \code{report[[1]][[1]]} will return the first hit in
   the first query.
-
+}
+\section{Slots}{
   \describe{ \item{\code{header}:}{Header information;
   \code{"BlastHeader"}.} \item{\code{params}:}{Blast
   parameters and statistics \code{"BlastParameters"}.}

@@ -3,12 +3,11 @@
 
 #' @include blastReport-class.r
 #' @importFrom Biostrings BString
-#' @importFrom rmisc xvalue
-#' @importFrom rmisc strsplitN
 #' @importFrom XML xmlInternalTreeParse
 #' @importFrom XML xmlRoot
 #' @importFrom XML xpathApply
 #' @importFrom XML xmlDoc
+#' @importFrom XML xmlValue
 NULL
 
 #' Parse NCBI BLAST XML files into \linkS4class{blastReport} objects.
@@ -20,59 +19,55 @@ NULL
 #' @return A \code{\linkS4class{blastReport}} object.
 #' @rdname blastReport
 #' @export
-blastReport <- function (blast, asText = FALSE) {
+blastReport <- function(blast, asText = FALSE) {
   doc <- xmlRoot(xmlInternalTreeParse(blast, asText = asText))
-  d <- parseBlastDatabaseReport(doc)
+  dbr <- parseBlastDatabaseReport(doc)
   iter_elems <- xpathApply(doc, '/BlastOutput/BlastOutput_iterations/Iteration')
-  new('blastReport',
-      header = d[["header"]],
-      parameters = d[["params"]],
-      iterations = if (is.null(d[["message"]]))
-        parseIterations(iter_elems)
-      else
-        d[["message"]]
-     )
+  new_blastReport(
+    header = dbr$header,
+    parameters = dbr$params,
+    iterations = parseIterations(iter_elems)
+  )
 }
 
 
 parseBlastDatabaseReport  <- function(doc) {
   list(
-    header = new("BlastHeader",
-                 version = xvalue(doc, '//BlastOutput/BlastOutput_version'),
-                 reference = xvalue(doc, '//BlastOutput/BlastOutput_reference'),
-                 database = xvalue(doc, '/BlastOutput/BlastOutput_db')
+    header = new_BlastHeader(
+      version = xvalue(doc, '//BlastOutput/BlastOutput_version'),
+      reference = xvalue(doc, '//BlastOutput/BlastOutput_reference'),
+      database = xvalue(doc, '/BlastOutput/BlastOutput_db')
     ),
-    params = new("BlastParameters",
-                 program = xvalue(doc, '/BlastOutput/BlastOutput_program'),
-                 matrix = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_matrix'),
-                 expect = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_expect', as = 'numeric'), 
-                 penalties = {
-                   open <- xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_gap-open', as = 'integer')
-                   extend <- xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_gap-extend', as = 'integer')
-                   c(open = open, extend = extend)
-                 },
-                 filter = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_filter'),
-                 sc_match = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_sc-match', as = 'integer'),
-                 sc_mismatch = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_sc-mismatch', as = 'integer'),
-                 num_sequences = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_db-num'),
-                 num_letters = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_db-len'),
-                 hsp_length = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_hsp-len', as = 'numeric'),
-                 effective_space = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_eff-space', as = 'numeric'), 
-                 ka_params = {
-                   k <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_kappa', as = 'numeric')
-                   lambda <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_lambda', as = 'numeric')
-                   h <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_entropy', as = 'numeric')
-                   c(k = k, lambda = lambda, h = h)
-                 }
-    ),
-    message = xvalue(doc, '//Iteration_message', NULL)
+    params = new_BlastParameters(
+      program = xvalue(doc, '/BlastOutput/BlastOutput_program'),
+      matrix = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_matrix'),
+      expect = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_expect', as = 'numeric'), 
+      penalties = {
+        open <- xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_gap-open', as = 'integer')
+        extend <- xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_gap-extend', as = 'integer')
+        c(open = open, extend = extend)
+      },
+      filter = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_filter'),
+      sc_match = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_sc-match', as = 'integer'),
+      sc_mismatch = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_sc-mismatch', as = 'integer'),
+      num_sequences = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_db-num'),
+      num_letters = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_db-len'),
+      hsp_length = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_hsp-len', as = 'numeric'),
+      effective_space = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_eff-space', as = 'numeric'), 
+      ka_params = {
+        k <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_kappa', as = 'numeric')
+        lambda <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_lambda', as = 'numeric')
+        h <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_entropy', as = 'numeric')
+        c(k = k, lambda = lambda, h = h)
+      }
+    )
   )
 }
 
 
 parseIterations <- function(iter_elems) {
   IterationList(
-    lapply(iter_elems, function (elem) {
+    lapply(iter_elems, function(elem) {
       doc <- xmlDoc(elem)
       hit_elems <- xpathApply(doc, '/Iteration/Iteration_hits/Hit')
       query_env <- new.env(parent=emptyenv())
@@ -80,61 +75,65 @@ parseIterations <- function(iter_elems) {
       query_env[['query_id']] <- xvalue(doc, '/Iteration/Iteration_query-ID')
       query_env[['query_def']] <- xvalue(doc, '/Iteration/Iteration_query-def')
       query_env[['query_len']] <- xvalue(doc, '/Iteration/Iteration_query-len', as='integer')
-      new('Iteration',
-          iter_num = query_env[['iter_num']] , query_id = query_env[['query_id']],
-          query_def = query_env[['query_def']], query_len = query_env[['query_len']],
-          hits = parseHits(hit_elems, query_env),
-          query_env = query_env)
+      message <- xvalue(doc, '/Iteration/Iteration_message')
+      new_Iteration(
+        iter_num = query_env[['iter_num']] , query_id = query_env[['query_id']],
+        query_def = query_env[['query_def']], query_len = query_env[['query_len']],
+        hits = message %|na|% parseHits(hit_elems, query_env),
+        query_env = query_env
+      )
     })
   )
 }
 
 
-parseHits <- function (hit_elems, query_env) {
+parseHits <- function(hit_elems, query_env) {
   HitList(
-    lapply(hit_elems, function (elem) {
+    lapply(hit_elems, function(elem) {
       doc <- xmlDoc(elem)
       hsp_elems <- xpathApply(doc, '/Hit/Hit_hsps/Hsp')
       hit_len <- xvalue(doc, '/Hit/Hit_len', as='integer')
       query_env[['hit_len']] <- hit_len
-      new('Hit',
-          hit_num = xvalue(doc, '/Hit/Hit_num', as='integer'),
-          hit_def = Deflines(x=paste(xvalue(doc, '/Hit/Hit_id'),
+      new_Hit(
+        hit_num = xvalue(doc, '/Hit/Hit_num', as='integer'),
+        hit_def = Deflines(x=paste(xvalue(doc, '/Hit/Hit_id'),
                                    xvalue(doc, '/Hit/Hit_def'))
-                             ),
-          hit_acc = xvalue(doc, '/Hit/Hit_accession'),
-          hit_len = hit_len,
-          hsps = parseHsps(hsp_elems, query_env),
-          query_env = query_env)
+        ),
+        hit_acc = xvalue(doc, '/Hit/Hit_accession'),
+        hit_len = hit_len,
+        hsps = parseHsps(hsp_elems, query_env),
+        query_env = query_env
+      )
     }),
     query_env = query_env
   )
 }
 
 
-parseHsps <- function (hsp_elems, query_env) {
+parseHsps <- function(hsp_elems, query_env) {
   HspList(
-    lapply(hsp_elems, function (elem) {
+    lapply(hsp_elems, function(elem) {
       doc <- xmlDoc(elem)
-      new('Hsp',
-          hsp_num = xvalue(doc, '/Hsp/Hsp_num', as='integer'),
-          bit_score = xvalue(doc, '/Hsp/Hsp_bit-score', as='numeric'),
-          score = xvalue(doc, "/Hsp/Hsp_score", as='numeric'),
-          evalue = xvalue(doc, "/Hsp/Hsp_evalue", as='numeric'),
-          query_from = xvalue(doc, "/Hsp/Hsp_query-from", as='integer'),
-          query_to = xvalue(doc, "/Hsp/Hsp_query-to", as='integer'),
-          hit_from = xvalue(doc, "/Hsp/Hsp_hit-from", as='integer'),
-          hit_to = xvalue(doc, "/Hsp/Hsp_hit-to", as='integer'),
-          query_frame = xvalue(doc, "/Hsp/Hsp_query-frame", as='integer'),
-          hit_frame = xvalue(doc, "/Hsp/Hsp_hit-frame", as='integer'),
-          identity = xvalue(doc, "/Hsp/Hsp_identity", as='integer'),
-          positive = xvalue(doc, "/Hsp/Hsp_positive", as='integer'),
-          gaps = xvalue(doc, "/Hsp/Hsp_gaps", as='integer'),
-          align_len = xvalue(doc, "/Hsp/Hsp_align-len", as='integer'),
-          qseq = BString(xvalue(doc, "/Hsp/Hsp_qseq")), 
-          hseq = BString(xvalue(doc, "/Hsp/Hsp_hseq")),
-          match = BString(xvalue(doc, "//Hsp_midline")),
-          query_env = query_env)
+      new_Hsp(
+        hsp_num = xvalue(doc, '/Hsp/Hsp_num', as='integer'),
+        bit_score = xvalue(doc, '/Hsp/Hsp_bit-score', as='numeric'),
+        score = xvalue(doc, "/Hsp/Hsp_score", as='numeric'),
+        evalue = xvalue(doc, "/Hsp/Hsp_evalue", as='numeric'),
+        query_from = xvalue(doc, "/Hsp/Hsp_query-from", as='integer'),
+        query_to = xvalue(doc, "/Hsp/Hsp_query-to", as='integer'),
+        hit_from = xvalue(doc, "/Hsp/Hsp_hit-from", as='integer'),
+        hit_to = xvalue(doc, "/Hsp/Hsp_hit-to", as='integer'),
+        query_frame = xvalue(doc, "/Hsp/Hsp_query-frame", as='integer'),
+        hit_frame = xvalue(doc, "/Hsp/Hsp_hit-frame", as='integer'),
+        identity = xvalue(doc, "/Hsp/Hsp_identity", as='integer'),
+        positive = xvalue(doc, "/Hsp/Hsp_positive", as='integer'),
+        gaps = xvalue(doc, "/Hsp/Hsp_gaps", as='integer'),
+        align_len = xvalue(doc, "/Hsp/Hsp_align-len", as='integer'),
+        qseq = BString(xvalue(doc, "/Hsp/Hsp_qseq")), 
+        hseq = BString(xvalue(doc, "/Hsp/Hsp_hseq")),
+        match = BString(xvalue(doc, "//Hsp_midline")),
+        query_env = query_env
+      )
     }),
     query_env = query_env
   )
@@ -149,7 +148,7 @@ parseHsps <- function (hsp_elems, query_env) {
 #' @return A \code{\linkS4class{blastTable}} object.
 #' @rdname blastTable
 #' @export
-blastTable <- function (blastfile) {
+blastTable <- function(blastfile) {
   res <- list()
   for (blout in blastfile) {
     if (is.character(blout) && file.exists(blout)) {

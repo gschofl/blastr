@@ -1,4 +1,3 @@
-\docType{methods}
 \name{getHitCoverage}
 \alias{getHitCoverage}
 \alias{getHitCoverage,Hit-method}
@@ -8,9 +7,24 @@
 \alias{getHitCoverage,Iteration-method}
 \alias{getHitCoverage,IterationList-method}
 \alias{getHitCoverage,blastReportDB-method}
+\alias{getHitCoverage-methods}
 \title{Extract the total Hit Coverage.}
 \usage{
   getHitCoverage(x)
+
+  \S4method{getHitCoverage}{Hsp}(x, ...)
+
+  \S4method{getHitCoverage}{HspList}(x, ...)
+
+  \S4method{getHitCoverage}{Hit}(x, ...)
+
+  \S4method{getHitCoverage}{HitList}(x, ...)
+
+  \S4method{getHitCoverage}{Iteration}(x, ...)
+
+  \S4method{getHitCoverage}{IterationList}(x, ...)
+
+  \S4method{getHitCoverage}{blastReportDB}(x, ...)
 }
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}

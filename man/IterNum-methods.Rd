@@ -1,12 +1,18 @@
-\docType{methods}
 \name{getIterNum}
 \alias{getIterNum}
 \alias{getIterNum,Iteration-method}
 \alias{getIterNum,IterationList-method}
 \alias{getIterNum,blastReport-method}
+\alias{getIterNum-methods}
 \title{Access components of Blast Iterations (Queries)}
 \usage{
   getIterNum(x, ...)
+
+  \S4method{getIterNum}{Iteration}(x, ...)
+
+  \S4method{getIterNum}{IterationList}(x, ...)
+
+  \S4method{getIterNum}{blastReport}(x, ...)
 }
 \arguments{
   \item{x}{A \linkS4class{blastReport} or

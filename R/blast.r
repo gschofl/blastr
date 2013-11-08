@@ -1,13 +1,8 @@
 #' @include blastReport-class.r
 #' @importFrom RCurl getForm
 #' @importFrom XML htmlParse
-#' @importFrom rmisc SysCall
-#' @importFrom rmisc Partial
-#' @importFrom rmisc merge_list
-#' @importFrom rmisc has_command
 #' @importFrom Biostrings toString
 #' @importFrom stringr str_match
-#' @importFrom assertthat has_attr
 NULL
 
 

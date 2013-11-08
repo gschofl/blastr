@@ -24,13 +24,15 @@ NULL
 #' @name Hit-class
 #' @rdname Hit-class
 #' @exportClass Hit
-setClass("Hit",
-         slots = c(hit_num = "integer",
-                   hit_def = "DeflineSet",
-                   hit_acc = "character",  
-                   hit_len = "integer",
-                   hsps = "HspList",
-                   query_env = 'environment'))
+new_Hit <- 
+  setClass("Hit",
+           slots = c(hit_num = "integer",
+                     hit_def = "DeflineSet",
+                     hit_acc = "character",  
+                     hit_len = "integer",
+                     hsps = "HspList",
+                     query_env = 'environment')
+  )
 
 #' @name HitList-class
 #' @rdname Hit-class
@@ -47,7 +49,7 @@ HitList <- listclassConstructor('HitList', 'Hit')
 #' @rdname Hsp-methods
 #' @aliases getHsp,Hit-method
 setMethod("getHsp", "Hit",
-          function (x, n = NULL, drop = TRUE) {
+          function(x, n = NULL, drop = TRUE) {
             hsp <- if (is.null(n)) x@hsps else x@hsps[n]
             if (drop && length(hsp) == 1)
               hsp[[1]]
@@ -58,33 +60,33 @@ setMethod("getHsp", "Hit",
 ## @return list<Hsp|HspList>
 #' @rdname Hsp-methods
 #' @aliases getHsp,HitList-method
-setMethod("getHsp", "HitList", function (x, n = NULL, drop = TRUE) {
+setMethod("getHsp", "HitList", function(x, n = NULL, drop = TRUE) {
   lapply(x, getHsp, n = n, drop = drop)
 })
 
 ## @return numeric
 #' @rdname nhsps-methods
 #' @aliases nhsps,Hit-method
-setMethod('nhsps', 'Hit', function (x) length(x@hsps))
+setMethod('nhsps', 'Hit', function(x) length(x@hsps))
 
 ## @return vector<numeric>
 #' @rdname nhsps-methods
 #' @aliases nhsps,HitList-method
-setMethod('nhsps', 'HitList', function (x) {
+setMethod('nhsps', 'HitList', function(x) {
   vapply(x, nhsps, numeric(1))
 })
 
 ## @return integer
 #' @rdname HspNum-methods
 #' @aliases getHspNum,Hit-method
-setMethod('getHspNum', 'Hit', function (x, max = FALSE) {
+setMethod('getHspNum', 'Hit', function(x, max = FALSE) {
   getHspNum(x@hsps, max = max)
 })
 
 ## @return vector<integer> 
 #' @rdname HspNum-methods
 #' @aliases getHspNum,HitList-method
-setMethod('getHspNum', 'HitList', function (x, max = FALSE) {
+setMethod('getHspNum', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getHspNum, max = max)
   if (max)
     unlist(ans)
@@ -96,50 +98,50 @@ setMethod('getHspNum', 'HitList', function (x, max = FALSE) {
 ## @return integer
 #' @rdname HitNum-methods
 #' @aliases getHitNum,Hit-method
-setMethod("getHitNum", "Hit", function (x) x@hit_num)
+setMethod("getHitNum", "Hit", function(x) x@hit_num)
 
 ## @return vector<integer> 
 #' @rdname HitNum-methods
 #' @aliases getHitNum,HitList-method
-setMethod("getHitNum", "HitList", function (x) {
+setMethod("getHitNum", "HitList", function(x) {
   vapply(x, getHitNum, integer(1))
 })
 
 ## @return integer
 #' @rdname HitLen-methods
 #' @aliases getHitLen,Hit-method
-setMethod("getHitLen", "Hit", function (x) x@hit_len)
+setMethod("getHitLen", "Hit", function(x) x@hit_len)
 
 ## @return vector<integer> 
 #' @rdname HitLen-methods
 #' @aliases getHitLen,HitList-method
-setMethod("getHitLen", "HitList", function (x) {
+setMethod("getHitLen", "HitList", function(x) {
   vapply(x, getHitLen, integer(1))
 })
 
 # @return character
 #' @rdname Accession-methods
 #' @aliases getAccession,Hit-method
-setMethod("getAccession", "Hit", function (x) x@hit_acc)
+setMethod("getAccession", "Hit", function(x) x@hit_acc)
 
 ## @return vector<character>
 #' @rdname Accession-methods
 #' @aliases getAccession,HitList-method
-setMethod("getAccession", "HitList", function (x) {
+setMethod("getAccession", "HitList", function(x) {
   vapply(x, getAccession, character(1))
 })
 
 ## @return character
 #' @rdname GeneID-methods
 #' @aliases getGeneID,Hit-method
-setMethod("getGeneID", "Hit", function (x) {
+setMethod("getGeneID", "Hit", function(x) {
   .getDeflineID(x@hit_def[[1L]], db = 'gi')
 })
 
 ## @return vector<character> 
 #' @rdname GeneID-methods
 #' @aliases getGeneID,HitList-method
-setMethod("getGeneID", "HitList", function (x) {
+setMethod("getGeneID", "HitList", function(x) {
   vapply(x, getGeneID, character(1))
 })
 
@@ -148,28 +150,28 @@ setMethod("getGeneID", "HitList", function (x) {
 ## @return matrix<character> or vector<character>
 #' @rdname HitID-methods
 #' @aliases getHitID,Hit-method
-setMethod("getHitID", "Hit", function (x, db = 'any') {
+setMethod("getHitID", "Hit", function(x, db = 'any') {
   .getDeflineID(x@hit_def, db = db)
 })
 
 ## @return list<matrix<character>> or list<vector<integer>> 
 #' @rdname HitID-methods
 #' @aliases getHitID,HitList-method
-setMethod("getHitID", "HitList", function (x, db = 'any') {
+setMethod("getHitID", "HitList", function(x, db = 'any') {
   lapply(x, getHitID, db = db)
 })
 
 ## @return vector<character>
 #' @rdname HitDef-methods
 #' @aliases getHitDef,Hit-method
-setMethod("getHitDef", "Hit", function (x) {
+setMethod("getHitDef", "Hit", function(x) {
   .deflineDesc(x@hit_def)
 })
 
 ## @return list<vector<intecharacterger>>
 #' @rdname HitDef-methods
 #' @aliases getHitDef,HitList-method
-setMethod("getHitDef", "HitList", function (x) {
+setMethod("getHitDef", "HitList", function(x) {
   lapply(x, getHitDef)
 })
 
@@ -177,28 +179,28 @@ setMethod("getHitDef", "HitList", function (x) {
 ## @return vector<character>
 #' @rdname Defline-methods
 #' @aliases getDefline,Hit-method
-setMethod("getDefline", "Hit", function (x) {
+setMethod("getDefline", "Hit", function(x) {
   paste0(.deflineID(x@hit_def),' ',.deflineDesc(x@hit_def))
 })
 
 ## @return list<vector<intecharacterger>>
 #' @rdname Defline-methods
 #' @aliases getDefline,HitList-method
-setMethod("getDefline", "HitList", function (x) {
+setMethod("getDefline", "HitList", function(x) {
   lapply(x, getDefline)
 })
 
 ## @return character
 #' @rdname HitDef-methods
 #' @aliases getPrimaryHitDef,Hit-method
-setMethod("getPrimaryHitDef", "Hit", function (x) {
+setMethod("getPrimaryHitDef", "Hit", function(x) {
   .deflineDesc(x@hit_def[[1L]])
 })
 
 ## @return vector<intecharacterger>
 #' @rdname HitDef-methods
 #' @aliases getPrimaryHitDef,HitList-method
-setMethod("getPrimaryHitDef", "HitList", function (x) {
+setMethod("getPrimaryHitDef", "HitList", function(x) {
   vapply(x, getPrimaryHitDef, character(1))
 })
 
@@ -206,14 +208,14 @@ setMethod("getPrimaryHitDef", "HitList", function (x) {
 ## @return character
 #' @rdname Defline-methods
 #' @aliases getPrimaryDefline,Hit-method
-setMethod("getPrimaryDefline", "Hit", function (x) {
+setMethod("getPrimaryDefline", "Hit", function(x) {
   paste0(.deflineID(x@hit_def[[1L]]),' ',.deflineDesc(x@hit_def[[1L]]))
 })
 
 ## @return vector<character>
 #' @rdname Defline-methods
 #' @aliases getPrimaryDefline,HitList-method
-setMethod("getPrimaryDefline", "HitList", function (x) {
+setMethod("getPrimaryDefline", "HitList", function(x) {
   vapply(x, getPrimaryDefline, character(1))
 })
 
@@ -222,14 +224,14 @@ setMethod("getPrimaryDefline", "HitList", function (x) {
 ## @return vector<numeric>
 #' @rdname Bitscore-methods
 #' @aliases getBitscore,Hit-method
-setMethod('getBitscore', 'Hit', function (x, max = FALSE, sum = FALSE) {
+setMethod('getBitscore', 'Hit', function(x, max = FALSE, sum = FALSE) {
   getBitscore(x@hsps, max = max, sum = sum)
 })
 
 ## @return list<vector<numeric>>
 #' @rdname Bitscore-methods
 #' @aliases getBitscore,HitList-method
-setMethod('getBitscore', 'HitList', function (x, max = FALSE, sum = FALSE) {
+setMethod('getBitscore', 'HitList', function(x, max = FALSE, sum = FALSE) {
   ans <- lapply(x, getBitscore, max = max, sum = sum)
   if (max || sum)
     unlist(ans)
@@ -239,40 +241,40 @@ setMethod('getBitscore', 'HitList', function (x, max = FALSE, sum = FALSE) {
 ## @return numeric
 #' @rdname Bitscore-methods
 #' @aliases getMaxBitscore,Hit-method
-setMethod('getMaxBitscore', 'Hit', function (x) {
+setMethod('getMaxBitscore', 'Hit', function(x) {
   getMaxBitscore(x@hsps)
 })
 
 ## @return vector<numeric>
 #' @rdname Bitscore-methods
 #' @aliases getMaxBitscore,HitList-method
-setMethod('getMaxBitscore', 'HitList', function (x) {
+setMethod('getMaxBitscore', 'HitList', function(x) {
   vapply(x, getMaxBitscore, numeric(1))
 })
 
 ## @return numeric
 #' @rdname Bitscore-methods
 #' @aliases getTotalBitscore,Hit-method
-setMethod('getTotalBitscore', 'Hit', function (x) {
+setMethod('getTotalBitscore', 'Hit', function(x) {
   getTotalBitscore(x@hsps)
 })
 
 ## @return vector<numeric>
 #' @rdname Bitscore-methods
 #' @aliases getTotalBitscore,HitList-method
-setMethod('getTotalBitscore', 'HitList', function (x) {
+setMethod('getTotalBitscore', 'HitList', function(x) {
   vapply(x, getTotalBitscore, numeric(1))
 })
 
 ## @return vector<numeric>
 #' @rdname Score-methods
 #' @aliases getScore,Hit-method
-setMethod('getScore', 'Hit', function (x, max = FALSE) getScore(x@hsps, max = max))
+setMethod('getScore', 'Hit', function(x, max = FALSE) getScore(x@hsps, max = max))
 
 ## @return list<vector<numeric>>
 #' @rdname Score-methods
 #' @aliases getScore,HitList-method
-setMethod('getScore', 'HitList', function (x, max = FALSE) {
+setMethod('getScore', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getScore, max = max)
   if (max)
     unlist(ans)
@@ -282,14 +284,14 @@ setMethod('getScore', 'HitList', function (x, max = FALSE) {
 ## @return <vector<numeric> 
 #' @rdname Evalue-methods
 #' @aliases getEvalue,Hit-method
-setMethod('getEvalue', 'Hit', function (x, max = FALSE) {
+setMethod('getEvalue', 'Hit', function(x, max = FALSE) {
   getEvalue(x@hsps, max = max)
 })
 
 ## @return list<vector<numeric>> 
 #' @rdname Evalue-methods
 #' @aliases getEvalue,HitList-method
-setMethod('getEvalue', 'HitList', function (x, max = FALSE) {
+setMethod('getEvalue', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getEvalue, max = max)
   if (max)
     unlist(ans)
@@ -301,12 +303,12 @@ setMethod('getEvalue', 'HitList', function (x, max = FALSE) {
 ## @return <vector<integer> 
 #' @rdname Identity-methods
 #' @aliases getIdentity,Hit-method
-setMethod('getIdentity', 'Hit', function (x, max = FALSE) getIdentity(x@hsps, max = max))
+setMethod('getIdentity', 'Hit', function(x, max = FALSE) getIdentity(x@hsps, max = max))
 
 ## @return list<vector<integer>> 
 #' @rdname Identity-methods
 #' @aliases getIdentity,HitList-method
-setMethod('getIdentity', 'HitList', function (x, max = FALSE) {
+setMethod('getIdentity', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getIdentity, max = max)
   if (max)
     unlist(ans)
@@ -316,12 +318,12 @@ setMethod('getIdentity', 'HitList', function (x, max = FALSE) {
 ## @return <vector<integer> 
 #' @rdname Positive-methods
 #' @aliases getPositive,Hit-method
-setMethod('getPositive', 'Hit', function (x, max = FALSE) getPositive(x@hsps, max = max))
+setMethod('getPositive', 'Hit', function(x, max = FALSE) getPositive(x@hsps, max = max))
 
 ## @return list<vector<integer>> 
 #' @rdname Positive-methods
 #' @aliases getPositive,HitList-method
-setMethod('getPositive', 'HitList', function (x, max = FALSE) {
+setMethod('getPositive', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getPositive, max = max)
   if (max)
     unlist(ans)
@@ -331,12 +333,12 @@ setMethod('getPositive', 'HitList', function (x, max = FALSE) {
 ## @return <vector<integer> 
 #' @rdname Gaps-methods
 #' @aliases getGaps,Hit-method
-setMethod('getGaps', 'Hit', function (x, max = FALSE) getGaps(x@hsps, max = max))
+setMethod('getGaps', 'Hit', function(x, max = FALSE) getGaps(x@hsps, max = max))
 
 ## @return list<vector<integer>> 
 #' @rdname Gaps-methods
 #' @aliases getGaps,HitList-method
-setMethod('getGaps', 'HitList', function (x, max = FALSE) {
+setMethod('getGaps', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getGaps, max = max)
   if (max)
     unlist(ans)
@@ -346,12 +348,12 @@ setMethod('getGaps', 'HitList', function (x, max = FALSE) {
 ## @return <vector<integer> 
 #' @rdname AlignLen-methods
 #' @aliases getAlignLen,Hit-method
-setMethod('getAlignLen', 'Hit', function (x, max = FALSE) getAlignLen(x@hsps, max = max))
+setMethod('getAlignLen', 'Hit', function(x, max = FALSE) getAlignLen(x@hsps, max = max))
 
 ## @return list<vector<integer>> 
 #' @rdname AlignLen-methods
 #' @aliases getAlignLen,HitList-method
-setMethod('getAlignLen', 'HitList', function (x, max = FALSE) {
+setMethod('getAlignLen', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getAlignLen, max = max)
   if (max)
     unlist(ans)
@@ -363,14 +365,14 @@ setMethod('getAlignLen', 'HitList', function (x, max = FALSE) {
 ## @return vector<integer> 
 #' @rdname QueryFrom-methods
 #' @aliases getQueryFrom,Hit-method
-setMethod('getQueryFrom', 'Hit', function (x, max = FALSE) {
+setMethod('getQueryFrom', 'Hit', function(x, max = FALSE) {
   getQueryFrom(x@hsps, max = max)
 })
 
 ## @return list<vector<integer>> 
 #' @rdname QueryFrom-methods
 #' @aliases getQueryFrom,HitList-method
-setMethod('getQueryFrom', 'HitList', function (x, max = FALSE) {
+setMethod('getQueryFrom', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getQueryFrom, max = max)
   if (max)
     unlist(ans)
@@ -380,14 +382,14 @@ setMethod('getQueryFrom', 'HitList', function (x, max = FALSE) {
 ## @return vector<integer> 
 #' @rdname QueryTo-methods
 #' @aliases getQueryTo,Hit-method
-setMethod('getQueryTo', 'Hit', function (x, max = FALSE) {
+setMethod('getQueryTo', 'Hit', function(x, max = FALSE) {
   getQueryTo(x@hsps, max = max)
 })
 
 ## @return list<vector<integer>> 
 #' @rdname QueryTo-methods
 #' @aliases getQueryTo,HitList-method
-setMethod('getQueryTo', 'HitList', function (x, max = FALSE) {
+setMethod('getQueryTo', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getQueryTo, max = max)
   if (max)
     unlist(ans)
@@ -397,14 +399,14 @@ setMethod('getQueryTo', 'HitList', function (x, max = FALSE) {
 ## @return vector<integer> 
 #' @rdname HitFrom-methods
 #' @aliases getHitFrom,Hit-method
-setMethod('getHitFrom', 'Hit', function (x, max = FALSE) {
+setMethod('getHitFrom', 'Hit', function(x, max = FALSE) {
   getHitFrom(x@hsps, max = max)
 })
 
 ## @return list<vector<integer>> 
 #' @rdname HitFrom-methods
 #' @aliases getHitFrom,HitList-method
-setMethod('getHitFrom', 'HitList', function (x, max = FALSE) {
+setMethod('getHitFrom', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getHitFrom, max = max)
   if (max)
     unlist(ans)
@@ -414,14 +416,14 @@ setMethod('getHitFrom', 'HitList', function (x, max = FALSE) {
 ## @return vector<integer> 
 #' @rdname HitTo-methods
 #' @aliases getHitTo,Hit-method
-setMethod('getHitTo', 'Hit', function (x, max = FALSE) {
+setMethod('getHitTo', 'Hit', function(x, max = FALSE) {
   getHitTo(x@hsps, max = max)
 })
 
 ## @return list<vector<integer>> 
 #' @rdname HitTo-methods
 #' @aliases getHitTo,HitList-method
-setMethod('getHitTo', 'HitList', function (x, max = FALSE) {
+setMethod('getHitTo', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getHitTo, max = max)
   if (max)
     unlist(ans)
@@ -433,14 +435,14 @@ setMethod('getHitTo', 'HitList', function (x, max = FALSE) {
 ## @return vector<integer> 
 #' @rdname QueryFrame-methods
 #' @aliases getQueryFrame,Hit-method
-setMethod('getQueryFrame', 'Hit', function (x, max = FALSE) {
+setMethod('getQueryFrame', 'Hit', function(x, max = FALSE) {
   getQueryFrame(x@hsps, max = max)
 })
 
 ## @return list<vector<integer>>
 #' @rdname QueryFrame-methods
 #' @aliases getQueryFrame,HitList-method
-setMethod('getQueryFrame', 'HitList', function (x, max = FALSE) {
+setMethod('getQueryFrame', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getQueryFrame, max = max)
   if (max)
     unlist(ans)
@@ -450,14 +452,14 @@ setMethod('getQueryFrame', 'HitList', function (x, max = FALSE) {
 ## @return vector<integer> 
 #' @rdname HitFrame-methods
 #' @aliases getHitFrame,Hit-method
-setMethod('getHitFrame', 'Hit', function (x, max = FALSE) {
+setMethod('getHitFrame', 'Hit', function(x, max = FALSE) {
   getHitFrame(x@hsps, max = max)
 })
 
 ## @return list<vector<integer>>
 #' @rdname HitFrame-methods
 #' @aliases getHitFrame,HitList-method
-setMethod('getHitFrame', 'HitList', function (x, max = FALSE) {
+setMethod('getHitFrame', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getHitFrame, max = max)
   if (max)
     unlist(ans)
@@ -469,7 +471,7 @@ setMethod('getHitFrame', 'HitList', function (x, max = FALSE) {
 ## @return IRanges 
 #' @rdname QueryRange-methods
 #' @aliases getQueryRange,Hit-method
-setMethod("getQueryRange", "Hit", function (x, max = FALSE) {
+setMethod("getQueryRange", "Hit", function(x, max = FALSE) {
   if (max)
     x <- x[[bs.max(x@hsps)]]
   .range(getQueryFrame(x), getQueryFrom(x), getQueryTo(x))
@@ -478,7 +480,7 @@ setMethod("getQueryRange", "Hit", function (x, max = FALSE) {
 ## @return IRangesList|IRanges 
 #' @rdname QueryRange-methods
 #' @aliases getQueryRange,Hit-method
-setMethod("getQueryRange", "HitList", function (x, max = FALSE) {
+setMethod("getQueryRange", "HitList", function(x, max = FALSE) {
   ans <- IRangesList( lapply(x, getQueryRange, max = max) )
   if (max)
     unlist(ans)
@@ -488,7 +490,7 @@ setMethod("getQueryRange", "HitList", function (x, max = FALSE) {
 ## @return IRanges 
 #' @rdname HitRange-methods
 #' @aliases getHitRange,Hit-method
-setMethod("getHitRange", "Hit", function (x, max = FALSE) {
+setMethod("getHitRange", "Hit", function(x, max = FALSE) {
   if (max)
     x <- x[[bs.max(x@hsps)]]
   .range(getQueryFrame(x), getQueryFrom(x), getQueryTo(x))
@@ -497,7 +499,7 @@ setMethod("getHitRange", "Hit", function (x, max = FALSE) {
 ## @return IRangesList|IRanges 
 #' @rdname HitRange-methods
 #' @aliases getHitRange,HitList-method
-setMethod("getHitRange", "HitList", function (x, max = FALSE) {
+setMethod("getHitRange", "HitList", function(x, max = FALSE) {
   ans <- IRangesList( lapply(x, getHitRange, max = max) )
   if (max)
     unlist(ans)
@@ -509,14 +511,14 @@ setMethod("getHitRange", "HitList", function (x, max = FALSE) {
 ## @return BStringSet
 #' @rdname QuerySeq-methods
 #' @aliases getQuerySeq,Hit-method
-setMethod('getQuerySeq', 'Hit', function (x, max = FALSE) {
+setMethod('getQuerySeq', 'Hit', function(x, max = FALSE) {
   getQuerySeq(x@hsps, max = max)
 })
 
 ## @return list<BStringSet>|BStringSet
 #' @rdname QuerySeq-methods
 #' @aliases getQuerySeq,HitList-method
-setMethod('getQuerySeq', 'HitList', function (x, max = FALSE) {
+setMethod('getQuerySeq', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getQuerySeq, max = max)
   if (max)
     do.call('c', ans)
@@ -526,14 +528,14 @@ setMethod('getQuerySeq', 'HitList', function (x, max = FALSE) {
 ## @return BStringSet
 #' @rdname HitSeq-methods
 #' @aliases getHitSeq,Hit-method
-setMethod('getHitSeq', 'Hit', function (x, max = FALSE) {
+setMethod('getHitSeq', 'Hit', function(x, max = FALSE) {
   getHitSeq(x@hsps, max = max)
 })
 
 ## @return list<BStringSet>|BStringSet
 #' @rdname HitSeq-methods
 #' @aliases getHitSeq,HitList-method
-setMethod('getHitSeq', 'HitList', function (x, max = FALSE) {
+setMethod('getHitSeq', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getHitSeq, max = max)
   if (max)
     do.call('c', ans)
@@ -543,14 +545,14 @@ setMethod('getHitSeq', 'HitList', function (x, max = FALSE) {
 ## @return BStringSet
 #' @rdname Match-methods
 #' @aliases getMatch,Hit-method
-setMethod('getMatch', 'Hit', function (x, max = FALSE) {
+setMethod('getMatch', 'Hit', function(x, max = FALSE) {
   getMatch(x@hsps, max = max)
 })
 
 ## @return list<BStringSet>|BStringSet
 #' @rdname Match-methods
 #' @aliases getMatch,HitList-method
-setMethod('getMatch', 'HitList', function (x, max = FALSE) {
+setMethod('getMatch', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getMatch, max = max)
   if (max)
     do.call('c', ans)
@@ -561,13 +563,13 @@ setMethod('getMatch', 'HitList', function (x, max = FALSE) {
 
 #' @rdname PercIdentity-methods
 #' @aliases getPercIdentity,Hit-method
-setMethod('getPercIdentity', 'Hit', function (x, max = FALSE) {
+setMethod('getPercIdentity', 'Hit', function(x, max = FALSE) {
   getIdentity(x@hsps, max = max)/getAlignLen(x@hsps, max = max)
 })
 
 #' @rdname PercIdentity-methods
 #' @aliases getPercIdentity,HitList-method
-setMethod('getPercIdentity', 'HitList', function (x, max = FALSE) {
+setMethod('getPercIdentity', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getPercIdentity, max = max)
   if (max)
     unlist(ans)
@@ -579,23 +581,23 @@ setMethod('getPercIdentity', 'HitList', function (x, max = FALSE) {
 ## bitscore !!!
 #' @rdname PercIdentity-methods
 #' @aliases getMaxPercIdentity,Hit-method
-setMethod('getMaxPercIdentity', 'Hit', function (x) getMaxPercIdentity(x@hsps))
+setMethod('getMaxPercIdentity', 'Hit', function(x) getMaxPercIdentity(x@hsps))
 
 #' @rdname PercIdentity-methods
 #' @aliases getMaxPercIdentity,HitList-method
-setMethod('getMaxPercIdentity', 'HitList', function (x) {
+setMethod('getMaxPercIdentity', 'HitList', function(x) {
   vapply(x, getMaxPercIdentity, numeric(1))
 })
 
 #' @rdname PercPositive-methods
 #' @aliases getPercPositive,Hit-method
-setMethod('getPercPositive', 'Hit', function (x, max = FALSE) {
+setMethod('getPercPositive', 'Hit', function(x, max = FALSE) {
   getPositive(x@hsps, max = max)/getAlignLen(x@hsps, max = max)
 })
 
 #' @rdname PercPositive-methods
 #' @aliases getPercPositive,HitList-method
-setMethod('getPercPositive', 'HitList', function (x, max = FALSE) {
+setMethod('getPercPositive', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getPercPositive, max = max)
   if (max)
     unlist(ans)
@@ -604,13 +606,13 @@ setMethod('getPercPositive', 'HitList', function (x, max = FALSE) {
 
 #' @rdname PercGaps-methods
 #' @aliases getPercGaps,Hit-method
-setMethod('getPercGaps', 'Hit', function (x, max = FALSE) {
+setMethod('getPercGaps', 'Hit', function(x, max = FALSE) {
   getGaps(x@hsps, max = max)/getAlignLen(x@hsps, max = max)
 })
 
 #' @rdname PercGaps-methods
 #' @aliases getPercGaps,HitList-method
-setMethod('getPercGaps', 'HitList', function (x, max = FALSE) {
+setMethod('getPercGaps', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getPercGaps, max = max)
   if (max)
     unlist(ans)
@@ -621,13 +623,13 @@ setMethod('getPercGaps', 'HitList', function (x, max = FALSE) {
 
 #' @rdname QueryCoverage-methods
 #' @aliases getQueryCoverage,Hit-method
-setMethod('getQueryCoverage', 'Hit', function (x) {
+setMethod('getQueryCoverage', 'Hit', function(x) {
   getQueryCoverage(x@hsps)
 })
 
 #' @rdname QueryCoverage-methods
 #' @aliases getQueryCoverage,HitList-method
-setMethod('getQueryCoverage', 'HitList', function (x) {
+setMethod('getQueryCoverage', 'HitList', function(x) {
   ans <- Map(function(frame, from, to) {
     sum(.range(frame, from, to, width=TRUE))
   }, frame=getQueryFrame(x), from=getQueryFrom(x), to=getQueryTo(x))
@@ -636,13 +638,13 @@ setMethod('getQueryCoverage', 'HitList', function (x) {
 
 #' @rdname HitCoverage-methods
 #' @aliases getHitCoverage,Hit-method
-setMethod('getHitCoverage', 'Hit', function (x) {
+setMethod('getHitCoverage', 'Hit', function(x) {
   getHitCoverage(x@hsps)
 })
 
 #' @rdname HitCoverage-methods
 #' @aliases getHitCoverage,HitList-method
-setMethod('getHitCoverage', 'HitList', function (x) {
+setMethod('getHitCoverage', 'HitList', function(x) {
   ans <- Map(function(frame, from, to) {
     sum(.range(frame, from, to, width=TRUE))
   }, frame=getQueryFrame(x), from=getQueryFrom(x), to=getQueryTo(x))
@@ -653,33 +655,29 @@ setMethod('getHitCoverage', 'HitList', function (x) {
 
 
 ## Subset to HspList
-setMethod("[", "Hit",
-          function(x, i, j, ..., drop) {
-            x@hsps[i]
-          })
+setMethod("[", "Hit", function(x, i, j, ..., drop) {
+  x@hsps[i]
+})
 
 ## Subset to Hsp
-setMethod("[[", "Hit",
-          function(x, i, j, ...) {
-            x@hsps[[i]]
-          })
+setMethod("[[", "Hit", function(x, i, j, ...) {
+  x@hsps[[i]]
+})
 
-setMethod("[", "HitList",
-          function(x, i, j, ..., drop) {
-            query_env = x@query_env
-            HitList( callNextMethod(), query_env = query_env )
-          })
+setMethod("[", "HitList", function(x, i, j, ..., drop) {
+  query_env = x@query_env
+  HitList( callNextMethod(), query_env = query_env )
+})
 
-setMethod("[[", "HitList",
-          function(x, i, j, ...) {
-            callNextMethod()
-          })
+setMethod("[[", "HitList", function(x, i, j, ...) {
+  callNextMethod()
+})
 
 
 # show, Hit, HitList -----------------------------------------------------
 
 
-.show_Hit <- function (hit, show_hsps = TRUE) {
+.show_Hit <- function(hit, show_hsps = TRUE) {
   offset <- nchar(getHitNum(hit)) + 6
   id_ <- .deflineID(hit@hit_def[[1L]])
   desc_ <- linebreak(.deflineDesc(hit@hit_def[[1L]]), indent=-offset, offset=offset)
@@ -692,7 +690,7 @@ setMethod("[[", "HitList",
     hsps <- hit@hsps
     show_aln <- logical(length(hsps))
     show_aln[] <- getOption("showAlignment", default=FALSE)
-    x <- Map(function (hsp, sa) .show_hsp(hsp, show_aln=sa, offset=3),
+    x <- Map(function(hsp, sa) .show_hsp(hsp, show_aln=sa, offset=3),
              hsp = hsps, sa = as.list(show_aln))
   }
 }
@@ -700,7 +698,7 @@ setMethod("[[", "HitList",
 #' @aliases show,Hit-method
 #' @rdname show-methods
 setMethod("show", "Hit",
-          function (object) {
+          function(object) {
             olen <- length(object@hsps)
             cat(sprintf("A %s instance with %s hsp%s.\n",
                         sQuote(class(object)), olen, ifelse(olen == 1, '', 's')),
@@ -711,7 +709,7 @@ setMethod("show", "Hit",
 #' @aliases show,HitList-method
 #' @rdname show-methods
 setMethod("show", "HitList",
-          function (object) {
+          function(object) {
             olen <- length(object)
             tail <- "\n"
             n <- getOption("showHits", default = 8)

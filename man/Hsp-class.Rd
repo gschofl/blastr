@@ -2,6 +2,9 @@
 \alias{Hsp-class}
 \alias{HspList-class}
 \title{Contains information parsed from an XML NCBI BLAST hsp element.}
+\usage{
+  new_Hsp(...)
+}
 \description{
   Information about each high-scoring pair (hsp) within a
   hit contained in a single \sQuote{Hsp} element.

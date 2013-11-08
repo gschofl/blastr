@@ -1,6 +1,9 @@
-\name{BlastHeader}
-\alias{BlastHeader}
+\name{new_BlastHeader}
+\alias{new_BlastHeader}
 \title{BlastHeader-class}
+\usage{
+  new_BlastHeader(...)
+}
 \description{
   A container for blast header information:
 }

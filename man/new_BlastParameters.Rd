@@ -1,6 +1,9 @@
-\name{BlastParameters}
-\alias{BlastParameters}
+\name{new_BlastParameters}
+\alias{new_BlastParameters}
 \title{blastParameters-class}
+\usage{
+  new_BlastParameters(...)
+}
 \description{
   A container for blast parameters and statistics.
 }

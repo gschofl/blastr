@@ -16,10 +16,12 @@ NULL
 #' }
 #'
 #' @keywords internal
-setClass("BlastHeader",
-         slots = c(version = 'character',
-                   reference = 'character',
-                   database = 'character'))
+new_BlastHeader <- 
+  setClass("BlastHeader",
+           slots = c(version = 'character',
+                     reference = 'character',
+                     database = 'character')
+  )
 
 setMethod('show', 'BlastHeader',
           function(object) {
@@ -52,18 +54,20 @@ setMethod('show', 'BlastHeader',
 #' }
 #'    
 #' @keywords internal
-setClass("BlastParameters",
-         slots = c(program = "character", matrix = "character",
-                   expect = "numeric", penalties = "numeric",
-                   sc_match = "integer", sc_mismatch = "integer",
-                   filter = "character", num_sequences = "character",
-                   num_letters = "character", hsp_length = "numeric",
-                   effective_space = "numeric", ka_params = "numeric"),
-         prototype = prototype(penalties = c(open = NA_real_, extend = NA_real_),
-                               ka_params = c(k = NA_real_, lambda = NA_real_, h = NA_real_)))
+new_BlastParameters <- 
+  setClass("BlastParameters",
+           slots = c(program = "character", matrix = "character",
+                     expect = "numeric", penalties = "numeric",
+                     sc_match = "integer", sc_mismatch = "integer",
+                     filter = "character", num_sequences = "character",
+                     num_letters = "character", hsp_length = "numeric",
+                     effective_space = "numeric", ka_params = "numeric"),
+           prototype = prototype(penalties = c(open = NA_real_, extend = NA_real_),
+                                 ka_params = c(k = NA_real_, lambda = NA_real_, h = NA_real_))
+  )
 
 setMethod('show', 'BlastParameters',
-          function (object) {
+          function(object) {
             fmt.params <- paste0("Search Parameters:\n",
                                  "  Program:                %s\n",
                                  "  Expect value:           %s\n",
@@ -93,8 +97,6 @@ setMethod('show', 'BlastParameters',
 # blastReport-class ------------------------------------------------------
 
 
-setClassUnion("IterationListOrChar", members=c("IterationList", "character"))
-
 #' blastReport-class
 #'
 #' \code{"blastReport"} is the top-level container for data parsed from NCBI
@@ -114,6 +116,8 @@ setClassUnion("IterationListOrChar", members=c("IterationList", "character"))
 #'  
 #'  E.g. \code{report[[1]][[1]]} will return the first hit in the first query.
 #'  
+#'  @section Slots:
+#'  
 #'  \describe{
 #'    \item{\code{header}:}{Header information; \code{"BlastHeader"}.}
 #'    \item{\code{params}:}{Blast parameters and statistics \code{"BlastParameters"}.}
@@ -126,26 +130,27 @@ setClassUnion("IterationListOrChar", members=c("IterationList", "character"))
 #' @name blastReport-class
 #' @rdname blastReport-class
 #' @exportClass blastReport
-setClass("blastReport",
-         slots = c(header = "BlastHeader",
-                   parameters = "BlastParameters",
-                   iterations = "IterationListOrChar"),
-         prototype = prototype(iterations = NULL))
+new_blastReport <- 
+  setClass("blastReport",
+           slots = c(header = "BlastHeader",
+                     parameters = "BlastParameters",
+                     iterations = "IterationList")
+  )
 
 
 # getter, blastReport ----------------------------------------------------
 
 
 ## @return BlastHeader
-setMethod("getHeader", "blastReport", function (x, ...) x@header)
+setMethod("getHeader", "blastReport", function(x, ...) x@header)
 
 ## @return BlastParameters
-setMethod("getParams", "blastReport", function (x) x@parameters)
+setMethod("getParams", "blastReport", function(x) x@parameters)
 
 ## @return Iteration|IterationList
 #' @rdname Iteration-methods
 #' @aliases getIteration,blastReport-method
-setMethod("getIteration", "blastReport", function (x, drop = TRUE) {
+setMethod("getIteration", "blastReport", function(x, drop = TRUE) {
   it <- x@iterations
   if (drop && length(it) == 1)
     it[[1]]
@@ -157,35 +162,35 @@ setMethod("getIteration", "blastReport", function (x, drop = TRUE) {
 #' @rdname Hit-methods
 #' @aliases getHit,blastReport-method
 setMethod("getHit", "blastReport",
-          function (x, n = NULL, drop = TRUE) {
+          function(x, n = NULL, drop = TRUE) {
   getHit(getIteration(x), n = n, drop = drop)
 })
 
 ## @return vector<integer>
 #' @rdname IterNum-methods
 #' @aliases getIterNum,blastReport-method
-setMethod("getIterNum", "blastReport", function (x) {
+setMethod("getIterNum", "blastReport", function(x) {
   getIterNum(getIteration(x))
 })
 
 ## @return vector<character>
 #' @rdname QueryID-methods
 #' @aliases getQueryID,blastReport-method
-setMethod("getQueryID", "blastReport", function (x) {
+setMethod("getQueryID", "blastReport", function(x) {
   getQueryID(getIteration(x))
 })
 
 ## @return vector<character>
 #' @rdname QueryDef-methods
 #' @aliases getQueryDef,blastReport-method
-setMethod("getQueryDef", "blastReport", function (x) {
+setMethod("getQueryDef", "blastReport", function(x) {
   getQueryDef(getIteration(x))
 })
 
 ## @return vector<integer>
 #' @rdname QueryLen-methods
 #' @aliases getQueryLen,blastReport-method
-setMethod("getQueryLen", "blastReport", function (x) {
+setMethod("getQueryLen", "blastReport", function(x) {
   getQueryLen(getIteration(x))
 })
 
@@ -194,22 +199,24 @@ setMethod("getQueryLen", "blastReport", function (x) {
 
 
 ## Subset to IterationList
-setMethod("[", "blastReport",
-          function(x, i, j, ..., drop) {
-            x@iterations[i]
-          })
+setMethod("[", "blastReport", function(x, i, j, ..., drop) {
+  x@iterations[i]
+})
 
 ## Subset to Iteration
-setMethod("[[", "blastReport",
-          function(x, i, j, ...) {
-            x@iterations[[i]]
-          })
+setMethod("[[", "blastReport", function(x, i, j, ...) {
+  x@iterations[[i]]
+})
+
+setMethod("is.na", "blastReport", function(x) {
+  vapply(x@iterations, is.na, FALSE, USE.NAMES=FALSE)
+})
 
 
 # show, blastReport ------------------------------------------------------
 
 
-.show_blastReport <- function (object) {
+.show_blastReport <- function(object) {
   olen <- length(object@iterations)
   cat(sprintf("A %s instance with %s iteration%s.\n",
               sQuote(class(object)), olen, ifelse(olen == 1, '', 's')),
@@ -247,7 +254,7 @@ setMethod("[[", "blastReport",
 #' # options("showHits" = NULL)
 #' # show(hitlist)
 setMethod("show", "blastReport",
-          function (object) {
+          function(object) {
             .show_blastReport(object)
           })
 

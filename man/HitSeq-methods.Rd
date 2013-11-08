@@ -1,4 +1,3 @@
-\docType{methods}
 \name{getHitSeq}
 \alias{getHitSeq}
 \alias{getHitSeq,Hit-method}
@@ -7,9 +6,22 @@
 \alias{getHitSeq,HspList-method}
 \alias{getHitSeq,Iteration-method}
 \alias{getHitSeq,blastReportDB-method}
+\alias{getHitSeq-methods}
 \title{Access components of High-Scoring Pairs (Hsps)}
 \usage{
   getHitSeq(x, max = FALSE)
+
+  \S4method{getHitSeq}{Hsp}(x, ...)
+
+  \S4method{getHitSeq}{HspList}(x, ...)
+
+  \S4method{getHitSeq}{Hit}(x, ...)
+
+  \S4method{getHitSeq}{HitList}(x, ...)
+
+  \S4method{getHitSeq}{Iteration}(x, ...)
+
+  \S4method{getHitSeq}{blastReportDB}(x, ...)
 }
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}
