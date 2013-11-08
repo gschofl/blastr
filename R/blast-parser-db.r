@@ -285,7 +285,7 @@ blastReportDB <- function (blastfile, db_path = "blast.db", max_hit = NULL,
   assert_that( db_bulk_insert(con, "query", handler$getQuery()) )
   assert_that( db_bulk_insert(con, "hit", handler$getHit()) )
   assert_that( db_bulk_insert(con, "hsp", handler$getHsp()) )
-  new_blastReportDB(conn)
+  new_blastReportDB(conn, path=normalizePath(db_path))
 }
 
 
@@ -295,5 +295,5 @@ blastReportDB <- function (blastfile, db_path = "blast.db", max_hit = NULL,
 #' @export
 blastReportDBConnect <- function (db_path) {
   assert_that(is.readable(db_path))
-  new_blastReportDB(db_connect(db_path))
+  new_blastReportDB(db_connect(db_path), path = normalizePath(db_path))
 }

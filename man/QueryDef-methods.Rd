@@ -4,7 +4,9 @@
 \alias{getQueryDef,Iteration-method}
 \alias{getQueryDef,IterationList-method}
 \alias{getQueryDef,blastReport-method}
-\alias{getQueryDef,blastReportFb-method}
+\alias{getQueryDef,blastReportDB-method}
+\alias{getQueryDef,blastReportDb-method}
+\alias{getQueryDef-methods}
 \title{Access components of Blast Iterations (Queries)}
 \usage{
   getQueryDef(x, ...)
