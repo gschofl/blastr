@@ -37,6 +37,7 @@ NULL
 #' Construct deflines
 #' @keywords internal
 make_deflines <- function (query, prefix = "lcl") {
+  ##
   if (class(query) %in% c("gbFeatureList","gbFeature")) {
     id <- paste0(prefix, "|", index(query))
     desc <- paste0(unlist(qualif(query, "locus_tag")),
@@ -69,14 +70,20 @@ make_deflines <- function (query, prefix = "lcl") {
 }
 
 
+#' @importFrom Biostrings fasta.info
 #' @keywords internal
-make_blast_query <- function (query, transl = FALSE) {  
+make_blast_query <- function (query, transl = FALSE) {
+  ## Set up tempfile to use as input for blast
+  tmp <- tempfile(fileext=".fa")
   if (is.string(query) && tryCatch(is.readable(query),
                                    assertError = function (e) FALSE )) {
-    # x is the path to a FASTA file
-    return(list(query=query, defline=NULL, parse_defline=FALSE))
+    # query must be the path to a valid FASTA file
+    nqueries <- length(fasta.info(query))
+    # copy query to tempfile because blast deletes the query file
+    # after it's finished
+    file.copy(query, tmp)
+    return(list(query=tmp, nqueries=nqueries, parse_defline=FALSE))
   }
-  
   if (class(query) %in% c("gbReportList","gbReport","gbFeatureList","gbFeature")) {
     seq <- getSequence(query)
   }
@@ -89,12 +96,9 @@ make_blast_query <- function (query, transl = FALSE) {
   else {
     stop("Objects of class ", sQuote(class(query)), " are not supported as query.")
   }
-  
-  seqnames <- make_deflines(seq, prefix="lcl")
-  input <- paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse="\n")
-  tmp <- tempfile(fileext=".fa")
-  writeLines(input, tmp)
-  list(query=tmp, defline=seqnames$defline, parse_deflines=seqnames$parse_defline) 
+  seqnames <- make_deflines(seq)
+  writeLines(paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse="\n"), tmp)
+  list(query=tmp, nqueries=length(seqnames$defline), parse_deflines=seqnames$parse_defline) 
 }
 
 
@@ -119,19 +123,19 @@ wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   seq_widths <- nchar(s[[1L]])
   max_seq_width <- max(seq_widths)
   
-  seq_starts <- .mapply(FUN=function(start, rev) {
+  seq_starts <- mapply(function(start, rev) {
     x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
     x <- x[-which.max(x)]
     x
-  }, dots=list(start=start, rev=reverse), MoreArgs=NULL)
+  }, start=start, rev=reverse, SIMPLIFY=FALSE, USE.NAMES=TRUE)
   
-  new_starts <- mapply(function (s, rev) if (rev) s[length(s) - 1] - 1 else s[2] - 1,
+  new_starts <- mapply(function(s, rev) if (rev) s[length(s) - 1] - 1 else s[2] - 1,
                        s=seq_starts, rev=reverse)
   
-  seq_ends <- .mapply(FUN=function (start, rev) {
+  seq_ends <- mapply(function(start, rev) {
     x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
     x <- x[-which.max(x)]
-  }, dots=list(start=new_starts, rev=reverse), , MoreArgs=NULL)  
+  }, start=new_starts, rev=reverse, SIMPLIFY=FALSE, USE.NAMES=TRUE)  
   
   tmp <- seq_ends[reverse]
   seq_ends[reverse] <- seq_starts[reverse]
