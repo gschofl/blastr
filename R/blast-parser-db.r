@@ -250,6 +250,15 @@ CREATE INDEX Fhsp_hit ON hsp (hit_id);
 CREATE INDEX Fhsp_hit_query ON hsp (query_id, hit_id, hsp_id);
 '
 
+#' Load SQL schema for blast_db
+#' 
+#' @keywords internal
+#' @export
+.blastr_blastdb_sql <- function() {
+  blast_db.sql
+}
+
+
 #' Parse NCBI BLAST XML files into \linkS4class{blastReportDB} objects.
 #' 
 #' Create (or connect to) a  blastReport SQLite database.
