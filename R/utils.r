@@ -12,16 +12,30 @@ NULL
 ## NCBI BLAST defline database tags
 .tags  <- c("lcl","gb","emb","pir","sp","ref","gnl", "gi","dbj","prf","pdb","pat","bbs")
 
+is.empty <- function(x) {
+  is.null(x) || length(x) == 0L || (length(x) == 1L && !nzchar(x))
+}
+on_failure(is.empty) <- function(call, env) {
+  paste0(deparse(call$x), " is not empty.")
+}
+
+"%||%" <- function(a, b) {
+  if (is.empty(a)) force(b) else a
+}
+
+"%|na|%" <- function(a, b) {
+  if (is.null(a) || all(is.na(a))) force(b) else a
+}
+
+## Vectorized default operators
 "%|%" <- function(a, b) ifelse(nzchar(a), a, b)
 
 "%|NA|%" <- function(a, b) ifelse(is.na(a), b, a)
 
-"%||%" <- function(a, b) if (is.null(a)) force(b) else a
-
-"%|na|%" <- function(a, b) if (is.na(a)) force(b) else a
+"%ni%" <- Negate(`%in%`)
 
 compact <- function(x) {
-  x[!vapply(x, is.null, FALSE, USE.NAMES=FALSE)]
+  x[!vapply(x, is.empty, FALSE, USE.NAMES=FALSE)]
 }
 
 compactChar <- function(x) {
