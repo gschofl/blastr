@@ -21,6 +21,7 @@ NULL
 #' 
 #' @param dbName Path to an SQLite database.
 #' @param dbSchema SQL schema for setting up the db.
+#' @export
 #' @keywords internal
 db_create <- function(dbName, dbSchema = "") {
   assert_that(is.string(dbSchema))
@@ -43,6 +44,7 @@ db_create <- function(dbName, dbSchema = "") {
 #' 
 #' @param dbName Path to an SQLite database.
 #' @param message Message if db does not exits
+#' @export
 #' @keywords internal
 db_connect <- function(dbName, message = "") {
   if (!file.exists(dbName))
@@ -55,6 +57,7 @@ db_connect <- function(dbName, message = "") {
 #' Disconnect from an SQLite database.
 #' 
 #' @param ... connection objects.
+#' @export
 #' @keywords internal
 db_disconnect <- function(...) {
   lapply(list(...), dbDisconnect)
@@ -66,6 +69,7 @@ db_disconnect <- function(...) {
 #' @param con a connection object.
 #' @param sql an SQL statemant
 #' @param j
+#' @export
 #' @keywords internal
 db_query <- function(con, sql, j=NA) {
   assert_that(is(con, "SQLiteConnection"))
@@ -83,6 +87,7 @@ db_query <- function(con, sql, j=NA) {
 #' 
 #' @param con a connection object.
 #' @param tbl name of table in database.
+#' @export
 #' @keywords internal
 db_count <- function(con, tbl) {
   assert_that(con %has_tables% tbl)
@@ -91,6 +96,12 @@ db_count <- function(con, tbl) {
 }
 
 
+#' Bulk insert a data.frame into a db table
+#' 
+#' @param con a connection object.
+#' @param tbl name of table in database.
+#' @param df data.frame to insert
+#' @export
 #' @keywords internal
 db_bulk_insert <- function(con, tbl, df) {
   sql <- sprintf("INSERT INTO %s VALUES (%s)", tbl,
@@ -105,6 +116,7 @@ db_bulk_insert <- function(con, tbl, df) {
 #'
 #' @param con a connection object
 #' @param tables a character vector of table names
+#' @export
 #' @keywords internal
 has_tables <- function (con, tbl) {
   assert_that(is(con, "SQLiteConnection"))
@@ -116,8 +128,7 @@ on_failure(has_tables) <- function(call, env) {
   paste0("Missing table(s) ", tbl, " in database ", sQuote(dbName))
 }
 
-
+#' @export
 #' @keywords internal
-#' @rdname has_tables
 "%has_tables%" <- has_tables
 
