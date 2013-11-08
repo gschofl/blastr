@@ -1,18 +1,13 @@
+#' @include utils.r
 #' @importFrom biofiles getSequence
 #' @importFrom biofiles strand
 #' @importFrom biofiles index
 #' @importFrom biofiles qualif
-#' @importFrom rmisc linebreak
-#' @importFrom rmisc pad
-#' @importFrom rmisc are_empty
 #' @importFrom stringr str_split_fixed
 #' @importFrom stringr str_extract_all
 #' @importFrom stringr str_detect
 #' @importFrom stringr str_match
 #' @importFrom stringr perl
-#' @importFrom Biostrings translate
-#' @importFrom Biostrings reverseComplement
-#' @importFrom Biostrings BStringSet
 NULL
 
 
@@ -140,18 +135,20 @@ wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
   tmp <- seq_ends[reverse]
   seq_ends[reverse] <- seq_starts[reverse]
   seq_starts[reverse] <- tmp
-  
+ 
+  seq_starts[vapply(seq_starts, function(x) length(x)==0, FALSE)] <- ""
+  seq_ends[vapply(seq_ends, function(x) length(x)==0, FALSE)] <- ""
   pasteAlignment <- function(prefix, seq_starts, s, seq_ends, suffix) {
-    seq_starts[are_empty(seq_starts)] <- ""
-    seq_ends[are_empty(seq_ends)] <- ""
-    paste0(pad(prefix, pref_width, "right"), blanks(sep),
-           pad(seq_starts, aln_start_width, "left"), blanks(1),
-           pad(s, max_seq_width, "right"), blanks(1),
-           pad(seq_ends, aln_start_width, "left"), blanks(sep),
-           pad(suffix, suf_width, "right"))
+    paste0(
+      pad(prefix, pref_width, "right"), blanks(sep),
+      pad(seq_starts, aln_start_width, "left"), blanks(1),
+      pad(s, max_seq_width, "right"), blanks(1),
+      pad(seq_ends, aln_start_width, "left"), blanks(sep),
+      pad(suffix, suf_width, "right")
+    )
   }
   s <- .mapply(pasteAlignment, list(prefix=prefix, seq_starts=seq_starts, s=s,
                                     seq_ends=seq_ends, suffix=suffix), NULL)
-  paste0(do.call(function (...) paste(..., sep="\n"), s),collapse="\n\n")
+  paste0(do.call(function(...) paste(..., sep="\n"), s), collapse="\n\n")
 }
 

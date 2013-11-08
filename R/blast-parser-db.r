@@ -1,24 +1,14 @@
 #' @include blastReportDB-class.r
-#' @importFrom assertthat assert_that
-#' @importFrom assertthat is.readable
-#' @importFrom assertthat has_extension
-#' @importFrom rmisc db_create
-#' @importFrom rmisc db_bulk_insert
-#' @importFrom rmisc db_connect
-#' @importFrom rmisc "%has_tables%"
-#' @importFrom rmisc strsplitN
-#' @importFrom rmisc xsize
-#' @importFrom RSQLite dbListFields
 #' @importFrom XML xmlEventParse
 #' @importFrom XML xmlValue
 #' @importFrom XML xmlStopParser
 #' @importFrom XML xpathApply
 NULL
 
-BlastOutput.Iterations <- function (dbPath = NULL,
-                                    max_hit = NULL,
-                                    max_hsp = NULL,
-                                    reset_at = 1000)
+BlastOutput.Iterations <- function(dbPath = NULL,
+                                   max_hit = NULL,
+                                   max_hsp = NULL,
+                                   reset_at = 1000)
 {
   if (!is.null(dbPath)) {
     con <- db_connect(dbPath)
@@ -49,7 +39,7 @@ BlastOutput.Iterations <- function (dbPath = NULL,
   
   resetEnv <- function(...) {
     env <- list(...)
-    lapply(env, function (e) {
+    lapply(env, function(e) {
       remove(list=ls(envir=e), envir=e, inherits=FALSE)
     })
   }
@@ -58,13 +48,13 @@ BlastOutput.Iterations <- function (dbPath = NULL,
     assign(tag, c(env[[tag]], value), env) 
   }
   
-  geneId <- function (def) {
+  geneId <- function(def) {
     strsplitN(def, "|", 2L, fixed=TRUE)  
   }
   
   getLast <- function(tag, env, init_val) {
     val <- tryCatch(get(tag, envir=env, inherits=TRUE),
-                    error=function (e) NULL)
+                    error=function(e) NULL)
     val[length(val)] %||% init_val
   }
   
@@ -82,19 +72,19 @@ BlastOutput.Iterations <- function (dbPath = NULL,
     ifelse(a < b, a, b)
   }
   
-  `%.%` <- function (lval, rval) paste0(lval, rval)
+  `%.%` <- function(lval, rval) paste0(lval, rval)
   
-  getQuery <- function () {
+  getQuery <- function() {
     ans <- as.list(query)[query_order]
     as.data.frame(ans, stringsAsFactors=FALSE)  
   }
   
-  getHit <- function () {
+  getHit <- function() {
     ans <- as.list(hit)[hit_order]
     as.data.frame(ans, stringsAsFactors=FALSE) 
   }
   
-  getHsp <- function () {
+  getHsp <- function() {
     ans <- as.list(hsp)[hsp_order]
     as.data.frame(ans, stringsAsFactors=FALSE) 
   }
@@ -105,7 +95,7 @@ BlastOutput.Iterations <- function (dbPath = NULL,
     assert_that( db_bulk_insert(con, "hsp", getHsp()) )
   }
   
-  'Iteration_iter-num' <- function (ctxt, node) {
+  'Iteration_iter-num' <- function(ctxt, node) {
     .id <- as.integer(xmlValue(node))
     if (.id%%reset_at == 0) {
       print('Reset at '%.%.id)
@@ -122,15 +112,15 @@ BlastOutput.Iterations <- function (dbPath = NULL,
   }
   class(`Iteration_iter-num`) <- "XMLParserContextFunction"
   
-  'Iteration_query-def' <- function (node) {
+  'Iteration_query-def' <- function(node) {
     accumulate('query_def', xmlValue(node), query)
   }
   
-  'Iteration_query-len' <- function (node) {
+  'Iteration_query-len' <- function(node) {
     accumulate('query_len', as.integer( xmlValue(node) ), query)
   }
   
-  'Iteration_hits' <- function (node) {
+  'Iteration_hits' <- function(node) {
     ## Accumulate over Hits
     xp <- paste0('/Iteration_hits/Hit[position() <= ', max_hit, ']/')
     
@@ -274,18 +264,18 @@ CREATE INDEX Fhsp_hit_query ON hsp (query_id, hit_id, hsp_id);
 #' @return A \code{\linkS4class{blastReportDB}} object.
 #' @rdname blastReportDB
 #' @export
-blastReportDB <- function (blastfile, db_path = "blast.db", max_hit = NULL,
-                           max_hsp = NULL, reset_at = 1000)
+blastReportDB <- function(blastfile, db_path = "blast.db", max_hit = NULL,
+                          max_hsp = NULL, reset_at = 1000)
 {
   assert_that(is.readable(blastfile), has_extension(blastfile, 'xml'))
-  conn <- db_create(db_path, blast_db.sql)
+  con <- db_create(db_path, blast_db.sql)
   handler <- BlastOutput.Iterations(db_path, max_hit, max_hsp, reset_at)
   out <- xmlEventParse(blastfile, list(), branches=handler)
   ## load final part into db
-  assert_that( db_bulk_insert(con, "query", handler$getQuery()) )
-  assert_that( db_bulk_insert(con, "hit", handler$getHit()) )
-  assert_that( db_bulk_insert(con, "hsp", handler$getHsp()) )
-  new_blastReportDB(conn, path=normalizePath(db_path))
+  assert_that(db_bulk_insert(con, "query", handler$getQuery()))
+  assert_that(db_bulk_insert(con, "hit", handler$getHit()))
+  assert_that(db_bulk_insert(con, "hsp", handler$getHsp()))
+  new_blastReportDB(con, path=normalizePath(db_path))
 }
 
 
@@ -293,7 +283,7 @@ blastReportDB <- function (blastfile, db_path = "blast.db", max_hit = NULL,
 #' @return A \code{\linkS4class{blastReportDB}} object.
 #' @rdname blastReportDB
 #' @export
-blastReportDBConnect <- function (db_path) {
+blastReportDBConnect <- function(db_path) {
   assert_that(is.readable(db_path))
   new_blastReportDB(db_connect(db_path), path = normalizePath(db_path))
 }

@@ -1,10 +1,10 @@
-\docType{methods}
 \name{getQueryID}
 \alias{getQueryID}
 \alias{getQueryID,Iteration-method}
 \alias{getQueryID,IterationList-method}
 \alias{getQueryID,blastReport-method}
 \alias{getQueryID,blastReportDB-method}
+\alias{getQueryID,blastReportDb-method}
 \alias{getQueryID-methods}
 \title{Access components of Blast Iterations (Queries)}
 \usage{

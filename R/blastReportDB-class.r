@@ -1,18 +1,9 @@
 #' @include blastReport-class.r
-#' @importClassesFrom RSQLite SQLiteConnection
-#' @importClassesFrom RSQLite SQLiteObject
-#' @importClassesFrom RSQLite dbObjectId
-#' @importClassesFrom DBI DBIConnection
-#' @importClassesFrom DBI DBIObject
-#' @importFrom RSQLite dbListTables
-#' @importFrom RSQLite dbListFields
 #' @importFrom IRanges IRanges
 #' @importFrom IRanges IRangesList
 #' @importFrom IRanges reduce
 #' @importFrom IRanges width
 #' @importFrom IRanges unlist
-#' @importFrom rmisc db_count
-#' @importFrom rmisc is.empty
 NULL
 
 # blastReportDB-class ----------------------------------------------------
@@ -145,47 +136,46 @@ setMethod("getQueryLen", "blastReportDB", function (x, id) {
 #' @rdname HitID-methods
 #' @aliases getHitID,blastReportDB-method
 setMethod("getHitID", "blastReportDB", function (x, id) {
-  unlist(.getHitID(x, id))
+  .getHitID(x, id)
 })
 
 .getHitNum <- getterConstructor('hit_num', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitNum-methods
 #' @aliases getHitNum,blastReportDB-method
 setMethod("getHitNum", "blastReportDB", function (x, id) {
-  unlist(.getHitNum(x, id))
+  .getHitNum(x, id)
 })
 
 .getHitLen <- getterConstructor('length', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitLen-methods
 #' @aliases getHitLen,blastReportDB-method
 setMethod("getHitLen", "blastReportDB", function (x, id) {
-  unlist(.getHitLen(x, id))
+  .getHitLen(x, id)
 })
 
 .getAccession <- getterConstructor('accession', 'hit', WHERE='query_id')
 #' @rdname Accession-methods
 #' @aliases getAccession,blastReportDB-method
 setMethod("getAccession", "blastReportDB", function (x, id) {
-  unlist(.getAccession(x, id))
+  .getAccession(x, id)
 })
 
 .getGeneID <- getterConstructor('gene_id', 'hit', WHERE='query_id',as='integer')
 #' @rdname GeneID-methods
 #' @aliases getGeneID,blastReportDB-method
 setMethod("getGeneID", "blastReportDB", function (x, id) {
-  unlist(.getGeneID(x, id))
+  .getGeneID(x, id)
 })
 
 .getHitDef <- getterConstructor('definition', 'hit', WHERE='query_id')
 #' @rdname HitDef-methods
 #' @aliases getHitDef,blastReportDB-method
 setMethod("getHitDef", "blastReportDB", function (x, id) {
-  unlist(.getHitDef(x, id))
+  .getHitDef(x, id)
 })
 
 .getHspHitID <- getterConstructor('hit_id', 'hsp', WHERE='query_id', as='integer')
-.getMaxHspHitID <- getterConstructor('hit_id', 'hsp', WHERE='query_id',
-                                     FUN='MAX',VAL='bit_score',as='integer')
+.getMaxHspHitID <- getterConstructor('hit_id', 'hsp', WHERE='query_id', FUN='MAX',VAL='bit_score',as='integer')
 #' @rdname HspHitID-methods
 #' @aliases getHspHitID,blastReportDB-method
 setMethod("getHspHitID", "blastReportDB", function (x, id, max=FALSE) {
@@ -197,8 +187,7 @@ setMethod("getHspHitID", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getHspID <- getterConstructor('hsp_id', 'hsp', WHERE='query_id', as='integer')
-.getMaxHspID <- getterConstructor('hsp_id', 'hsp', WHERE='query_id',
-                                  FUN='MAX', VAL='bit_score', as='integer')
+.getMaxHspID <- getterConstructor('hsp_id', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname HspID-methods
 #' @aliases getHspID,blastReportDB-method
 setMethod("getHspID", "blastReportDB", function (x, id, max=FALSE) {
@@ -210,8 +199,7 @@ setMethod("getHspID", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getHspNum <- getterConstructor('hsp_num', 'hsp', WHERE='query_id', as='integer')
-.getMaxHspNum <- getterConstructor('hsp_num', 'hsp', WHERE='query_id',
-                                   FUN='MAX', VAL='bit_score', as='integer')
+.getMaxHspNum <- getterConstructor('hsp_num', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @usage getHspNum(x, id)
 #' @rdname HspNum-methods
 #' @aliases getHspNum,blastReportDB-method
@@ -274,8 +262,7 @@ setMethod("getEvalue", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getQueryFrom <- getterConstructor('query_from', 'hsp', WHERE='query_id', as='integer')
-.getMaxQueryFrom <- getterConstructor('query_from', 'hsp', WHERE='query_id',
-                                      FUN='MAX', VAL='bit_score', as='integer')
+.getMaxQueryFrom <- getterConstructor('query_from', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname QueryFrom-methods
 #' @aliases getQueryFrom,blastReportDB-method
 setMethod("getQueryFrom", "blastReportDB", function (x, id, max=FALSE) {
@@ -287,8 +274,7 @@ setMethod("getQueryFrom", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getQueryTo <- getterConstructor('query_to', 'hsp', WHERE='query_id', as='integer')
-.getMaxQueryTo <- getterConstructor('query_to', 'hsp', WHERE='query_id',
-                                    FUN='MAX', VAL='bit_score', as='integer')
+.getMaxQueryTo <- getterConstructor('query_to', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname QueryTo-methods
 #' @aliases getQueryTo,blastReportDB-method
 setMethod("getQueryTo", "blastReportDB", function (x, id, max=FALSE) {
@@ -306,8 +292,7 @@ setMethod("getQueryRange", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getHitFrom <- getterConstructor('hit_from', 'hsp', WHERE='query_id', as='integer')
-.getMaxHitFrom <- getterConstructor('hit_from', 'hsp', WHERE='query_id',
-                                    FUN='MAX', VAL='bit_score', as='integer')
+.getMaxHitFrom <- getterConstructor('hit_from', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname HitFrom-methods
 #' @aliases getHitFrom,blastReportDB-method
 setMethod("getHitFrom", "blastReportDB", function (x, id, max=FALSE) {
@@ -319,8 +304,7 @@ setMethod("getHitFrom", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getHitTo <- getterConstructor('hit_to', 'hsp', WHERE='query_id', as='integer')
-.getMaxHitTo <- getterConstructor('hit_to', 'hsp', WHERE='query_id',
-                                  FUN='MAX', VAL='bit_score', as='integer')
+.getMaxHitTo <- getterConstructor('hit_to', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname HitTo-methods
 #' @aliases getHitTo,blastReportDB-method
 setMethod("getHitTo", "blastReportDB", function (x, id, max=FALSE) {
@@ -338,8 +322,7 @@ setMethod("getHitRange", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getQueryFrame <- getterConstructor('query_frame', 'hsp', WHERE='query_id', as='integer')
-.getMaxQueryFrame <- getterConstructor('query_frame', 'hsp', WHERE='query_id',
-                                       FUN='MAX', VAL='bit_score', as='integer')
+.getMaxQueryFrame <- getterConstructor('query_frame', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname QueryFrame-methods
 #' @aliases getQueryFrame,blastReportDB-method
 setMethod("getQueryFrame", "blastReportDB", function (x, id, max=FALSE) {
@@ -351,8 +334,7 @@ setMethod("getQueryFrame", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getHitFrame <- getterConstructor('hit_frame', 'hsp', WHERE='query_id', as='integer')
-.getMaxHitFrame <- getterConstructor('hit_frame', 'hsp', WHERE='query_id',
-                                     FUN='MAX', VAL='bit_score', as='integer')
+.getMaxHitFrame <- getterConstructor('hit_frame', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname HitFrame-methods
 #' @aliases getHitFrame,blastReportDB-method
 setMethod("getHitFrame", "blastReportDB", function (x, id, max=FALSE) {
@@ -364,8 +346,7 @@ setMethod("getHitFrame", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getIdentity <- getterConstructor('identity', 'hsp', WHERE='query_id', as='integer')
-.getMaxIdentity <- getterConstructor('identity', 'hsp', WHERE='query_id',
-                                     FUN='MAX', VAL='bit_score', as='integer')
+.getMaxIdentity <- getterConstructor('identity', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname Identity-methods
 #' @aliases getIdentity,blastReportDB-method
 setMethod("getIdentity", "blastReportDB", function (x, id, max= FALSE) {
@@ -377,8 +358,7 @@ setMethod("getIdentity", "blastReportDB", function (x, id, max= FALSE) {
 })
 
 .getPositive <- getterConstructor('positive', 'hsp', WHERE='query_id', as='integer')
-.getMaxPositive <- getterConstructor('positive', 'hsp', WHERE='query_id',
-                                     FUN='MAX', VAL='bit_score', as='integer')
+.getMaxPositive <- getterConstructor('positive', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname Positive-methods
 #' @aliases getPositive,blastReportDB-method
 setMethod("getPositive", "blastReportDB", function (x, id, max=FALSE) {
@@ -390,8 +370,7 @@ setMethod("getPositive", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getGaps <- getterConstructor('gaps', 'hsp', WHERE='query_id', as='integer')
-.getMaxGaps <- getterConstructor('gaps', 'hsp', WHERE='query_id',
-                                 FUN='MAX', VAL='bit_score', as='integer')
+.getMaxGaps <- getterConstructor('gaps', 'hsp', WHERE='query_id', FUN='MAX', VAL='bit_score', as='integer')
 #' @rdname Gaps-methods
 #' @aliases getGaps,blastReportDB-method
 setMethod("getGaps", "blastReportDB", function (x, id, max=FALSE) {
@@ -403,8 +382,7 @@ setMethod("getGaps", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getAlignLen <- getterConstructor('align_len', 'hsp', WHERE='query_id', as='integer')
-.getMaxAlignLen <- getterConstructor('align_len','hsp',WHERE='query_id',
-                                     FUN='MAX',VAL='bit_score',as='integer')
+.getMaxAlignLen <- getterConstructor('align_len','hsp',WHERE='query_id', FUN='MAX',VAL='bit_score',as='integer')
 #' @rdname AlignLen-methods
 #' @aliases getAlignLen,blastReportDB-method
 setMethod("getAlignLen", "blastReportDB", function (x, id, max=FALSE) {
@@ -416,8 +394,7 @@ setMethod("getAlignLen", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getQuerySeq <- getterConstructor('qseq', 'hsp', WHERE='query_id')
-.getMaxQuerySeq <- getterConstructor('qseq','hsp',WHERE='query_id',
-                                     FUN='MAX',VAL='bit_score',as='character')
+.getMaxQuerySeq <- getterConstructor('qseq','hsp',WHERE='query_id', FUN='MAX',VAL='bit_score',as='character')
 #' @rdname QuerySeq-methods
 #' @aliases getQuerySeq,blastReportDB-method
 setMethod("getQuerySeq", "blastReportDB", function (x, id, max=FALSE) {
@@ -429,8 +406,7 @@ setMethod("getQuerySeq", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getHitSeq <- getterConstructor('hseq', 'hsp', WHERE='query_id')
-.getMaxHitSeq <- getterConstructor('hseq','hsp',WHERE='query_id',
-                                   FUN='MAX',VAL='bit_score',as='character')
+.getMaxHitSeq <- getterConstructor('hseq','hsp',WHERE='query_id', FUN='MAX',VAL='bit_score',as='character')
 #' @rdname HitSeq-methods
 #' @aliases getHitSeq,blastReportDB-method
 setMethod("getHitSeq", "blastReportDB", function (x, id, max=FALSE) {
@@ -442,8 +418,7 @@ setMethod("getHitSeq", "blastReportDB", function (x, id, max=FALSE) {
 })
 
 .getMatch <-getterConstructor('midline', 'hsp', WHERE='query_id')
-.getMaxMatch <- getterConstructor('midline','hsp',WHERE='query_id',
-                                  FUN='MAX',VAL='bit_score',as='character')
+.getMaxMatch <- getterConstructor('midline','hsp',WHERE='query_id', FUN='MAX',VAL='bit_score',as='character')
 #' @rdname Match-methods
 #' @aliases getMatch,blastReportDB-method
 setMethod("getMatch", "blastReportDB", function (x, id, max=FALSE) {
@@ -480,7 +455,7 @@ setMethod("getMaxPercIdentity", "blastReportDB", function (x, id) {
    pos <- getterFromToRange(x, id, type, max)
    colnames(pos) <- c('id', 'frame', 'from', 'to')
    pos <- split(pos, pos[["id"]]) 
-   Map(function (p) {
+   Map(function(p) {
      start <- ifelse(p[["frame"]] >= 0L, p[["from"]], p[["to"]])
      end <- ifelse(p[["frame"]] >= 0L, p[["to"]], p[["from"]])
      r <- IRanges(start, end)

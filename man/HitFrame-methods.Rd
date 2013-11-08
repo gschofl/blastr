@@ -1,4 +1,3 @@
-\docType{methods}
 \name{getHitFrame}
 \alias{getHitFrame}
 \alias{getHitFrame,Hit-method}
@@ -7,9 +6,22 @@
 \alias{getHitFrame,HspList-method}
 \alias{getHitFrame,Iteration-method}
 \alias{getHitFrame,blastReportDB-method}
+\alias{getHitFrame-methods}
 \title{Access components of High-Scoring Pairs (Hsps)}
 \usage{
   getHitFrame(x, max = FALSE)
+
+  \S4method{getHitFrame}{Hsp}(x, ...)
+
+  \S4method{getHitFrame}{HspList}(x, ...)
+
+  \S4method{getHitFrame}{Hit}(x, ...)
+
+  \S4method{getHitFrame}{HitList}(x, ...)
+
+  \S4method{getHitFrame}{Iteration}(x, ...)
+
+  \S4method{getHitFrame}{blastReportDB}(x, ...)
 }
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}

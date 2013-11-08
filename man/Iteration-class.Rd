@@ -1,6 +1,9 @@
 \name{Iteration-class}
 \alias{Iteration-class}
 \title{Iteration-class}
+\usage{
+  new_Iteration(...)
+}
 \description{
   An S4 class that holds data parsed from an NCBI BLAST XML
   \sQuote{Iteration} element. Each Iteration contains data
