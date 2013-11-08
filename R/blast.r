@@ -78,10 +78,7 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
   destdir <- normalizePath(destdir)
   assert_that(has_command("update_blastdb"))
   blastdb <- c(...)
-  args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)
-  archives <- dir(destdir, pattern="gz$", full.names=TRUE)
-  before_time <- setNames(file.info(archives)$ctime, nm=archives)
-  
+  args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)  
   if (showall) {
     ans <- SysCall('update_blastdb', showall=TRUE, style='gnu', intern=TRUE)
     return( ans[-1] )
@@ -100,13 +97,15 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
             args=args, style="gnu", redirection=FALSE, show_cmd=FALSE,
             intern=FALSE)
   } 
-  
-  after_time <- setNames(file.info(archives)$ctime, nm=archives)
-  if (decompress && any(before_time < after_time)) {
-    which.decompress <- which(before_time < after_time)
-    sapply(which.decompress, function (i) {
-      untar(archives[i], compressed='gzip', exdir=destdir)
-    }) 
+  if (decompress) {
+    assert_that(has_command("tar"))
+    archives <- dir(destdir, pattern="gz$", full.names=TRUE)
+    if (length(archives) > 0) {
+      sapply(archives, function (a) {
+        system(paste("tar zxvpf", a))
+        unlink(a)
+      })
+    }
   }
 }
 
@@ -125,16 +124,14 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
 #' @param ... Arguments passed on to the blast commmand line tools.
 #' @param intern Set \code{TRUE} if no '-out' argument is specified.
 #' Captures the blast output in an R character vector.
-#' @param input Used to pass a character vector to the standard input.
 #' @param show_cmd If \code{TRUE} print the constructed command line
 #' instead of passing it to \code{\link{system}}.
 #' @param parse
 #' 
 #' @keywords internal
-.blast <- function (program, query, db, outfmt = 'xml', max_hits = 20,
-                    strand = 'both', ..., intern = FALSE, input = NULL,
-                    show_cmd = FALSE, parse = TRUE) {
-  
+.blast <- function(program, query, db, outfmt = 'xml', max_hits = 20,
+                   strand = 'both', ..., intern = FALSE, show_cmd = FALSE,
+                   parse = TRUE) {
   program <- match.arg(program, c("blastn", "blastp", "blastx", "tblastn",
                                   "tblastx", "rpsblast+", 'rpstblastn'))
   assert_that(has_command(program))
@@ -143,16 +140,16 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
   
   # dealing with query
   if (missing(query))
-    return( SysCall(program, help=TRUE, intern=FALSE) )
+    return(SysCall(program, help=TRUE, intern=FALSE))
   
   if (program %in% c("blastp","blastp_short","rpsblast+")) {
     strand <- NULL
   }
   
   inp <- make_blast_query(query)
-  input <- inp[["input"]]
   query <- inp[["query"]]
-  deflines <- inp[["deflines"]]
+  on.exit(unlink(query))
+  nqueries <- inp[["nqueries"]]
   parse_deflines <- inp[["parse_deflines"]]
   
   # set a number of defaults different from the internal defaults of
@@ -160,25 +157,18 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
   if (missing(db)) {
     db <- switch(program, blastn='nt', `rpsblast+`='Cdd', 'nr')
   }
-  args <- merge_list(list(...),
-                     list(query=query, db=db, outfmt=outfmt,
-                          num_descriptions=NULL, num_alignments=NULL,
-                          max_target_seqs=max_hits, strand=strand,
-                          parse_deflines=parse_deflines))
-  # remove stdin', 'stdout' from the arguments list
-  stdin <- args[["stdin"]]
-  args[["stdin"]] <- NULL
-  stdout <- args[["stdout"]]
-  args[["stdout"]] <- NULL
-  
-  # check if 'out' is specified, otherwise return results internally
+  args <- merge_list(
+    list(...),
+    list(query=query, db=db, outfmt=outfmt,
+         num_descriptions=NULL, num_alignments=NULL,
+         max_target_seqs=max_hits, strand=strand,
+         parse_deflines=parse_deflines)
+  ) 
+  # check if 'out' was specified, otherwise return results internally
   intern <- if (is.null(args[["out"]])) TRUE else FALSE
-  cat(paste0("Blasting ", length(deflines), " queries [", program, "]", "\n"), sep="")
-  res <- SysCall(exec=program, args=args,
-                 stdin=stdin, stdout=stdout,
-                 redirection=if (is.null(stdin) && is.null(stdout)) FALSE else TRUE,
-                 style="unix", show_cmd=show_cmd,
-                 intern=intern, input=input)
+  cat(paste0("Blasting ", nqueries, " queries [", program, "]", "\n"), sep="")
+  res <- SysCall(exec=program, args=args, redirection= FALSE, style="unix",
+                 show_cmd=show_cmd, intern=intern)
   if (intern && parse && !has_attr(res, 'status')) {
     if (outfmt == 5) {
       blastReport(res, asText=TRUE)

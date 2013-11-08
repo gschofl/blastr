@@ -9,7 +9,8 @@ NULL
 #' An S4 class that holds data parsed from an NCBI BLAST XML \sQuote{Iteration} 
 #' element. Each Iteration contains data about a query.
 #'
-#'  \section{Slots}{ 
+#' @section Slots:
+#' 
 #'    \describe{
 #'      \item{\code{iter_num}:}{The number of the iteration;  \code{"integer"}.}
 #'      \item{\code{query_id}:}{Query identifier; \code{"character"}.}
@@ -18,9 +19,8 @@ NULL
 #'      \item{\code{hits}:}{List of hits; \code{"\linkS4class{HitList}"}.}
 #'      \item{\code{query_env}:}{Shared container for \code{query_id},
 #'      \code{query_def}, \code{query_len}, and \code{hit_len};
-#'       \code{"environment"}.}
+#'      \code{"environment"}.}
 #'    }
-#'  }
 #' 
 #' @name Iteration-class
 #' @rdname Iteration-class
@@ -39,14 +39,13 @@ setClass("Iteration",
 #' 
 #' A list of \linkS4class{Iteration} objects.
 #'
-#'  \section{Slots}{ 
+#' @section Slots:
 #'    \describe{
 #'      \item{\code{query_env}:}{Shared container for \code{query_id},
-#'      \code{query_def}, \code{query_len}, and \code{hit_len};
-#'       \code{"environment"}.}
+#'          \code{query_def}, \code{query_len}, and \code{hit_len};
+#'          \code{"environment"}.}
 #'      \item{\code{.Data}:}{Inherited from the \code{\link{list}} class.}
 #'    }
-#'  }
 #'  
 #' @name IterationList-class
 #' @rdname IterationList-class

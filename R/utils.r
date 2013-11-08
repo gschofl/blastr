@@ -21,6 +21,7 @@ setOldClass("DNAbin")
 ## vectorised %|na|%
 "%|NA|%" <- Partial(`%|%`, filter = "is.na")
 
+
 listclassConstructor <- function (listClass, elemClass) {
   assert_that(is.string(listClass), is.string(elemClass))
   function (..., query_env) {
@@ -42,6 +43,7 @@ listclassConstructor <- function (listClass, elemClass) {
   }
 }
 
+
 listclassValidator <- function (listClass, elemClass) {
   assert_that(is.string(listClass), is.string(elemClass))
   function (object) {
@@ -56,6 +58,7 @@ listclassValidator <- function (listClass, elemClass) {
     if (length(errors) == 0L) TRUE else errors
   }
 }
+
 
 getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
   function (x, id) {
@@ -75,6 +78,7 @@ getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
   }
 }
 
+
 getterFromToRange <- function(x, id, type='query', max=FALSE) {
   if (max) {
     if (type=='query') {
@@ -86,17 +90,18 @@ getterFromToRange <- function(x, id, type='query', max=FALSE) {
                               WHERE query_id=',id, 'AND bit_score = (SELECT
                               MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
     }
+  } else {
+    if (type=='query') {
+      pos <- db_query(x,paste('SELECT hit_id, query_frame, query_from, query_to from hsp 
+                                WHERE query_id =',id))
     } else {
-      if (type=='query') {
-        pos <- db_query(x,paste('SELECT hit_id, query_frame, query_from, query_to from hsp 
+      pos <- db_query(x,paste('SELECT hit_id, hit_frame, hit_from, hit_to from hsp 
                                 WHERE query_id =',id))
-      } else {
-        pos <- db_query(x,paste('SELECT hit_id, hit_frame, hit_from, hit_to from hsp 
-                                WHERE query_id =',id))
-      }
-      }
-  pos
     }
+  }
+  pos
+}
+
 
 ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
   str <- encodeString(obj)
@@ -105,38 +110,4 @@ ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
          str)
 }
 
-setAs("XStringSet", "DNAbin", function (from) {
-  tmp <- tempfile()
-  on.exit(unlink(tmp))
-  writeXStringSet(from, filepath=tmp, format="fasta")
-  to <- read.dna(tmp, format="fasta")
-  to
-})
-
-
-setAs("DNAbin", "DNAStringSet", function (from) {
-  tmp <- tempfile()
-  on.exit(unlink(tmp))
-  write.dna(from, file=tmp, format="fasta")
-  to <- readDNAStringSet(tmp, "fasta")
-  to
-})
-
-
-setAs("DNAbin", "DNAMultipleAlignment", function (from) {
-  tmp <- tempfile()
-  on.exit(unlink(tmp))
-  write.dna(from, file=tmp, format="fasta")
-  to <- readDNAMultipleAlignment(tmp, "fasta")
-  to
-})
-
-
-setAs("XStringSet", "DNAMultipleAlignment", function (from) {
-  tmp <- tempfile()
-  on.exit(unlink(tmp))
-  writeXStringSet(from, filepath=tmp, format="fasta")
-  to <- readDNAMultipleAlignment(tmp, "fasta")
-  to
-})
 
