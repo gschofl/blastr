@@ -35,7 +35,7 @@ on_failure(is.empty) <- function(call, env) {
 "%ni%" <- Negate(`%in%`)
 
 compact <- function(x) {
-  x[!vapply(x, is.empty, FALSE, USE.NAMES=FALSE)]
+  x[!vapply(x, is.null, FALSE, USE.NAMES=FALSE)]
 }
 
 compactChar <- function(x) {

@@ -11,6 +11,9 @@ NULL
 
 .valid_blastReportDB <- function (object) {
   errors <- character()
+  if (length(dbListTables(object)) == 0L) {
+    return("No tables in 'blastReportDB'")
+  }
   if (!all(c("hit", "hsp", "query") %in% dbListTables(object))) {
     errors <- c(errors, "Table missing from 'blastReportDB'\n")
   }
@@ -136,42 +139,48 @@ setMethod("getQueryLen", "blastReportDB", function (x, id) {
 #' @rdname HitID-methods
 #' @aliases getHitID,blastReportDB-method
 setMethod("getHitID", "blastReportDB", function (x, id) {
-  .getHitID(x, id)
+  res <- .getHitID(x, id)
+  if (length(res) == 1) res[[1]] else res
 })
 
 .getHitNum <- getterConstructor('hit_num', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitNum-methods
 #' @aliases getHitNum,blastReportDB-method
 setMethod("getHitNum", "blastReportDB", function (x, id) {
-  .getHitNum(x, id)
+  res <- .getHitNum(x, id)
+  if (length(res) == 1) res[[1]] else res
 })
 
 .getHitLen <- getterConstructor('length', 'hit', WHERE='query_id', as='integer')
 #' @rdname HitLen-methods
 #' @aliases getHitLen,blastReportDB-method
 setMethod("getHitLen", "blastReportDB", function (x, id) {
-  .getHitLen(x, id)
+  res <- .getHitLen(x, id)
+  if (length(res) == 1) res[[1]] else res
 })
 
 .getAccession <- getterConstructor('accession', 'hit', WHERE='query_id')
 #' @rdname Accession-methods
 #' @aliases getAccession,blastReportDB-method
 setMethod("getAccession", "blastReportDB", function (x, id) {
-  .getAccession(x, id)
+  res <- .getAccession(x, id)
+  if (length(res) == 1) res[[1]] else res
 })
 
 .getGeneID <- getterConstructor('gene_id', 'hit', WHERE='query_id',as='integer')
 #' @rdname GeneID-methods
 #' @aliases getGeneID,blastReportDB-method
 setMethod("getGeneID", "blastReportDB", function (x, id) {
-  .getGeneID(x, id)
+  res <- .getGeneID(x, id)
+  if (length(res) == 1) res[[1]] else res
 })
 
 .getHitDef <- getterConstructor('definition', 'hit', WHERE='query_id')
 #' @rdname HitDef-methods
 #' @aliases getHitDef,blastReportDB-method
 setMethod("getHitDef", "blastReportDB", function (x, id) {
-  .getHitDef(x, id)
+  res <- .getHitDef(x, id)
+  if (length(res) == 1) res[[1]] else res
 })
 
 .getHspHitID <- getterConstructor('hit_id', 'hsp', WHERE='query_id', as='integer')
