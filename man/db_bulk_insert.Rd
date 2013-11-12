@@ -5,11 +5,11 @@
   db_bulk_insert(con, tbl, df)
 }
 \arguments{
-  \item{con}{a connection object.}
+  \item{con}{A connection object.}
 
-  \item{tbl}{name of table in database.}
+  \item{tbl}{Name of table in database.}
 
-  \item{df}{data.frame to insert}
+  \item{df}{A \code{data.frame} matching the \code{tbl}.}
 }
 \description{
   Bulk insert a data.frame into a db table

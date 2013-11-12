@@ -277,14 +277,14 @@ blastReportDB <- function(blastfile, db_path = "blast.db", max_hit = NULL,
                           max_hsp = NULL, reset_at = 1000)
 {
   assert_that(is.readable(blastfile), has_extension(blastfile, 'xml'))
-  con <- db_create(db_path, blast_db.sql)
+  con <- db_create(db_path, blast_db.sql, overwrite=TRUE)
   handler <- BlastOutput.Iterations(db_path, max_hit, max_hsp, reset_at)
   out <- xmlEventParse(blastfile, list(), branches=handler)
   ## load final part into db
   assert_that(db_bulk_insert(con, "query", handler$getQuery()))
   assert_that(db_bulk_insert(con, "hit", handler$getHit()))
   assert_that(db_bulk_insert(con, "hsp", handler$getHsp()))
-  new_blastReportDB(con, path=normalizePath(db_path))
+  new_blastReportDB(con)
 }
 
 
@@ -294,5 +294,5 @@ blastReportDB <- function(blastfile, db_path = "blast.db", max_hit = NULL,
 #' @export
 blastReportDBConnect <- function(db_path) {
   assert_that(is.readable(db_path))
-  new_blastReportDB(db_connect(db_path), path = normalizePath(db_path))
+  new_blastReportDB(db_connect(db_path))
 }

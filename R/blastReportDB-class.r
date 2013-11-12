@@ -1,15 +1,12 @@
 #' @include blastReport-class.r
-#' @importFrom IRanges IRanges
-#' @importFrom IRanges IRangesList
-#' @importFrom IRanges reduce
-#' @importFrom IRanges width
-#' @importFrom IRanges unlist
+#' @importFrom IRanges IRanges IRangesList reduce width unlist
 NULL
+
 
 # blastReportDB-class ----------------------------------------------------
 
 
-.valid_blastReportDB <- function (object) {
+.valid_blastReportDB <- function(object) {
   errors <- character()
   if (length(dbListTables(object)) == 0L) {
     return("No tables in 'blastReportDB'")
@@ -20,9 +17,9 @@ NULL
   if (!all(c("query_id", "query_def", "query_len") %in% dbListFields(object, "query"))) {
     errors <- c(errors, "Field missing from table 'query'\n")
   }
-  if (!all(c("query_id", "hit_id"," hit_num", "gene_id", "accession",
+  if (!all(c("query_id", "hit_id", "hit_num", "gene_id", "accession",
              "definition", "length") %in% dbListFields(object, "hit"))) {
-    
+    errors <- c(errors, "Field missing from table 'hit'\n")
   }
   if (!all(c("query_id", "hit_id", "hsp_id", "hsp_num", "bit_score",
              "score", "evalue", "query_from", "query_to", "hit_from",
@@ -93,10 +90,22 @@ NULL
 #' @name blastReportDB-class
 #' @rdname blastReportDB-class
 #' @exportClass blastReportDB
-new_blastReportDB <- setClass('blastReportDB',
-                              slots=c(path="character"),
-                              contains='SQLiteConnection',
-                              validity=.valid_blastReportDB)
+new_blastReportDB <- setClass(
+  'blastReportDB',
+  slots=c(
+    info="list",
+    path="character"
+  ),
+  contains='SQLiteConnection',
+  validity=.valid_blastReportDB
+)
+
+setMethod('initialize', 'blastReportDB', function(.Object, ...) {
+  .Object <- callNextMethod()
+  .Object@info <- db_info(.Object)
+  .Object@path <- normalizePath(.Object@info$dbname)
+  .Object
+})
 
 setMethod("path", "blastReportDB", function(object, ...) object@path)
 

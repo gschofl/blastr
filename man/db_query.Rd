@@ -2,14 +2,14 @@
 \alias{db_query}
 \title{Query an SQLite database.}
 \usage{
-  db_query(con, sql, j = NA)
+  db_query(con, stmt, j = NA)
 }
 \arguments{
   \item{con}{a connection object.}
 
-  \item{sql}{an SQL statemant}
+  \item{stmt}{an SQL statemant.}
 
-  \item{j}{}
+  \item{j}{Subset data.}
 }
 \description{
   Query an SQLite database.
