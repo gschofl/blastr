@@ -113,9 +113,12 @@ setMethod("path", "blastReportDB", function(object, ...) object@path)
 #' @rdname show-methods
 setMethod('show', 'blastReportDB',
           function (object) {
-            n <- db_count(object, "query")
-            showme <- sprintf('%s object with %s query rows',
-                              sQuote(class(object)), n)
+            showme <- sprintf('%s object with:\n| %s queries | %s hits | %s hsps |',
+                              sQuote(class(object)),
+                              db_count(object, "query"),
+                              db_count(object, "hit"),
+                              db_count(object, "hsp")
+            )
             cat(showme, sep="\n")
           })
 
