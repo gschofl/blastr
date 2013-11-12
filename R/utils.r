@@ -125,7 +125,7 @@ strsplitN <- function (x, split, n, from = "start", collapse = split, ...) {
     n <- .mapply(`[<-`, list(x=n, i=Map(`>`, n, end), value=end), NULL)
   }  
   n <- lapply(n, Compose("sort", "unique"))
-  .mapply(function(x, n) paste0(x[n], collapse = collapse), list(x = xs, n = n), NULL)
+  unlist(.mapply(function(x, n) paste0(x[n], collapse = collapse), list(x = xs, n = n), NULL))
 }
 
 #' Format paragraphs

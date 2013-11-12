@@ -1,35 +1,52 @@
 #' @include utils.r
-#' @importClassesFrom RSQLite SQLiteConnection
-#' @importClassesFrom RSQLite SQLiteObject
-#' @importClassesFrom RSQLite dbObjectId
-#' @importClassesFrom DBI DBIConnection
-#' @importClassesFrom DBI DBIObject
-#' @importFrom RSQLite dbListTables
-#' @importFrom RSQLite SQLite
-#' @importFrom RSQLite dbConnect
-#' @importFrom RSQLite dbGetQuery
-#' @importFrom RSQLite dbDisconnect
-#' @importFrom RSQLite dbCommit
-#' @importFrom RSQLite dbListTables
-#' @importFrom RSQLite dbListFields
-#' @importFrom RSQLite dbBeginTransaction
-#' @importFrom RSQLite dbSendPreparedQuery
-#' @importFrom RSQLite dbGetInfo
+#' @importFrom assertthat assert_that is.string is.readable not_empty noNA
+#' @importClassesFrom RSQLite SQLiteConnection SQLiteObject dbObjectId
+#' @importClassesFrom DBI DBIConnection DBIObject
+#' @importFrom RSQLite SQLite dbConnect dbDisconnect dbCommit 
+#' @importFrom RSQLite dbGetQuery dbBeginTransaction dbSendPreparedQuery
+#' @importFrom RSQLite dbListTables dbListFields dbGetInfo
 NULL
+
+
+#' Connect to an existing SQLite database.
+#' 
+#' @param dbName Path to an SQLite database.
+#' @param message Message to be produced if db does not exist.
+#' @param create If \code{TRUE}, create the database if it doesn't exist.
+#' @export
+#' @keywords internal
+db_connect <- function(dbName, message = "", create = FALSE) {
+  if (!file.exists(dbName) && !create)
+    stop("Database ", sQuote(basename(dbName)), " does not exist.\n", message, call.=FALSE)
+  dbConnect(SQLite(), dbname=dbName)
+}
+
+#' Disconnect from an SQLite database.
+#' 
+#' @param ... Connection objects.
+#' @export
+#' @keywords internal
+db_disconnect <- function(...) {
+  lapply(list(...), dbDisconnect)
+}
 
 #' Create an SQLite database.
 #' 
 #' @param dbName Path to an SQLite database.
 #' @param dbSchema SQL schema for setting up the db.
+#' @param overwrtite Overwrite an existing db file by the same name.
 #' @export
 #' @keywords internal
-db_create <- function(dbName, dbSchema = "") {
-  assert_that(is.string(dbSchema))
-  message('Creating new database ', sQuote(basename(dbName)))
+db_create <- function(dbName, dbSchema = "", overwrite = FALSE) {
+  assert_that(is.string(dbName), is.string(dbSchema))
   if (file.exists(dbName)) {
-    unlink(dbName)
+    if (overwrite)
+      unlink(dbName)
+    else
+      stop("File ", sQuote(basename(dbName)), " already exists. Use 'db_connect'.", call.=FALSE)
   }
-  con <- dbConnect(SQLite(), dbname = dbName)
+  message('Creating new database ', sQuote(basename(dbName)))
+  con <- db_connect(dbName = dbName, create = TRUE)
   sql <- compactChar(trim(strsplit(dbSchema, ";\n")[[1L]]))
   if (length(sql) > 0L) {
     tryCatch(lapply(sql, dbGetQuery, conn = con), error = function(e) {
@@ -39,42 +56,25 @@ db_create <- function(dbName, dbSchema = "") {
   con
 }
 
-
-#' Connect to an existing SQLite database.
+#' Metadata for an SQLite database.
 #' 
-#' @param dbName Path to an SQLite database.
-#' @param message Message if db does not exits
+#' @param con A connection object.
 #' @export
 #' @keywords internal
-db_connect <- function(dbName, message = "") {
-  if (!file.exists(dbName))
-    stop("Database ", sQuote(basename(dbName)),
-         " does not exist.\n", message, call.=FALSE)
-  dbConnect(SQLite(), dbname=dbName)
+db_info <- function(con) {
+  dbGetInfo(con)
 }
-
-
-#' Disconnect from an SQLite database.
-#' 
-#' @param ... connection objects.
-#' @export
-#' @keywords internal
-db_disconnect <- function(...) {
-  lapply(list(...), dbDisconnect)
-}
-
 
 #' Query an SQLite database.
 #' 
 #' @param con a connection object.
-#' @param sql an SQL statemant
-#' @param j
+#' @param stmt an SQL statemant.
+#' @param j Subset data.
 #' @export
 #' @keywords internal
-db_query <- function(con, sql, j=NA) {
-  assert_that(is(con, "SQLiteConnection"))
-  assert_that(is.string(sql), noNA(sql))
-  data <- dbGetQuery(con, sql)
+db_query <- function(con, stmt, j=NA) {
+  assert_that(is(con, "SQLiteConnection"), is.string(stmt), noNA(stmt))
+  data <- dbGetQuery(con, stmt)
   if (is.na(j))
     return(data)
   if (nrow(data) == 0)
@@ -91,26 +91,25 @@ db_query <- function(con, sql, j=NA) {
 #' @keywords internal
 db_count <- function(con, tbl) {
   assert_that(con %has_tables% tbl)
-  sql <- paste0("SELECT count(*) FROM ", tbl)
+  sql <- paste0("select count(*) from ", tbl)
   db_query(con, sql, 1)
 }
 
 
 #' Bulk insert a data.frame into a db table
 #' 
-#' @param con a connection object.
-#' @param tbl name of table in database.
-#' @param df data.frame to insert
+#' @param con A connection object.
+#' @param tbl Name of table in database.
+#' @param df A \code{data.frame} matching the \code{tbl}.
 #' @export
 #' @keywords internal
 db_bulk_insert <- function(con, tbl, df) {
-  sql <- sprintf("INSERT INTO %s VALUES (%s)", tbl,
+  sql <- sprintf("insert into %s values (%s)", tbl,
                  paste0("$", names(df), collapse=", "))
   dbBeginTransaction(con)
   dbSendPreparedQuery(con, sql, df)
   dbCommit(con)
 }
-
 
 #' Check if a SQLite database has specified tables
 #'
@@ -118,7 +117,7 @@ db_bulk_insert <- function(con, tbl, df) {
 #' @param tables a character vector of table names
 #' @export
 #' @keywords internal
-has_tables <- function (con, tbl) {
+has_tables <- function(con, tbl) {
   assert_that(is(con, "SQLiteConnection"))
   all(tbl %in% dbListTables(con))
 }
