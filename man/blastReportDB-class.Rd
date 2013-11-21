@@ -2,7 +2,7 @@
 \alias{blastReportDB-class}
 \title{blastReportDB-class}
 \usage{
-  new_blastReportDB(...)
+  .blastReportDB(...)
 }
 \description{
   \sQuote{\bold{blastReportDB}}: A connection to an SQLite

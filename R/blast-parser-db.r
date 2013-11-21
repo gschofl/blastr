@@ -5,17 +5,17 @@
 #' @importFrom XML xpathApply
 NULL
 
-BlastOutput.Iterations <- function(dbPath = NULL,
-                                   max_hit = NULL,
-                                   max_hsp = NULL,
-                                   reset_at = 1000)
-{
-  if (!is.null(dbPath)) {
-    con <- db_connect(dbPath)
-    assert_that(con %has_tables% c("query", "hit", "hsp"))
-    query_order <- dbListFields(con, "query")
-    hit_order <- dbListFields(con, "hit")
-    hsp_order <- dbListFields(con, "hsp")
+BlastOutput.Iterations <- function(
+  con = NULL,
+  max_hit = NULL,
+  max_hsp = NULL,
+  reset_at = 1000
+) {
+  if (!is.null(con)) {
+    assert_that(is(con, "SQLiteConnection"), con %has_tables% c("query", "hit", "hsp"))
+    query_order <- db_list_fields(con, "query")
+    hit_order <- db_list_fields(con, "hit")
+    hsp_order <- db_list_fields(con, "hsp")
   } else {
     query_order <- hit_order <- hsp_order <- TRUE
   }
@@ -90,9 +90,9 @@ BlastOutput.Iterations <- function(dbPath = NULL,
   }
   
   db_load <- function(con) {
-    assert_that( db_bulk_insert(con, "query", getQuery()) )
-    assert_that( db_bulk_insert(con, "hit", getHit()) )
-    assert_that( db_bulk_insert(con, "hsp", getHsp()) )
+    assert_that( .db_bulk_insert(con, "query", getQuery()) )
+    assert_that( .db_bulk_insert(con, "hit", getHit()) )
+    assert_that( .db_bulk_insert(con, "hsp", getHsp()) )
   }
   
   'Iteration_iter-num' <- function(ctxt, node) {
@@ -197,7 +197,7 @@ BlastOutput.Iterations <- function(dbPath = NULL,
 }
 
 
-blast_db.sql <- '
+.blast_db.sql <- '
 CREATE TABLE query(
         query_id      INTEGER,
         query_def     TEXT,
@@ -254,45 +254,7 @@ CREATE INDEX Fhsp_hit_query ON hsp (query_id, hit_id, hsp_id);
 #' 
 #' @keywords internal
 #' @export
-.blastr_blastdb_sql <- function() {
-  blast_db.sql
+blast_db.sql <- function() {
+  .blast_db.sql
 }
 
-
-#' Parse NCBI BLAST XML files into \linkS4class{blastReportDB} objects.
-#' 
-#' Create (or connect to) a  blastReport SQLite database.
-#' 
-#' @param blastfile an XML BLAST Report.
-#' @param db_path Path to an blastReport SQLite database.
-#' @param max_hit How many hits should be parsed (default: all available)
-#' @param max_hsp How many hsps should be parsed (default: all available)
-#' @param reset_at After how many iterations should the parser dump the
-#' data into the db before continuing.
-#'
-#' @return A \code{\linkS4class{blastReportDB}} object.
-#' @rdname blastReportDB
-#' @export
-blastReportDB <- function(blastfile, db_path = "blast.db", max_hit = NULL,
-                          max_hsp = NULL, reset_at = 1000)
-{
-  assert_that(is.readable(blastfile), has_extension(blastfile, 'xml'))
-  con <- db_create(db_path, blast_db.sql, overwrite=TRUE)
-  handler <- BlastOutput.Iterations(db_path, max_hit, max_hsp, reset_at)
-  out <- xmlEventParse(blastfile, list(), branches=handler)
-  ## load final part into db
-  assert_that(db_bulk_insert(con, "query", handler$getQuery()))
-  assert_that(db_bulk_insert(con, "hit", handler$getHit()))
-  assert_that(db_bulk_insert(con, "hsp", handler$getHsp()))
-  new_blastReportDB(con)
-}
-
-
-#' @usage blastReportDBConnect(db_path)
-#' @return A \code{\linkS4class{blastReportDB}} object.
-#' @rdname blastReportDB
-#' @export
-blastReportDBConnect <- function(db_path) {
-  assert_that(is.readable(db_path))
-  new_blastReportDB(db_connect(db_path))
-}

@@ -3,8 +3,9 @@
 \alias{blastReportDBConnect}
 \title{Parse NCBI BLAST XML files into \linkS4class{blastReportDB} objects.}
 \usage{
-  blastReportDB(blastfile, db_path = "blast.db",
-    max_hit = NULL, max_hsp = NULL, reset_at = 1000)
+  blastReportDB(blastfile, db_path = ":memory:",
+    max_hit = NULL, max_hsp = NULL, reset_at = 1000,
+    verbose = TRUE)
 
   blastReportDBConnect(db_path)
 }
@@ -21,6 +22,8 @@
 
   \item{reset_at}{After how many iterations should the
   parser dump the data into the db before continuing.}
+
+  \item{verbose}{Message if a new database is created.}
 }
 \value{
   A \code{\linkS4class{blastReportDB}} object.

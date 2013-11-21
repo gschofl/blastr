@@ -1,4 +1,4 @@
-#' @include sqlite-utils.r
+#' @include sqlite-db.r
 NULL
 
 listclassConstructor <- function(listClass, elemClass) {
@@ -35,42 +35,67 @@ listclassValidator <- function(listClass, elemClass) {
 }
 
 getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
-  function(x, id) {
-    args <- list(...)
-    stmts <- trim(paste("SELECT", SELECT, "FROM", FROM,
-                        if (!is.null(args$WHERE)) {
-                          paste("WHERE", args$WHERE, "=", id)
-                        },
-                        if (!is.null(args$VAL) && !is.null(args$FUN)) {
-                          paste("AND", args$VAL, "= (SELECT", args$FUN,
-                                "(", args$VAL, ") FROM", FROM, "WHERE", args$WHERE, "=", id, ")")
-                        }))
+  ARGS <- list(...)
+  function(x, id, ...) {
     AS <- match.fun(paste0('as.', as))
+    con <- conn(x)
+    log <- list(...)$log
+    WHERE <- AND <- GROUPBY <- ''
+    if (!is.null(ARGS$WHERE) && !missing(id)) {
+      WHERE <- paste0(" where ", ARGS$WHERE, " = ", id) 
+    }
+    if (!is.null(ARGS$GROUP_BY)) {
+      GROUPBY <- paste0(" group by ", ARGS$GROUP_BY)
+    }
+    if (!is.null(ARGS$VAL) && !is.null(ARGS$FUN)) {
+      AND <-  paste0(if (all(nzchar(WHERE))) " and " else " where ",
+                         ARGS$VAL, " in (select ", ARGS$FUN,
+                         "(", ARGS$VAL, ") from ", FROM, WHERE, GROUPBY, ")")
+    }
+    stmts <- trim(paste0("select ", SELECT, " from ", FROM, WHERE, AND, GROUPBY))
     lapply(stmts, function(stmt) {
-      AS(db_query(x, stmt, 1L) %||% NA_character_)
+      AS(.db_query(con, stmt, 1L, log=log) %||% NA)
     })
   }
 }
 
-getterFromToRange <- function(x, id, type='query', max=FALSE) {
-  if (max) {
-    if (type=='query') {
-      pos <- db_query(x,paste('SELECT hit_id, query_frame, query_from, query_to from hsp 
-                              WHERE query_id=',id, 'AND bit_score = (SELECT
-                              MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
-    } else {
-      pos <- db_query(x,paste('SELECT hit_id, hit_frame, hit_from, hit_to from hsp 
-                              WHERE query_id=',id, 'AND bit_score = (SELECT
-                              MAX(bit_score) FROM hsp WHERE query_id =', id, ')'))
+
+simpleGetter <- function(SELECT, FROM, ..., as = 'character') {
+  ARGS <- list(...)
+  function(x, id, ...) {
+    AS <- match.fun(paste0('as.', as))
+    log <- list(...)$log
+    WHERE <- ''
+    if (!is.null(ARGS$WHERE) && !missing(id)) {
+      WHERE <- paste0(" where ", ARGS$WHERE, " in (", paste0(id, collapse=","), ")") 
     }
-  } else {
-    if (type=='query') {
-      pos <- db_query(x,paste('SELECT hit_id, query_frame, query_from, query_to from hsp 
-                                WHERE query_id =',id))
-    } else {
-      pos <- db_query(x,paste('SELECT hit_id, hit_frame, hit_from, hit_to from hsp 
-                                WHERE query_id =',id))
-    }
+    stmt <- trim(paste0("select ", SELECT, " from ", FROM, WHERE))
+    AS(.db_query(conn(x), stmt, 1L, log=log) %||% NA)
   }
-  pos
+}
+
+
+.rangeDB <- function(x, id, type, width = FALSE, max = FALSE, ...) {
+  pos <- .fetch_range(x, id, type, max, log = list(...)$log)
+  lapply(pos, function (p) {
+    colnames(p) <- c('id', 'frame', 'from', 'to')
+    p <- split.data.frame(p, as.factor(p$id))
+    .mapply(function(p) {
+      start <- ifelse(p$frame >= 0L, p$from, p$to)
+      end <- ifelse(p$frame >= 0L, p$to, p$from)
+      r <- IRanges(start, end)
+      if (width) width(reduce(r)) else r
+    }, list(p=p), NULL)
+  })
+}
+
+
+.fetch_range <- function(x, id, type, max, log = NULL) {
+  stmts <- paste0('select hit_id, ', type, '_frame, ', type, '_from, ', type, '_to ',
+                  'from hsp where query_id = ', id,
+                  if (max) 
+                    paste0(' and bit_score = (select max(bit_score)',
+                           ' from hsp ', where, ')')
+                  else '')
+  .db_query(conn(x), stmt, j = NA, log = log)
 }
