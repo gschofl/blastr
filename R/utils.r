@@ -1,3 +1,4 @@
+#' @include all-generics.r
 #' @import methods
 #' @importFrom assertthat assert_that
 #' @importFrom assertthat is.readable
@@ -42,6 +43,10 @@ compactChar <- function(x) {
   x[vapply(x, nzchar, FALSE, USE.NAMES=FALSE)]
 }
 
+compactNA <- function(x) {
+  x[!is.na(x)]
+}
+
 Call <- function(fn, ...) {
   fn <- match.fun(fn)
   fn(...)
@@ -78,11 +83,6 @@ merge_list <- function(x, y) {
   x
 }
 
-trim <- function(x, trim = '\\s+') {
-  assert_that(is.vector(x))
-  gsub(paste0("^", trim, "|", trim, "$"), '', x)
-}
-
 dup <- function (x, n) {
   assert_that(is.string(x))
   if (any(n < 0)) n[n < 0] <- 0
@@ -101,6 +101,12 @@ pad <- function (x, n = 10, where = 'left', pad = ' ') {
   lengths <- unique(c(left, right))
   padding <- dup(pad, lengths)
   paste0(padding[match(left, lengths)], x, padding[match(right, lengths)])
+}
+
+
+trim <- function(x, trim = '\\s+') {
+  assert_that(is.vector(x))
+  gsub(paste0("^", trim, "|", trim, "$"), '', x)
 }
 
 ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {

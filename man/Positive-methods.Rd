@@ -1,3 +1,4 @@
+\docType{methods}
 \name{getPositive}
 \alias{getPositive}
 \alias{getPositive,Hit-method}
@@ -5,21 +6,7 @@
 \alias{getPositive,Hsp-method}
 \alias{getPositive,HspList-method}
 \alias{getPositive,blastReportDB-method}
-\alias{getPositive-methods}
 \title{Access components of High-Scoring Pairs (Hsps)}
-\usage{
-  getPositive(x, max = FALSE)
-
-  \S4method{getPositive}{Hsp}(x, ...)
-
-  \S4method{getPositive}{HspList}(x, ...)
-
-  \S4method{getPositive}{Hit}(x, ...)
-
-  \S4method{getPositive}{HitList}(x, ...)
-
-  \S4method{getPositive}{blastReportDB}(x, ...)
-}
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}
 

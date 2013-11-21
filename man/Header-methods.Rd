@@ -1,10 +1,7 @@
+\docType{methods}
 \name{getHeader}
 \alias{getHeader}
-\alias{getHeader-methods}
 \title{Extract the header from a BLAST report}
-\usage{
-  getHeader(x, ...)
-}
 \arguments{
   \item{x}{A \code{\linkS4class{blastReport}} object.}
 

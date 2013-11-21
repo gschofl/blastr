@@ -1,3 +1,4 @@
+\docType{methods}
 \name{getHitTo}
 \alias{getHitTo}
 \alias{getHitTo,Hit-method}
@@ -6,23 +7,7 @@
 \alias{getHitTo,HspList-method}
 \alias{getHitTo,Iteration-method}
 \alias{getHitTo,blastReportDB-method}
-\alias{getHitTo-methods}
 \title{Access components of High-Scoring Pairs (Hsps)}
-\usage{
-  getHitTo(x, max = FALSE)
-
-  \S4method{getHitTo}{Hsp}(x, ...)
-
-  \S4method{getHitTo}{HspList}(x, ...)
-
-  \S4method{getHitTo}{Hit}(x, ...)
-
-  \S4method{getHitTo}{HitList}(x, ...)
-
-  \S4method{getHitTo}{Iteration}(x, ...)
-
-  \S4method{getHitTo}{blastReportDB}(x, ...)
-}
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}
 

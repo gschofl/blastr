@@ -200,12 +200,12 @@ blastTable <- function(blastfile) {
     neg_log_evalue <- with(hit_table, -log(as.numeric(evalue)))
     neg_log_evalue[is.infinite(neg_log_evalue)] <- -log(1e-323)
     
-    if (not.null(comStr) && length(comStr) == 5) {
+    if (!is.null(comStr) && length(comStr) == 5) {
       program <- comStr[1]
       query <- str_split_fixed(comStr[2], "Query: ", 2)[,2]
       database <- str_split_fixed(comStr[3], "Database: ", 2)[,2]
     } else {
-      program <- query <- db <- NA_character_
+      program <- query <- database <- NA_character_
     }
     
     close(file_path)

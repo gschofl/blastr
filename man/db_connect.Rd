@@ -2,16 +2,13 @@
 \alias{db_connect}
 \title{Connect to an existing SQLite database.}
 \usage{
-  db_connect(dbName, message = "", create = FALSE)
+  db_connect(dbName = ":memory:", create = FALSE)
 }
 \arguments{
-  \item{dbName}{Path to an SQLite database.}
+  \item{dbName}{Path to an SQLite database [default:
+  :memory:].}
 
-  \item{message}{Message to be produced if db does not
-  exist.}
-
-  \item{create}{If \code{TRUE}, create the database if it
-  doesn't exist.}
+  \item{create}{}
 }
 \description{
   Connect to an existing SQLite database.
