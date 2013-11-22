@@ -2,9 +2,10 @@
 \alias{update_blastdb}
 \title{Wrapper for update_blastdb.pl}
 \usage{
-  update_blastdb(..., destdir = ".", decompress = TRUE,
-    showall = FALSE, passive = FALSE, timeout = 120,
-    force = FALSE)
+  update_blastdb(...,
+    destdir = getOption("blastr.blastdb.path"),
+    decompress = TRUE, showall = FALSE, passive = FALSE,
+    timeout = 120, force = FALSE)
 }
 \arguments{
   \item{...}{Blast db to download}

@@ -1,6 +1,7 @@
 #' @include sqlite-db.r
 NULL
 
+
 listclassConstructor <- function(listClass, elemClass) {
   assert_that(is.string(listClass), is.string(elemClass))
   function(..., query_env) {
@@ -20,6 +21,7 @@ listclassConstructor <- function(listClass, elemClass) {
     }
   }
 }
+
 
 listclassValidator <- function(listClass, elemClass) {
   assert_that(is.string(listClass), is.string(elemClass))
@@ -75,27 +77,22 @@ simpleGetter <- function(SELECT, FROM, ..., as = 'character') {
 }
 
 
-.rangeDB <- function(x, id, type, width = FALSE, max = FALSE, ...) {
-  pos <- .fetch_range(x, id, type, max, log = list(...)$log)
-  lapply(pos, function (p) {
-    colnames(p) <- c('id', 'frame', 'from', 'to')
-    p <- split.data.frame(p, as.factor(p$id))
-    .mapply(function(p) {
-      start <- ifelse(p$frame >= 0L, p$from, p$to)
-      end <- ifelse(p$frame >= 0L, p$to, p$from)
-      r <- IRanges(start, end)
+.rangeDB <- function(con, id, type, width=FALSE, max=FALSE, ...) {
+  log <- list(...)$log
+  stmts <- paste0("select hit_id as id, min(", type, "_from, ", type, "_to) as start,",
+                  " abs(", type, "_to - ", type, "_from + 1) as width",
+                  " from hsp where query_id = ", id,
+                  if (max) 
+                    paste0(' and bit_score = (select max(bit_score)',
+                           ' from hsp where query_id = ', id, ')')
+                  else '')
+  pos <- lapply(stmts, .db_query, con=con, j=NA, log=log)
+  lapply(pos, function(pos) {
+    lapply(unname(split.data.frame(pos, as.factor(pos$id))), function(p) {
+      r <- IRanges(start=p$start, width=p$width)
       if (width) width(reduce(r)) else r
-    }, list(p=p), NULL)
+    })
   })
 }
 
 
-.fetch_range <- function(x, id, type, max, log = NULL) {
-  stmts <- paste0('select hit_id, ', type, '_frame, ', type, '_from, ', type, '_to ',
-                  'from hsp where query_id = ', id,
-                  if (max) 
-                    paste0(' and bit_score = (select max(bit_score)',
-                           ' from hsp ', where, ')')
-                  else '')
-  .db_query(conn(x), stmt, j = NA, log = log)
-}

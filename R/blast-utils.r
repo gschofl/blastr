@@ -10,6 +10,9 @@
 #' @importFrom stringr perl
 NULL
 
+## NCBI BLAST defline database tags
+.tags  <- c("lcl","gb","emb","pir","sp","ref","gnl", "gi","dbj","prf","pdb","pat","bbs")
+
 
 #' @keywords internal
 .escape <- function (s, httpPOST=FALSE) {

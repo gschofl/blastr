@@ -67,9 +67,8 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' 
 #' @family blast applications
 #' @export
-update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
-                           passive=FALSE, timeout=120, force=FALSE) {
-  
+update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path"), decompress=TRUE,
+                           showall=FALSE, passive=FALSE, timeout=120, force=FALSE) {
   destdir <- normalizePath(destdir)
   assert_that(has_command("update_blastdb"))
   blastdb <- c(...)
@@ -152,6 +151,7 @@ update_blastdb <- function(..., destdir=".", decompress=TRUE, showall=FALSE,
   if (missing(db)) {
     db <- switch(program, blastn='nt', `rpsblast+`='Cdd', 'nr')
   }
+  db <- file.path(getOption("blastr.blastdb.path"), db)
   args <- merge_list(
     list(...),
     list(query=query, db=db, outfmt=outfmt,
