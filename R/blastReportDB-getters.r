@@ -298,14 +298,14 @@ setMethod("getHitTo", "blastReportDB", function(x, id, max=FALSE, ...) {
 #' @rdname QueryRange-methods
 #' @aliases getQueryRange,blastReportDB-method
 setMethod("getQueryRange", "blastReportDB", function(x, id, max = FALSE, ...) {
-  res <- lapply(id, Compose(IRangesList, .rangeDB), x=x, type='query', max=max, ...)
+  res <- lapply(id, Compose(IRangesList, .rangeDB), con=conn(x), type='query', max=max, ...)
   if (length(res)==1) res[[1]] else res
 })
 
 #' @rdname HitRange-methods
 #' @aliases getHitRange,blastReportDB-method
 setMethod("getHitRange", "blastReportDB", function(x, id, max = FALSE, ...) {
-  res <- lapply(id, Compose(IRangesList, .rangeDB), x=x, type='hit', max=max, ...)
+  res <- lapply(id, Compose(IRangesList, .rangeDB), con=conn(x), type='hit', max=max, ...)
   if (length(res)==1) res[[1]] else res
 })
 
@@ -480,12 +480,11 @@ setMethod("getMaxPercIdentity", "blastReportDB", function(x, id, ...) {
 
 #' @rdname QueryCoverage-methods
 #' @aliases getQueryCoverage,blastReportDB-method
-setMethod("getQueryCoverage", "blastReportDB", function(x, id, method = 1, ...) {
+setMethod("getQueryCoverage", "blastReportDB", function(x, id, ...) {
   if (missing(id))
     id <- db_query(x, "select query_id from query", 1L, ...)
-  hitwidth = .mapply(function(r) vapply(r, sum, 0, USE.NAMES=FALSE),
-                     list(r = .rangeDB(x, id, 'query', width=TRUE, ...)), NULL)
-  querylen = .getQueryLen(x, id, ...)
+  hitwidth = lapply(.rangeDB(conn(x), id, type='query', width=TRUE, ...), FUN=vapply, "sum", 0L)
+  querylen = .getQueryLen(x, id)
   res <- .mapply(`/`, list(hitwidth, querylen), NULL)
   if (length(res)==1) res[[1]] else res
 }) 
@@ -496,8 +495,7 @@ setMethod("getQueryCoverage", "blastReportDB", function(x, id, method = 1, ...) 
 setMethod("getHitCoverage", "blastReportDB", function(x, id, ...) {
   if (missing(id))
     id <- db_query(x, "select query_id from query", 1L, ...)
-  hitwidth = .mapply(function(r) vapply(r, sum, 0, USE.NAMES=FALSE),
-                     list(r = .rangeDB(x, id, 'hit', width=TRUE, ...)), NULL)
+  hitwidth = lapply(.rangeDB(conn(x), id, type='hit', width=TRUE, ...), FUN=vapply, "sum", 0L)
   querylen = .getQueryLen(x, id, ...)
   res <- .mapply(`/`, list(hitwidth, querylen), NULL)
   if (length(res)==1) res[[1]] else res

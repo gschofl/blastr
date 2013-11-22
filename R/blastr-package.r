@@ -1,11 +1,11 @@
-#' Provide a set of classes and functions to manage
-#' NCBI Blast web service queries via R.
+#' Provide a set of classes and functions to perform and parse
+#' BLAST queries locally or vie NCBI Blast web service queries.
 #'
 #'  \tabular{ll}{
 #'    Package: \tab blastr\cr
 #'    Type: \tab Package\cr
-#'    Version: \tab 0.0-2\cr
-#'    Date: \tab 2012-11-05\cr
+#'    Version: \tab 0.2.1\cr
+#'    Date: \tab 2013-11-22\cr
 #'    License: \tab MIT\cr
 #'  }
 #'
@@ -15,6 +15,6 @@
 #' Maintainer: Gerhard Schoefl \email{gschof@@yahoo.de}
 #' @name blastr
 #' @docType package
-#' @title A wrapper arpound NCBI Blast.
+#' @title A wrapper around NCBI Blast.
 #' @keywords package
 NULL

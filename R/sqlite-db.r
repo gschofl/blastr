@@ -64,7 +64,6 @@ setMethod("path", "sqliteDB", function(x) x$.path)
 
 
 .db_query <- function(con, stmt, j = NA, log = NULL) {
-  assert_that(is(con, "SQLiteConnection"), is.string(stmt), noNA(stmt))
   do_log(log, ellipsize(stmt, 60), '\n')
   data <- tryCatch(dbGetQuery(con, stmt), error = function(e) {
     do_log(log, e$message, '\n')
@@ -96,8 +95,6 @@ setMethod("db_query", "SQLiteConnection", function(x, stmt, j = NA, ...) {
   log <- list(...)$log
   .db_query(x, stmt = stmt, j = j, log = log)
 })
-
-
 
 
 .db_bulk_insert <- function(con, tbl, df, log = NULL) {

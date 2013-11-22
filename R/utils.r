@@ -1,17 +1,8 @@
 #' @include all-generics.r
 #' @import methods
-#' @importFrom assertthat assert_that
-#' @importFrom assertthat is.readable
-#' @importFrom assertthat has_extension
-#' @importFrom assertthat is.string
-#' @importFrom assertthat has_attr
-#' @importFrom assertthat "on_failure<-"
-#' @importFrom assertthat not_empty
-#' @importFrom assertthat noNA
+#' @importFrom assertthat assert_that is.readable has_extension is.string
+#' @importFrom assertthat has_attr "on_failure<-"
 NULL
-
-## NCBI BLAST defline database tags
-.tags  <- c("lcl","gb","emb","pir","sp","ref","gnl", "gi","dbj","prf","pdb","pat","bbs")
 
 is.empty <- function(x) {
   is.null(x) || length(x) == 0L || (length(x) == 1L && !nzchar(x))

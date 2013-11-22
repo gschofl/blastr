@@ -1,5 +1,5 @@
 Package: blastr
-Version: 0.2.0
+Version: 0.2.1
 Date: 2013-06-13
 Type: Package
 Title: A wrapper arpound NCBI Blast.
@@ -23,8 +23,8 @@ Imports:
     stringr,
     XML
 Collate:
-    'all-generics.r'
     'utils.r'
+    'all-generics.r'
     'sqlite-db.r'
     'class-utils.r'
     'blast-utils.r'
@@ -33,10 +33,11 @@ Collate:
     'Hit-class.r'
     'Iteration-class.r'
     'blastReport-class.r'
-    'blastReportDB-class.r'
     'blast-parser-db.r'
+    'blastReportDB-class.r'
     'blast-parser.r'
     'blast.r'
     'blastReportDB-getters.r'
     'blastTable-class.r'
-    'package.r'
+    'blastr-package.r'
+    'zzz.r'
