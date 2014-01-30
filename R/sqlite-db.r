@@ -4,7 +4,7 @@
 #' @importClassesFrom DBI DBIConnection DBIObject
 #' @importFrom RSQLite SQLite dbConnect dbDisconnect dbCommit 
 #' @importFrom RSQLite dbGetQuery dbBeginTransaction sqliteExecStatement
-#' @importFrom RSQLite dbListTables dbListFields dbGetInfo
+#' @importFrom RSQLite dbListTables dbListFields dbGetInfo isIdCurrent
 NULL
 
 #' sqliteDB-class
@@ -262,6 +262,16 @@ db_create <- function(dbName = ":memory:", dbSchema = "", overwrite = FALSE, ver
 #' @keywords internal
 db_info <- function(con) {
   dbGetInfo(con)
+}
+
+
+#' Is a connection to an SQLite database still current.
+#' 
+#' @param con A connection object.
+#' @export
+#' @keywords internal
+db_is_current <- function(con) {
+  isIdCurrent(con)
 }
 
 

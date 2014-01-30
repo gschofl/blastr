@@ -134,7 +134,7 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.
   assert_that(has_command(exec))
   strand <- match.arg(strand, c("both", "plus", "minus"))
   outfmt <- switch(match.arg(outfmt, c('xml', 'table')), xml=5, table=7)
-  dot_args <- dots(...)
+  dot_args <- list(...)
   
   # dealing with query
   if (missing(query)) {
