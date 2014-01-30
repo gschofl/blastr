@@ -1,8 +1,9 @@
+\docType{class}
 \name{IterationList-class}
 \alias{IterationList-class}
 \title{IterationList-class}
 \description{
-  A list of \linkS4class{Iteration} objects.
+A list of \linkS4class{Iteration} objects.
 }
 \section{Slots}{
   \describe{ \item{\code{query_env}:}{Shared container for

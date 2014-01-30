@@ -580,6 +580,18 @@ setGeneric("getPrimaryDefline", function (x, ...) standardGeneric("getPrimaryDef
 
 # query-accessor generics ------------------------------------------------
 
+#' Access components of Blast Iterations (Queries)
+#' 
+#' Extract a data frame with the fields:
+#' query_id, query_def, query_len, n_hits
+#' 
+#' @usage getQuery(x, ...)
+#' @param x A \linkS4class{blastReport} or \linkS4class{blastReportDB} object.
+#' @param ... Further arguments passed to methods.
+#' @return A numeric vector or list of numeric vectors.
+#' @rdname getQuery-methods
+#' @export
+setGeneric("getQuery", function (x, ...) standardGeneric("getQuery"))
 
 #' Access components of Blast Iterations (Queries)
 #' 

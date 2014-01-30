@@ -1,5 +1,5 @@
 \docType{methods}
-\name{getHitRange}
+\name{getHitRange,Hit-method}
 \alias{getHitRange}
 \alias{getHitRange,Hit-method}
 \alias{getHitRange,HitList-method}
@@ -8,6 +8,21 @@
 \alias{getHitRange,Iteration-method}
 \alias{getHitRange,blastReportDB-method}
 \title{Access components of High-Scoring Pairs (Hsps)}
+\usage{
+\S4method{getHitRange}{Hit}(x, max = FALSE)
+
+\S4method{getHitRange}{HitList}(x, max = FALSE)
+
+\S4method{getHitRange}{Hsp}(x, max = FALSE)
+
+\S4method{getHitRange}{HspList}(x, max = FALSE)
+
+\S4method{getHitRange}{Iteration}(x, max = FALSE)
+
+getHitRange(x, max = FALSE)
+
+\S4method{getHitRange}{blastReportDB}(x, id, max = FALSE, ...)
+}
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}
 
@@ -15,9 +30,9 @@
   with the highest bit score.}
 }
 \value{
-  An \linkS4class{IRanges} object.
+An \linkS4class{IRanges} object.
 }
 \description{
-  Extract the alignment ranges for the hit sequence.
+Extract the alignment ranges for the hit sequence.
 }
 

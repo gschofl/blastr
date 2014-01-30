@@ -33,6 +33,13 @@ setMethod("is.na", "blastReportDB", function(x) {
 
 # getters, blastReportDB --------------------------------------------------
 
+setMethod("getQuery", "blastReportDB", function(x, id, ...) {
+  where <- if (!missing(id)) {
+    paste0(" where query_id in (", paste0(id, collapse=","), ")")
+  } else '' 
+  stmt <- paste0("select query_id, query_def, query_len from query", where)
+  db_query(x, stmt)
+})
 
 .getQueryID <- simpleGetter("query_id", 'query', WHERE='query_id', as='integer')
 .getMaxQueryID <- simpleGetter("max(query_id)", 'query', WHERE='query_id', as='integer')

@@ -13,7 +13,6 @@ Depends:
     R (>= 2.15)
 Imports:
     assertthat,
-    biofiles,
     Biostrings,
     DBI,
     IRanges,
@@ -22,9 +21,11 @@ Imports:
     RSQLite,
     stringr,
     XML
+Suggests:
+    biofiles
 Collate:
-    'utils.r'
     'all-generics.r'
+    'utils.r'
     'sqlite-db.r'
     'class-utils.r'
     'blast-utils.r'
@@ -33,8 +34,8 @@ Collate:
     'Hit-class.r'
     'Iteration-class.r'
     'blastReport-class.r'
-    'blast-parser-db.r'
     'blastReportDB-class.r'
+    'blast-parser-db.r'
     'blast-parser.r'
     'blast.r'
     'blastReportDB-getters.r'

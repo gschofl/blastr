@@ -5,7 +5,7 @@
 #' \itemize{
 #'   \item \code{blastr.blastdb.path}: Path to a local installation of the NCBI
 #'   BLAST databases. Defaults to "$HOME/local/db/blast". You can override the
-#'   default by setting this option in your .Rprofile file. Run\code{\link{update_blastdb}}
+#'   default by setting this option in your .Rprofile file. Run \code{\link{update_blastdb}}
 #'   to install these databases.
 #' }
 #' 

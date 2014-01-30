@@ -2,6 +2,9 @@
 \name{db_bulk_insert}
 \alias{db_bulk_insert}
 \title{Insert a \code{data.frame} into a corresponding SQLite table}
+\usage{
+db_bulk_insert(x, tbl, df, ...)
+}
 \arguments{
   \item{con}{A connection object.}
 
@@ -13,8 +16,8 @@
   Path to a log file).}
 }
 \description{
-  Insert a \code{data.frame} into a corresponding SQLite
-  table
+Insert a \code{data.frame} into a corresponding SQLite
+table
 }
 \keyword{internal}
 

@@ -2,9 +2,9 @@
 \alias{qblast}
 \title{Do a BLAST search using the QBLAST URL API}
 \usage{
-  qblast(query, program = "megablast", db = "nt",
-    outfmt = "xml", max_hits = 20, entrez_query = "",
-    evalue = 10, ..., .params = list(), update_time = 4)
+qblast(query, exec = "megablast", db = "nt", outfmt = "xml",
+  max_hits = 20, entrez_query = "", evalue = 10, ..., .params = list(),
+  update_time = 4)
 }
 \arguments{
   \item{query}{Query sequences as path to a FASTA file, an
@@ -40,21 +40,26 @@
   results.}
 }
 \value{
-  A \code{\link{blastReport-class}} object.
+A \code{\link{blastReport-class}} object.
 }
 \description{
-  Do a BLAST search using the QBLAST URL API
+Do a BLAST search using the QBLAST URL API
 }
 \examples{
 ##
 }
 \seealso{
-  Other blast.applications: \code{\link{blastn}},
-  \code{\link{blastn_short}}, \code{\link{blastp}},
-  \code{\link{blastp_short}}, \code{\link{blastx}},
-  \code{\link{dc_megablast}}, \code{\link{makeblasttdb}},
-  \code{\link{megablast}}, \code{\link{rpsblast}},
-  \code{\link{tblastn}}, \code{\link{tblastx}},
-  \code{\link{update_blastdb}}
+Other blast.applications: \code{\link{blastn}},
+\code{\link{blastn}}, \code{\link{blastn_short}},
+\code{\link{blastn_short}}, \code{\link{dc_megablast}},
+\code{\link{dc_megablast}}, \code{\link{megablast}},
+\code{\link{megablast}}; \code{\link{blastp}},
+\code{\link{blastp}}, \code{\link{blastp_short}},
+\code{\link{blastp_short}}; \code{\link{blastx}},
+\code{\link{blastx}}; \code{\link{makeblasttdb}};
+\code{\link{rpsblast}}, \code{\link{rpsblast}};
+\code{\link{tblastn}}, \code{\link{tblastn}};
+\code{\link{tblastx}}, \code{\link{tblastx}};
+\code{\link{update_blastdb}}
 }
 

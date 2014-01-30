@@ -2,10 +2,9 @@
 \alias{update_blastdb}
 \title{Wrapper for update_blastdb.pl}
 \usage{
-  update_blastdb(...,
-    destdir = getOption("blastr.blastdb.path"),
-    decompress = TRUE, showall = FALSE, passive = FALSE,
-    timeout = 120, force = FALSE)
+update_blastdb(..., destdir = getOption("blastr.blastdb.path") \%||\% ".",
+  decompress = TRUE, showall = FALSE, passive = FALSE, timeout = 120,
+  force = FALSE)
 }
 \arguments{
   \item{...}{Blast db to download}
@@ -28,16 +27,20 @@
   already on local directory}
 }
 \description{
-  Download pre-formatted BLAST databases from NCBI ftp
-  site.
+Download pre-formatted BLAST databases from NCBI ftp site.
 }
 \seealso{
-  Other blast.applications: \code{\link{blastn}},
-  \code{\link{blastn_short}}, \code{\link{blastp}},
-  \code{\link{blastp_short}}, \code{\link{blastx}},
-  \code{\link{dc_megablast}}, \code{\link{makeblasttdb}},
-  \code{\link{megablast}}, \code{\link{qblast}},
-  \code{\link{rpsblast}}, \code{\link{tblastn}},
-  \code{\link{tblastx}}
+Other blast.applications: \code{\link{blastn}},
+\code{\link{blastn}}, \code{\link{blastn_short}},
+\code{\link{blastn_short}}, \code{\link{dc_megablast}},
+\code{\link{dc_megablast}}, \code{\link{megablast}},
+\code{\link{megablast}}; \code{\link{blastp}},
+\code{\link{blastp}}, \code{\link{blastp_short}},
+\code{\link{blastp_short}}; \code{\link{blastx}},
+\code{\link{blastx}}; \code{\link{makeblasttdb}};
+\code{\link{qblast}}; \code{\link{rpsblast}},
+\code{\link{rpsblast}}; \code{\link{tblastn}},
+\code{\link{tblastn}}; \code{\link{tblastx}},
+\code{\link{tblastx}}
 }
 

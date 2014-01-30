@@ -2,10 +2,10 @@
 \alias{make_deflines}
 \title{Construct deflines}
 \usage{
-  make_deflines(query, prefix = "lcl")
+make_deflines(query, prefix = "lcl")
 }
 \description{
-  Construct deflines
+Construct deflines
 }
 \keyword{internal}
 

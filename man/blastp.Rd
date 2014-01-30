@@ -3,13 +3,11 @@
 \alias{blastp_short}
 \title{Wrapper for the NCBI Protein-Protein BLAST}
 \usage{
-  blastp(query, db="nr", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, matrix="BLOSUM62",
-    remote=FALSE, ...)
+blastp(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
+ evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
 
-  blastp_short(query, db="nr", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, matrix="BLOSUM62",
-    remote=FALSE, ...)
+blastp_short(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
+ evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
 }
 \arguments{
   \item{query}{Query sequences as path to a FASTA file, an
@@ -40,23 +38,27 @@
   for a description of common options.}
 }
 \description{
-  \code{blastp} is the traditional BLASTP.
-  \code{blastp_short} is BLASTP optimised for residues
-  shorter than 30.
+\code{blastp} is the traditional BLASTP.
+\code{blastp_short} is BLASTP optimised for residues
+shorter than 30.
 }
 \details{
-  Run \code{blastp()} without arguments to print usage and
-  arguments description.
+Run \code{blastp()} without arguments to print usage and
+arguments description.
 }
 \examples{
 ##
 }
 \seealso{
-  Other blast.applications: \code{\link{blastn}},
-  \code{\link{blastn_short}}, \code{\link{blastx}},
-  \code{\link{dc_megablast}}, \code{\link{makeblasttdb}},
-  \code{\link{megablast}}, \code{\link{qblast}},
-  \code{\link{rpsblast}}, \code{\link{tblastn}},
-  \code{\link{tblastx}}, \code{\link{update_blastdb}}
+Other blast.applications: \code{\link{blastn}},
+\code{\link{blastn}}, \code{\link{blastn_short}},
+\code{\link{blastn_short}}, \code{\link{dc_megablast}},
+\code{\link{dc_megablast}}, \code{\link{megablast}},
+\code{\link{megablast}}; \code{\link{blastx}},
+\code{\link{blastx}}; \code{\link{makeblasttdb}};
+\code{\link{qblast}}; \code{\link{rpsblast}},
+\code{\link{rpsblast}}; \code{\link{tblastn}},
+\code{\link{tblastn}}; \code{\link{tblastx}},
+\code{\link{tblastx}}; \code{\link{update_blastdb}}
 }
 

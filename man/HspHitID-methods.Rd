@@ -3,13 +3,18 @@
 \alias{getHspHitID}
 \alias{getHspHitID,blastReportDB-method}
 \title{Access components of Blast Hits}
+\usage{
+getHspHitID(x)
+
+\S4method{getHspHitID}{blastReportDB}(x, id, max = FALSE, ...)
+}
 \arguments{
   \item{x}{A \linkS4class{blastReportDB} connection.}
 }
 \value{
-  An numeric vector.
+An numeric vector.
 }
 \description{
-  Extract Hit IDs for Hsps.
+Extract Hit IDs for Hsps.
 }
 

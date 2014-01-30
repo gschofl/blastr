@@ -38,6 +38,21 @@ compactNA <- function(x) {
   x[!is.na(x)]
 }
 
+dots <- function(...) {
+  eval(substitute(alist(...)))
+}
+
+pkg_checker <- function(pkg) {
+  assert_that(is.string(pkg))
+  function()
+    if (!require(eval(substitute(pkg)), character.only=TRUE)) {
+      stop("Please install the ", pkg, " package", call. = FALSE)
+    }
+}
+
+check_parallel <- pkg_checker("parallel")
+check_biofiles <- pkg_checker("biofiles")
+
 Call <- function(fn, ...) {
   fn <- match.fun(fn)
   fn(...)
@@ -53,10 +68,10 @@ Partial <- function(fn, ..., .env = parent.frame()) {
   eval(call("function", as.pairlist(args), fcall), .env)
 }
 
-Compose <- function (...) {
+Compose <- function(...) {
   fns <- lapply(compact(list(...)), match.fun)
   len <- length(fns)
-  function (...) {
+  function(...) {
     res <- Call(fns[[len]], ...)
     for (fn in rev(fns[-len]))
       res <- fn(res)
@@ -69,7 +84,7 @@ merge_list <- function(x, y) {
   if (length(y) == 0) return(x) 
   i <- is.na(match(names(y), names(x)))
   if (any(i)) {
-    x[names(y)[which(i)]] = y[which(i)]
+    x[names(y)[which(i)]] <- y[which(i)]
   }
   x
 }
@@ -82,7 +97,7 @@ dup <- function (x, n) {
 
 blanks <- Partial(dup, x = " ")
 
-pad <- function (x, n = 10, where = 'left', pad = ' ') {
+pad <- function(x, n = 10, where = 'left', pad = ' ') {
   assert_that(length(n) == 1, length(pad) == 1)
   x <- as.character(x)
   where <- match.arg(where, c("left", "right", "both"))
@@ -111,7 +126,7 @@ strsplitN <- function (x, split, n, from = "start", collapse = split, ...) {
   assert_that(is.vector(x))
   from <- match.arg(from, c("start", "end"))
   xs <- strsplit(x, split, ...)
-  end <- vapply(xs, length, integer(1))
+  end <- vapply(xs, length, 0L)
   
   if (from == "end") {
     end <- end + 1L
@@ -247,8 +262,7 @@ subl <- function(x, ...) {
   assert_that(has_command('subl'))
   if (tryCatch(is.readable(x), assertError = function (e) FALSE)) {
     SysCall('subl', stdin=x, redirection=FALSE, ...)
-  }
-  else {
+  } else {
     tmp <- tempfile()
     write(x, file=tmp)
     SysCall('subl', stdin=tmp, redirection=FALSE, ...)
@@ -263,8 +277,8 @@ are_true <- function (x) {
   vapply(x, isTRUE, FALSE, USE.NAMES=FALSE)
 }
 
-are_false <- function (x) {
-  vapply(x, function (x) identical(x, FALSE), FALSE, USE.NAMES=FALSE)
+are_false <- function(x) {
+  vapply(x, function(x) identical(x, FALSE), FALSE, USE.NAMES=FALSE)
 }
 
 #' Test if an external executable is available
@@ -275,7 +289,7 @@ are_false <- function (x) {
 #' @param cmd The exececutable to test for.
 #' @param msg Additional message if the test fails.
 #' @keywords internal
-has_command <- function (cmd, msg = "") {
+has_command <- function(cmd, msg = "") {
   assert_that(is.string(cmd))
   unname(Sys.which(cmd) != "")
 }
@@ -300,9 +314,9 @@ on_failure(has_command) <- function(call, env) {
 #' @param intern Passed on to \code{\link{system}}'s \code{intern} argument.
 #' @param input Passed on to \code{\link{system}}'s \code{input} argument.
 #' @keywords internal
-SysCall <- function (exec, ..., args = list(), stdin = NULL, stdout = NULL,
-                     redirection = TRUE, style = c("unix", "gnu"), sep = " ",
-                     show_cmd = FALSE, intern = FALSE, input = NULL) {  
+SysCall <- function(exec, ..., args = list(), stdin = NULL, stdout = NULL,
+                    redirection = TRUE, style = c("unix", "gnu"), sep = " ",
+                    show_cmd = FALSE, intern = FALSE, input = NULL) {  
   assert_that(has_command(exec))
   args <- merge_list(list(...), args)
   style <- match.arg(style)
@@ -322,9 +336,10 @@ SysCall <- function (exec, ..., args = list(), stdin = NULL, stdout = NULL,
                  unix=paste0(trim(sprintf("-%s%s%s", names(args), sep, args)), collapse=" "),
                  gnu=paste0(trim(sprintf("--%s%s%s", names(args), sep, args)), collapse=" "))
   
-  if (show_cmd)
+  if (show_cmd) {
     print(trim(paste(exec, args, stdin, stdout)))
-  else
+  } else{
     system(trim(paste(exec, args, stdin, stdout)), intern = intern, input = input)
+  }
 }
 

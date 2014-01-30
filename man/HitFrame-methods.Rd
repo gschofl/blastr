@@ -1,5 +1,5 @@
 \docType{methods}
-\name{getHitFrame}
+\name{getHitFrame,Hit-method}
 \alias{getHitFrame}
 \alias{getHitFrame,Hit-method}
 \alias{getHitFrame,HitList-method}
@@ -8,6 +8,21 @@
 \alias{getHitFrame,Iteration-method}
 \alias{getHitFrame,blastReportDB-method}
 \title{Access components of High-Scoring Pairs (Hsps)}
+\usage{
+\S4method{getHitFrame}{Hit}(x, max = FALSE)
+
+\S4method{getHitFrame}{HitList}(x, max = FALSE)
+
+\S4method{getHitFrame}{Hsp}(x, max = FALSE)
+
+\S4method{getHitFrame}{HspList}(x, max = FALSE)
+
+\S4method{getHitFrame}{Iteration}(x, max = FALSE)
+
+getHitFrame(x, max = FALSE)
+
+\S4method{getHitFrame}{blastReportDB}(x, id, max = FALSE, ...)
+}
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}
 
@@ -15,9 +30,9 @@
   with the highest bit score.}
 }
 \value{
-  An numeric vector or a list of numeric vectors
+An numeric vector or a list of numeric vectors
 }
 \description{
-  Extract the frame of the hit sequence.
+Extract the frame of the hit sequence.
 }
 

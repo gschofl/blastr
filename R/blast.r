@@ -10,8 +10,9 @@ NULL
 #' 
 #' @param input_file Input file/database name. Multiple file/database names
 #' can be provided as a character vector.
-#' @param input_type Type of data specified in input file.
-#' @param dbtype Molecule type of target db. (\sQuote{nucl} or \sQuote{prot})
+#' @param input_type Type of data specified in input file. One of \dQuote{fasta},
+#' \dQuote{blastdb}, \dQuote{asn1_bin}, or \dQuote{asn1_txt}.
+#' @param dbtype Molecule type of target db. (\dQuote{nucl} or \dQuote{prot})
 #' @param ... further arguments passed to makeblastdb.
 #' @param show_log print log file.
 #' @param show_cmd print the command line instead of executing it.
@@ -21,11 +22,10 @@ NULL
 makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
                          ..., show_log=TRUE, show_cmd=FALSE) {
   assert_that(has_command('makeblastdb'))
-  
-  if (missing(input_file))
+  if (missing(input_file)) {
     return(SysCall("makeblastdb", help=TRUE, redirection=FALSE))
-
-  ## assert that multiple input files are present
+  }
+  ## assert that multiple input files are present and readable
   lapply(input_file, Compose(assert_that, is.readable))
   
   if (length(input_file) > 1) {
@@ -35,19 +35,19 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
   input_type <- match.arg(input_type, c("fasta","blastdb","asn1_bin","asn1_txt"))
   dbtype <- match.arg(dbtype, c("nucl","prot"))
   
-  o <- list(...)
-  if (!is.null(o$logfile))
+  o <- dots(...)
+  if (!is.null(o$logfile)) {
     logfile <- o$logfile
-  else
+  } else {
     logfile <- replace_ext(input_file[[1]], "log")
-
+  }
   SysCall(exec="makeblastdb", infile=NULL, outfile=NULL,
           `in`=input_file, input_type=input_type,
           dbtype=dbtype, logfile=logfile, ..., style="unix",
-          show_cmd=show_cmd)
-  
-  if (show_log && assert_that(is.readable(logfile)))
+          show_cmd=show_cmd)  
+  if (show_log && assert_that(is.readable(logfile))) {
     cat(paste(readLines(logfile), collapse="\n"))
+  }
 }
 
 #' Wrapper for update_blastdb.pl
@@ -67,11 +67,12 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' 
 #' @family blast applications
 #' @export
-update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path"), decompress=TRUE,
-                           showall=FALSE, passive=FALSE, timeout=120, force=FALSE) {
+update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.',
+                           decompress=TRUE, showall=FALSE, passive=FALSE,
+                           timeout=120, force=FALSE) {
   destdir <- normalizePath(destdir)
   assert_that(has_command("update_blastdb"))
-  blastdb <- c(...)
+  blastdb <- unlist(dots(...))
   args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)  
   if (showall) {
     ans <- SysCall('update_blastdb', showall=TRUE, style='gnu', intern=TRUE)
@@ -123,20 +124,20 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path"), decomp
 #' @param parse
 #' 
 #' @keywords internal
-.blast <- function(program, query, db, outfmt = 'xml', max_hits = 20,
+.blast <- function(exec, query, db, outfmt = 'xml', max_hits = 20,
                    strand = 'both', ..., intern = FALSE, show_cmd = FALSE,
                    parse = TRUE) {
-  program <- match.arg(program, c("blastn", "blastp", "blastx", "tblastn",
-                                  "tblastx", "rpsblast+", 'rpstblastn'))
-  assert_that(has_command(program))
+  exec <- match.arg(exec, c("blastn", "blastp", "blastx", "tblastn",
+                            "tblastx", "rpsblast+", 'rpstblastn'))
+  assert_that(has_command(exec))
   strand <- match.arg(strand, c("both", "plus", "minus"))
   outfmt <- switch(match.arg(outfmt, c('xml', 'table')), xml=5, table=7)
   
   # dealing with query
-  if (missing(query))
-    return(SysCall(program, help=TRUE, intern=FALSE))
-  
-  if (program %in% c("blastp","blastp_short","rpsblast+")) {
+  if (missing(query)) {
+    return(SysCall(exec, help=TRUE, intern=FALSE))
+  }
+  if (exec %in% c("blastp","blastp_short","rpsblast+")) {
     strand <- NULL
   }
   
@@ -149,11 +150,17 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path"), decomp
   # set a number of defaults different from the internal defaults of
   # the blast applications
   if (missing(db)) {
-    db <- switch(program, blastn='nt', `rpsblast+`='Cdd', 'nr')
+    db <- switch(exec, blastn='nt', `rpsblast+`='Cdd', 'nr')
   }
-  db <- file.path(getOption("blastr.blastdb.path"), db)
+  
+  ## if we query the NCBI blast server we don't want to fetch the path to local
+  ## blast dbs
+  dot_args <- dots(...)
+  if (!dot_args$remote %||% FALSE) {
+    db <- file.path(getOption("blastr.blastdb.path"), db) %||% db
+  }
   args <- merge_list(
-    list(...),
+    dot_args,
     list(query=query, db=db, outfmt=outfmt,
          num_descriptions=NULL, num_alignments=NULL,
          max_target_seqs=max_hits, strand=strand,
@@ -161,8 +168,8 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path"), decomp
   ) 
   # check if 'out' was specified, otherwise return results internally
   intern <- if (is.null(args[["out"]])) TRUE else FALSE
-  cat(paste0("Blasting ", nqueries, " queries [", program, "]", "\n"), sep="")
-  res <- SysCall(exec=program, args=args, redirection= FALSE, style="unix",
+  cat(paste0("Blasting ", nqueries, " queries [", exec, "]", "\n"), sep="")
+  res <- SysCall(exec=exec, args=args, redirection= FALSE, style="unix",
                  show_cmd=show_cmd, intern=intern)
   if (intern && parse && !has_attr(res, 'status')) {
     if (outfmt == 5) {
@@ -214,25 +221,25 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path"), decomp
 #' @aliases blastn blastn_short megablast dc_megablast
 #' @examples
 #' ##
-blastn <- Partial(.blast, program = "blastn", task = "blastn")
+blastn <- Partial(.blast, exec = "blastn", task = "blastn")
 
 #' @usage blastn_short(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, remote=FALSE, ...)
 #' @export
 #' @rdname blastn
-blastn_short <- Partial(.blast, program = "blastn", task = "blastn-short")
+blastn_short <- Partial(.blast, exec = "blastn", task = "blastn-short")
 
 #' @usage megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, remote=FALSE, ...)
 #' @export
 #' @rdname blastn
-megablast <- Partial(.blast, program = "blastn", task = "megablast")
+megablast <- Partial(.blast, exec = "blastn", task = "megablast")
 
 #' @usage dc_megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, remote=FALSE, ...)
 #' @export
 #' @rdname blastn
-dc_megablast <- Partial(.blast, program = "blastn", task = "dc-megablast")
+dc_megablast <- Partial(.blast, exec = "blastn", task = "dc-megablast")
 
 #' Wrapper for the NCBI Protein-Protein BLAST
 #' 
@@ -266,14 +273,14 @@ dc_megablast <- Partial(.blast, program = "blastn", task = "dc-megablast")
 #' @aliases blastp blastp_short
 #' @examples
 #' ##
-blastp <- Partial(.blast, program = "blastp", task = "blastp")
+blastp <- Partial(.blast, exec = "blastp", task = "blastp")
 
 #' @usage blastp_short(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
 #'  evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
 #' @export
 #' @rdname blastp
 #' @inheritParams blastp
-blastp_short <- Partial(.blast, program = "blastp", task = "blastp-short")
+blastp_short <- Partial(.blast, exec = "blastp", task = "blastp-short")
 
 #' Wrapper for the NCBI Translated Query-Protein Subject BLAST
 #' 
@@ -305,7 +312,7 @@ blastp_short <- Partial(.blast, program = "blastp", task = "blastp-short")
 #' @aliases blastx
 #' @examples
 #' ##
-blastx <- Partial(.blast, program = "blastx")
+blastx <- Partial(.blast, exec = "blastx")
 
 #' Wrapper for the NCBI Translated Query-Protein Subject BLAST
 #' 
@@ -337,7 +344,7 @@ blastx <- Partial(.blast, program = "blastx")
 #' @aliases tblastx
 #' @examples
 #' ##
-tblastx <- Partial(.blast, program = "tblastx")
+tblastx <- Partial(.blast, exec = "tblastx")
 
 #' Wrapper for the NCBI Protein Query-Translated Subject BLAST
 #' 
@@ -368,7 +375,7 @@ tblastx <- Partial(.blast, program = "tblastx")
 #' @aliases tblastn
 #' @examples
 #' ##
-tblastn <- Partial(.blast, program = "tblastn")
+tblastn <- Partial(.blast, exec = "tblastn")
 
 
 #' Wrapper for the NCBI Reversed Position Specific Blast
@@ -399,7 +406,7 @@ tblastn <- Partial(.blast, program = "tblastn")
 #' @aliases rpsblast
 #' @examples
 #' ##
-rpsblast <- Partial(.blast, program = "rpsblast+")
+rpsblast <- Partial(.blast, exec = "rpsblast+")
 
 
 #' Do a BLAST search using the QBLAST URL API
@@ -427,7 +434,7 @@ rpsblast <- Partial(.blast, program = "rpsblast+")
 #' @export
 #' @examples
 #' ##
-qblast <- function(query, program = 'megablast', db = 'nt', outfmt = 'xml',
+qblast <- function(query, exec = 'megablast', db = 'nt', outfmt = 'xml',
                    max_hits = 20, entrez_query = '', evalue = 10, ...,
                    .params = list(), update_time = 4)
 {
@@ -435,17 +442,17 @@ qblast <- function(query, program = 'megablast', db = 'nt', outfmt = 'xml',
     stop("No query provided")
   
   qbd <- megablast <- rpsblast <- FALSE
-  program <- match.arg(program, c("megablast","blastn","blastp", "rpsblast",
+  exec <- match.arg(exec, c("megablast","blastn","blastp", "rpsblast",
                                   "blastx","tblastn", "tblastx"))
   outfmt <- match.arg(outfmt, c("xml", "tabular"))
   
-  if (program == "megablast") {
-    program <- "blastn"
+  if (exec == "megablast") {
+    exec <- "blastn"
     megablast <- TRUE
   }
   
-  if (program == "rpsblast") {
-    program <- "blastp"
+  if (exec == "rpsblast") {
+    exec <- "blastp"
     rpsblast <- TRUE
   }
   
@@ -473,7 +480,7 @@ qblast <- function(query, program = 'megablast', db = 'nt', outfmt = 'xml',
   }
   
   .params <- merge_list(list(query=query,
-                             program=program,
+                             program=exec,
                              database=db,
                              expect=evalue,
                              hitlist_size=max_hits,

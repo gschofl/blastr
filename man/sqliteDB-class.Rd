@@ -1,11 +1,9 @@
+\docType{class}
 \name{sqliteDB-class}
 \alias{sqliteDB-class}
 \title{sqliteDB-class}
-\usage{
-  .sqliteDB(...)
-}
 \description{
-  sqliteDB-class
+sqliteDB-class
 }
 \keyword{internal}
 

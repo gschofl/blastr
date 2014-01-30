@@ -2,8 +2,8 @@
 \alias{db_create}
 \title{Create an SQLite database.}
 \usage{
-  db_create(dbName = ":memory:", dbSchema = "",
-    overwrite = FALSE, verbose = TRUE)
+db_create(dbName = ":memory:", dbSchema = "", overwrite = FALSE,
+  verbose = TRUE)
 }
 \arguments{
   \item{dbName}{Path to an SQLite database.}
@@ -16,7 +16,7 @@
   \item{verbose}{}
 }
 \description{
-  Create an SQLite database.
+Create an SQLite database.
 }
 \keyword{internal}
 

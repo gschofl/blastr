@@ -3,11 +3,10 @@
 \alias{blastReportDBConnect}
 \title{Parse NCBI BLAST XML files into \linkS4class{blastReportDB} objects.}
 \usage{
-  blastReportDB(blastfile, db_path = ":memory:",
-    max_hit = NULL, max_hsp = NULL, reset_at = 1000,
-    verbose = TRUE)
+blastReportDB(blastfile, db_path = ":memory:", max_hit = NULL,
+  max_hsp = NULL, reset_at = 1000, verbose = TRUE)
 
-  blastReportDBConnect(db_path)
+blastReportDBConnect(db_path)
 }
 \arguments{
   \item{blastfile}{an XML BLAST Report.}
@@ -26,11 +25,11 @@
   \item{verbose}{Message if a new database is created.}
 }
 \value{
-  A \code{\linkS4class{blastReportDB}} object.
+A \code{\linkS4class{blastReportDB}} object.
 
-  A \code{\linkS4class{blastReportDB}} object.
+A \code{\linkS4class{blastReportDB}} object.
 }
 \description{
-  Create (or connect to) a blastReport SQLite database.
+Create (or connect to) a blastReport SQLite database.
 }
 

@@ -2,9 +2,8 @@
 \alias{linebreak}
 \title{Format paragraphs}
 \usage{
-  linebreak(s, width = getOption("width") - 2, indent = 0,
-    offset = 0, split = " ", FORCE = FALSE,
-    FULL_FORCE = FALSE)
+linebreak(s, width = getOption("width") - 2, indent = 0, offset = 0,
+  split = " ", FORCE = FALSE, FULL_FORCE = FALSE)
 }
 \arguments{
   \item{s}{a character vector or a list of character
@@ -32,11 +31,11 @@
   whitespace or not.}
 }
 \value{
-  a character vector
+a character vector
 }
 \description{
-  Similar to \code{\link{strwrap}} but returns a single
-  string with linefeeds inserted
+Similar to \code{\link{strwrap}} but returns a single
+string with linefeeds inserted
 }
 \keyword{internal}
 

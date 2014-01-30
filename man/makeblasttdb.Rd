@@ -2,19 +2,20 @@
 \alias{makeblasttdb}
 \title{Wrapper for NCBI makeblastdb}
 \usage{
-  makeblasttdb(input_file, input_type = "fasta",
-    dbtype = "nucl", ..., show_log = TRUE,
-    show_cmd = FALSE)
+makeblasttdb(input_file, input_type = "fasta", dbtype = "nucl", ...,
+  show_log = TRUE, show_cmd = FALSE)
 }
 \arguments{
   \item{input_file}{Input file/database name. Multiple
   file/database names can be provided as a character
   vector.}
 
-  \item{input_type}{Type of data specified in input file.}
+  \item{input_type}{Type of data specified in input file.
+  One of \dQuote{fasta}, \dQuote{blastdb},
+  \dQuote{asn1_bin}, or \dQuote{asn1_txt}.}
 
-  \item{dbtype}{Molecule type of target db. (\sQuote{nucl}
-  or \sQuote{prot})}
+  \item{dbtype}{Molecule type of target db. (\dQuote{nucl}
+  or \dQuote{prot})}
 
   \item{...}{further arguments passed to makeblastdb.}
 
@@ -24,15 +25,20 @@
   executing it.}
 }
 \description{
-  Wrapper for NCBI makeblastdb
+Wrapper for NCBI makeblastdb
 }
 \seealso{
-  Other blast.applications: \code{\link{blastn}},
-  \code{\link{blastn_short}}, \code{\link{blastp}},
-  \code{\link{blastp_short}}, \code{\link{blastx}},
-  \code{\link{dc_megablast}}, \code{\link{megablast}},
-  \code{\link{qblast}}, \code{\link{rpsblast}},
-  \code{\link{tblastn}}, \code{\link{tblastx}},
-  \code{\link{update_blastdb}}
+Other blast.applications: \code{\link{blastn}},
+\code{\link{blastn}}, \code{\link{blastn_short}},
+\code{\link{blastn_short}}, \code{\link{dc_megablast}},
+\code{\link{dc_megablast}}, \code{\link{megablast}},
+\code{\link{megablast}}; \code{\link{blastp}},
+\code{\link{blastp}}, \code{\link{blastp_short}},
+\code{\link{blastp_short}}; \code{\link{blastx}},
+\code{\link{blastx}}; \code{\link{qblast}};
+\code{\link{rpsblast}}, \code{\link{rpsblast}};
+\code{\link{tblastn}}, \code{\link{tblastn}};
+\code{\link{tblastx}}, \code{\link{tblastx}};
+\code{\link{update_blastdb}}
 }
 

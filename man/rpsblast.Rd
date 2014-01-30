@@ -2,8 +2,8 @@
 \alias{rpsblast}
 \title{Wrapper for the NCBI Reversed Position Specific Blast}
 \usage{
-  rpsblast(query, db="Cdd", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, remote=FALSE, ...)
+rpsblast(query, db="Cdd", out=NULL, outfmt="xml", max_hits=20,
+evalue=10, remote=FALSE, ...)
 }
 \arguments{
   \item{query}{Query sequences as path to a FASTA file, an
@@ -32,19 +32,23 @@
   for a description of common options.}
 }
 \description{
-  Run \code{rpsblast()} without arguments to print usage
-  and arguments description.
+Run \code{rpsblast()} without arguments to print usage and
+arguments description.
 }
 \examples{
 ##
 }
 \seealso{
-  Other blast.applications: \code{\link{blastn}},
-  \code{\link{blastn_short}}, \code{\link{blastp}},
-  \code{\link{blastp_short}}, \code{\link{blastx}},
-  \code{\link{dc_megablast}}, \code{\link{makeblasttdb}},
-  \code{\link{megablast}}, \code{\link{qblast}},
-  \code{\link{tblastn}}, \code{\link{tblastx}},
-  \code{\link{update_blastdb}}
+Other blast.applications: \code{\link{blastn}},
+\code{\link{blastn}}, \code{\link{blastn_short}},
+\code{\link{blastn_short}}, \code{\link{dc_megablast}},
+\code{\link{dc_megablast}}, \code{\link{megablast}},
+\code{\link{megablast}}; \code{\link{blastp}},
+\code{\link{blastp}}, \code{\link{blastp_short}},
+\code{\link{blastp_short}}; \code{\link{blastx}},
+\code{\link{blastx}}; \code{\link{makeblasttdb}};
+\code{\link{qblast}}; \code{\link{tblastn}},
+\code{\link{tblastn}}; \code{\link{tblastx}},
+\code{\link{tblastx}}; \code{\link{update_blastdb}}
 }
 

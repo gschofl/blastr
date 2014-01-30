@@ -2,6 +2,9 @@
 \name{db_query}
 \alias{db_query}
 \title{Query an SQLite database.}
+\usage{
+db_query(x, stmt, j = NA, ...)
+}
 \arguments{
   \item{x}{A connection object.}
 
@@ -13,7 +16,7 @@
   Path to a log file).}
 }
 \description{
-  Query an SQLite database.
+Query an SQLite database.
 }
 \keyword{internal}
 

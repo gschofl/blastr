@@ -1,13 +1,11 @@
+\docType{class}
 \name{Iteration-class}
 \alias{Iteration-class}
 \title{Iteration-class}
-\usage{
-  new_Iteration(...)
-}
 \description{
-  An S4 class that holds data parsed from an NCBI BLAST XML
-  \sQuote{Iteration} element. Each Iteration contains data
-  about a query.
+An S4 class that holds data parsed from an NCBI BLAST XML
+\sQuote{Iteration} element. Each Iteration contains data
+about a query.
 }
 \section{Slots}{
   \describe{ \item{\code{iter_num}:}{The number of the

@@ -2,6 +2,9 @@
 \name{db_list_fields}
 \alias{db_list_fields}
 \title{List available tables in an SQLite database}
+\usage{
+db_list_fields(x, tbl, ...)
+}
 \arguments{
   \item{x}{A connection object.}
 
@@ -11,7 +14,7 @@
   Path to a log file).}
 }
 \description{
-  List available tables in an SQLite database
+List available tables in an SQLite database
 }
 \keyword{internal}
 

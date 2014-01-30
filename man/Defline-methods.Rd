@@ -1,5 +1,5 @@
 \docType{methods}
-\name{getDefline}
+\name{getDefline,Hit-method}
 \alias{getDefline}
 \alias{getDefline,Hit-method}
 \alias{getDefline,HitList-method}
@@ -10,6 +10,25 @@
 \alias{getPrimaryDefline,Iteration-method}
 \alias{getPrimaryDefline,IterationList-method}
 \title{Access components of Blast Hits}
+\usage{
+\S4method{getDefline}{Hit}(x)
+
+\S4method{getDefline}{HitList}(x)
+
+\S4method{getPrimaryDefline}{Hit}(x)
+
+\S4method{getPrimaryDefline}{HitList}(x)
+
+\S4method{getDefline}{Iteration}(x)
+
+\S4method{getPrimaryDefline}{Iteration}(x)
+
+\S4method{getPrimaryDefline}{IterationList}(x)
+
+getDefline(x, ...)
+
+getPrimaryDefline(x, ...)
+}
 \arguments{
   \item{x}{A \linkS4class{Hit} or \linkS4class{HitList}
   object.}
@@ -17,9 +36,9 @@
   \item{...}{Further arguments passed to methods.}
 }
 \value{
-  A character vector or list of character vectors.
+A character vector or list of character vectors.
 }
 \description{
-  Extract the (primary) definition lines.
+Extract the (primary) definition lines.
 }
 

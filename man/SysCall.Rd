@@ -2,10 +2,9 @@
 \alias{SysCall}
 \title{Wrapper for system commands}
 \usage{
-  SysCall(exec, ..., args = list(), stdin = NULL,
-    stdout = NULL, redirection = TRUE,
-    style = c("unix", "gnu"), sep = " ", show_cmd = FALSE,
-    intern = FALSE, input = NULL)
+SysCall(exec, ..., args = list(), stdin = NULL, stdout = NULL,
+  redirection = TRUE, style = c("unix", "gnu"), sep = " ",
+  show_cmd = FALSE, intern = FALSE, input = NULL)
 }
 \arguments{
   \item{exec}{The system command to be invoked.}
@@ -36,7 +35,7 @@
   \code{input} argument.}
 }
 \description{
-  Wrapper for system commands
+Wrapper for system commands
 }
 \keyword{internal}
 

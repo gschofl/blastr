@@ -1,8 +1,4 @@
 #' @include utils.r
-#' @importFrom biofiles getSequence
-#' @importFrom biofiles strand
-#' @importFrom biofiles index
-#' @importFrom biofiles qualif
 #' @importFrom stringr str_split_fixed
 #' @importFrom stringr str_extract_all
 #' @importFrom stringr str_detect
@@ -15,7 +11,7 @@ NULL
 
 
 #' @keywords internal
-.escape <- function (s, httpPOST=FALSE) {
+.escape <- function(s, httpPOST=FALSE) {
   if (httpPOST) {
     s <- gsub("\\s+", " ", s)
     s <- gsub("+", " ", s, fixed=TRUE)
@@ -34,12 +30,12 @@ NULL
 
 #' Construct deflines
 #' @keywords internal
-make_deflines <- function (query, prefix = "lcl") {
+make_deflines <- function(query, prefix = "lcl") {
   ##
-  if (class(query) %in% c("gbFeatureList","gbFeature")) {
+  if (class(query) %in% c("gbFeatureList", "gbFeature")) {
+    check_biofiles() ## conditionally load biofiles
     id <- paste0(prefix, "|", index(query))
-    desc <- paste0(unlist(qualif(query, "locus_tag")),
-                   " [", unlist(qualif(query, "product")), "]")
+    desc <- paste0(unlist(qualif(query, "locus_tag")), " [", unlist(qualif(query, "product")), "]")
     parse_defline <- TRUE
   } else if (is(query, "XStringSet")) {
     # test if the XStrings follow the naming convention
@@ -70,11 +66,10 @@ make_deflines <- function (query, prefix = "lcl") {
 
 #' @importFrom Biostrings fasta.info
 #' @keywords internal
-make_blast_query <- function (query, transl = FALSE) {
+make_blast_query <- function(query, transl = FALSE) {
   ## Set up tempfile to use as input for blast
   tmp <- tempfile(fileext=".fa")
-  if (is.string(query) && tryCatch(is.readable(query),
-                                   assertError = function (e) FALSE )) {
+  if (is.string(query) && tryCatch(is.readable(query), assertError = function(e) FALSE )) {
     # query must be the path to a valid FASTA file
     nqueries <- length(fasta.info(query))
     # copy query to tempfile because blast deletes the query file
@@ -83,15 +78,13 @@ make_blast_query <- function (query, transl = FALSE) {
     return(list(query=tmp, nqueries=nqueries, parse_defline=FALSE))
   }
   if (class(query) %in% c("gbReportList","gbReport","gbFeatureList","gbFeature")) {
+    check_biofiles() ## conditionally load biofiles
     seq <- getSequence(query)
-  }
-  else if (inherits(query, "XStringSet") || inherits(query, "XString")) {
+  } else if (inherits(query, "XStringSet") || inherits(query, "XString")) {
     seq <- as(query, "XStringSet")
-  }
-  else if (is.vector(query) && is.character(query)) {
+  } else if (is.vector(query) && is.character(query)) {
     seq <- query
-  }
-  else {
+  } else {
     stop("Objects of class ", sQuote(class(query)), " are not supported as query.")
   }
   seqnames <- make_deflines(seq)
@@ -101,8 +94,8 @@ make_blast_query <- function (query, transl = FALSE) {
 
 
 #' @keywords internal
-wrapAlignment <- function (seq1, ...,  prefix=c(""), suffix=c(""),
-                           start=c(1), reverse=c(FALSE), sep=2) {
+wrapAlignment <- function(seq1, ...,  prefix=c(""), suffix=c(""),
+                          start=c(1), reverse=c(FALSE), sep=2) {
   # seqs <- c(seq1, list(seq2, seq3))
   seqs <- c(list(seq1), list(...))
   lseqs <- vapply(seqs, nchar, FUN.VALUE=numeric(1))

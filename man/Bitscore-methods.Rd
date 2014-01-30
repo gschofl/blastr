@@ -1,5 +1,5 @@
 \docType{methods}
-\name{getBitscore}
+\name{getBitscore,Hit-method}
 \alias{getBitscore}
 \alias{getBitscore,Hit-method}
 \alias{getBitscore,HitList-method}
@@ -10,16 +10,67 @@
 \alias{getMaxBitscore}
 \alias{getMaxBitscore,Hit-method}
 \alias{getMaxBitscore,HitList-method}
+\alias{getMaxBitscore,Hsp-method}
+\alias{getMaxBitscore,HspList-method}
 \alias{getMaxBitscore,Iteration-method}
 \alias{getMaxBitscore,IterationList-method}
 \alias{getMaxBitscore,blastReportDB-method}
 \alias{getTotalBitscore}
 \alias{getTotalBitscore,Hit-method}
 \alias{getTotalBitscore,HitList-method}
+\alias{getTotalBitscore,Hsp-method}
+\alias{getTotalBitscore,HspList-method}
 \alias{getTotalBitscore,Iteration-method}
 \alias{getTotalBitscore,IterationList-method}
 \alias{getTotalBitscore,blastReportDB-method}
 \title{Access components of High-Scoring Pairs (Hsps)}
+\usage{
+\S4method{getBitscore}{Hit}(x, max = FALSE, sum = FALSE)
+
+\S4method{getBitscore}{HitList}(x, max = FALSE, sum = FALSE)
+
+\S4method{getMaxBitscore}{Hit}(x)
+
+\S4method{getMaxBitscore}{HitList}(x)
+
+\S4method{getTotalBitscore}{Hit}(x)
+
+\S4method{getTotalBitscore}{HitList}(x)
+
+\S4method{getBitscore}{Hsp}(x, max = FALSE, sum = FALSE)
+
+\S4method{getBitscore}{HspList}(x, max = FALSE, sum = FALSE)
+
+\S4method{getMaxBitscore}{Hsp}(x)
+
+\S4method{getMaxBitscore}{HspList}(x)
+
+\S4method{getTotalBitscore}{Hsp}(x)
+
+\S4method{getTotalBitscore}{HspList}(x)
+
+\S4method{getBitscore}{Iteration}(x, max = FALSE, sum = FALSE)
+
+\S4method{getMaxBitscore}{Iteration}(x)
+
+\S4method{getMaxBitscore}{IterationList}(x)
+
+\S4method{getTotalBitscore}{Iteration}(x)
+
+\S4method{getTotalBitscore}{IterationList}(x)
+
+getBitscore(x, max = FALSE, sum = FALSE)
+
+getMaxBitscore(x)
+
+getTotalBitscore(x)
+
+\S4method{getBitscore}{blastReportDB}(x, id, max = FALSE, sum = FALSE, ...)
+
+\S4method{getMaxBitscore}{blastReportDB}(x, id, ...)
+
+\S4method{getTotalBitscore}{blastReportDB}(x, id, ...)
+}
 \arguments{
   \item{x}{A \linkS4class{Hsp} or \linkS4class{HspList}.}
 
@@ -29,9 +80,9 @@
   Blast hit.}
 }
 \value{
-  An numeric vector or a list of numeric vectors
+An numeric vector or a list of numeric vectors
 }
 \description{
-  Extract the bit score.
+Extract the bit score.
 }
 

@@ -5,17 +5,17 @@
 \alias{megablast}
 \title{Wrapper for the NCBI Nucleotide-Nucleotide BLAST}
 \usage{
-  blastn(query, db="nt", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, remote=FALSE, ...)
+blastn(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
+ evalue=10, remote=FALSE, ...)
 
-  blastn_short(query, db="nt", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, remote=FALSE, ...)
+blastn_short(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
+ evalue=10, remote=FALSE, ...)
 
-  megablast(query, db="nt", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, remote=FALSE, ...)
+megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
+ evalue=10, remote=FALSE, ...)
 
-  dc_megablast(query, db="nt", out=NULL, outfmt="xml",
-    max_hits=20, evalue=10, remote=FALSE, ...)
+dc_megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
+ evalue=10, remote=FALSE, ...)
 }
 \arguments{
   \item{query}{Query sequences as path to a FASTA file, an
@@ -44,27 +44,29 @@
   for a description of common options.}
 }
 \description{
-  \itemize{ \item{\code{blastn}} is the traditional BLASTN
-  requiring an exact match of 11.
-  \item{\code{blastn_short}} is BLASTN optimised for
-  sequences shorter than 50 bases. \item{\code{megablast}}
-  is the traditional megablast used to find very similar
-  sequences. \item{\code{dc_megablast}} is discontiguous
-  megablast used to find more distant (e.g. interspecies)
-  sequences. }
+\itemize{ \item{\code{blastn}} is the traditional BLASTN
+requiring an exact match of 11. \item{\code{blastn_short}}
+is BLASTN optimised for sequences shorter than 50 bases.
+\item{\code{megablast}} is the traditional megablast used
+to find very similar sequences. \item{\code{dc_megablast}}
+is discontiguous megablast used to find more distant (e.g.
+interspecies) sequences. }
 }
 \details{
-  Run \code{blastn()} without arguments to print usage and
-  arguments description.
+Run \code{blastn()} without arguments to print usage and
+arguments description.
 }
 \examples{
 ##
 }
 \seealso{
-  Other blast.applications: \code{\link{blastp}},
-  \code{\link{blastp_short}}, \code{\link{blastx}},
-  \code{\link{makeblasttdb}}, \code{\link{qblast}},
-  \code{\link{rpsblast}}, \code{\link{tblastn}},
-  \code{\link{tblastx}}, \code{\link{update_blastdb}}
+Other blast.applications: \code{\link{blastp}},
+\code{\link{blastp}}, \code{\link{blastp_short}},
+\code{\link{blastp_short}}; \code{\link{blastx}},
+\code{\link{blastx}}; \code{\link{makeblasttdb}};
+\code{\link{qblast}}; \code{\link{rpsblast}},
+\code{\link{rpsblast}}; \code{\link{tblastn}},
+\code{\link{tblastn}}; \code{\link{tblastx}},
+\code{\link{tblastx}}; \code{\link{update_blastdb}}
 }
 

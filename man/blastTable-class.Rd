@@ -1,29 +1,30 @@
+\docType{class}
 \name{blastTable-class}
 \alias{blastTable-class}
 \title{blastTable-class}
 \description{
-  blastTable is an S4 class that provides a container for
-  data retrived by calls to the NCBI Blast utility.
+blastTable is an S4 class that provides a container for
+data retrived by calls to the NCBI Blast utility.
 }
 \details{
-  blastReport objects have ten slots: \describe{
-  \item{\code{program}:}{The BLAST flavour that generated
-  the data; \code{"character"}.} \item{\code{query}:}{Query
-  definition; \code{"character"}.}
-  \item{\code{reference}:}{Reference for BLAST;
-  \code{"character"}.} \item{\code{database}:}{Name of the
-  database; \code{"character"}.}
-  \item{\code{bit_score}:}{The bit score of the hsp;
-  \code{"numeric"}.} \item{\code{evalue}:}{The expect
-  value; \code{"numeric"}.} \item{\code{mlog.evalue}:}{}
-  \item{\code{accession}:}{Accession number;
-  \code{"character"}.} \item{\code{geneid}:}{Accession
-  number; \code{"character"}.} \item{\code{table}:}{Hit
-  table; \code{"data.frame"}.} }
+blastReport objects have ten slots: \describe{
+\item{\code{program}:}{The BLAST flavour that generated the
+data; \code{"character"}.} \item{\code{query}:}{Query
+definition; \code{"character"}.}
+\item{\code{reference}:}{Reference for BLAST;
+\code{"character"}.} \item{\code{database}:}{Name of the
+database; \code{"character"}.} \item{\code{bit_score}:}{The
+bit score of the hsp; \code{"numeric"}.}
+\item{\code{evalue}:}{The expect value; \code{"numeric"}.}
+\item{\code{mlog.evalue}:}{}
+\item{\code{accession}:}{Accession number;
+\code{"character"}.} \item{\code{geneid}:}{Accession
+number; \code{"character"}.} \item{\code{table}:}{Hit
+table; \code{"data.frame"}.} }
 }
 \seealso{
-  The constructor \code{\link{blastTable}}; the BLAST
-  classes \code{\linkS4class{blastReport}} and
-  \code{\linkS4class{blastReportDB}}
+The constructor \code{\link{blastTable}}; the BLAST classes
+\code{\linkS4class{blastReport}} and
+\code{\linkS4class{blastReportDB}}
 }
 
