@@ -18,16 +18,16 @@ Version: \tab 0.2.1\cr Date: \tab 2013-11-22\cr License:
   configure behaviour:
 
   \itemize{ \item \code{blastr.blastdb.path}: Path to a
-  local installation of the NCBI BLAST databases. Defaults
-  to "$HOME/local/db/blast". You can override the default
-  by setting this option in your .Rprofile file. Run
-  \code{\link{update_blastdb}} to install these databases.
-  }
+  local installation of the NCBI BLAST databases. By
+  default this option is not set. I recommend setting it to
+  a path of your choice in your .Rprofile file. Run
+  \code{\link{update_blastdb}} to install these databases
+  locally. }
 }
 \author{
-Gerhard Schoefl \email{gschof@yahoo.de}
+Gerhard Schoefl \email{gschofl@yahoo.de}
 
-Maintainer: Gerhard Schoefl \email{gschof@yahoo.de}
+Maintainer: Gerhard Schoefl \email{gschofl@yahoo.de}
 }
 \keyword{package}
 

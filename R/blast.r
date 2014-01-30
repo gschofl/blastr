@@ -127,17 +127,20 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.
 .blast <- function(exec, query, db, outfmt = 'xml', max_hits = 20,
                    strand = 'both', ..., intern = FALSE, show_cmd = FALSE,
                    parse = TRUE) {
+  blastdb.old <- Sys.getenv("BLASTDB")
+  on.exit(Sys.setenv(BLASTDB = blastdb.old))
   exec <- match.arg(exec, c("blastn", "blastp", "blastx", "tblastn",
                             "tblastx", "rpsblast+", 'rpstblastn'))
   assert_that(has_command(exec))
   strand <- match.arg(strand, c("both", "plus", "minus"))
   outfmt <- switch(match.arg(outfmt, c('xml', 'table')), xml=5, table=7)
+  dot_args <- dots(...)
   
   # dealing with query
   if (missing(query)) {
     return(SysCall(exec, help=TRUE, intern=FALSE))
   }
-  if (exec %in% c("blastp","blastp_short","rpsblast+")) {
+  if (exec %in% c("blastp", "blastp_short", "rpsblast+")) {
     strand <- NULL
   }
   
@@ -155,9 +158,10 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.
   
   ## if we query the NCBI blast server we don't want to fetch the path to local
   ## blast dbs
-  dot_args <- dots(...)
-  if (!dot_args$remote %||% FALSE) {
-    db <- file.path(getOption("blastr.blastdb.path"), db) %||% db
+  if (!(dot_args$remote %||% FALSE)) {
+    ## check if the supplied path to a BLAST db is valid or if a valid path is
+    ## set by the global option blastr.blastdb.path
+    db <- set_blastdb(db)
   }
   args <- merge_list(
     dot_args,
@@ -181,6 +185,32 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.
     }
   } else res 
 }
+
+
+set_blastdb <- function(db) {
+  db.ori <- db
+  if (!is.blastdb(db)) {
+    db <- normalizePath(file.path(getOption("blastr.blastdb.path"), db), mustWork = FALSE)
+    if (!is.blastdb(db)) {
+      stop("'", basename(db.ori), "' is not a valid BLAST database", call. = FALSE)
+    }
+  }
+  Sys.setenv(BLASTDB = dirname(db))
+  basename(db)
+}
+
+
+is.blastdb <- function(db) {
+  ## Protein and DNA database estensions, respectively.
+  ## three of these must be present
+  db_ext <- c("pin", "psq", ".phr", "nin", "nsq", "nhr")
+  if (length(dbs <- dir(dirname(db), pattern = paste0(basename(db), '\\..+'))) > 0) {
+    sum(db_ext %in% strsplitN(dbs, "\\.", 1, "end")) == 3
+  } else {
+    FALSE
+  }
+}
+
 
 #' Wrapper for the NCBI Nucleotide-Nucleotide BLAST
 #' 

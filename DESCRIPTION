@@ -1,8 +1,8 @@
 Package: blastr
-Version: 0.2.1
+Version: 0.2.2
 Date: 2013-06-13
 Type: Package
-Title: A wrapper arpound NCBI Blast.
+Title: A wrapper for NCBI Blast.
 Authors@R: person("Gerhard", "Schöfl", role=c("aut","cre"),
     email="gschofl@yahoo.de")
 Description: A set of classes and functions to manage
@@ -10,7 +10,7 @@ Description: A set of classes and functions to manage
 License: MIT
 Encoding: latin1
 Depends:
-    R (>= 2.15)
+    R (>= 3.0.0)
 Imports:
     assertthat,
     Biostrings,

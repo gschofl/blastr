@@ -10,9 +10,9 @@
 #'  }
 #'
 #' @author
-#' Gerhard Schoefl \email{gschof@@yahoo.de}
+#' Gerhard Schoefl \email{gschofl@@yahoo.de}
 #'
-#' Maintainer: Gerhard Schoefl \email{gschof@@yahoo.de}
+#' Maintainer: Gerhard Schoefl \email{gschofl@@yahoo.de}
 #' @name blastr
 #' @docType package
 #' @title A wrapper around NCBI Blast.
