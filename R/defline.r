@@ -42,7 +42,6 @@ DeflineSet <- listclassConstructor('DeflineSet', 'Defline')
 
 # getter, Defline, DeflineSet --------------------------------------------
 
-#' @keywords internal
 setMethod(".deflineID", "Defline", function (x, ...) {
   paste0( x@tag %|NA|% '',
           ifelse(is.na(x@tag), '', '|'),
@@ -54,8 +53,6 @@ setMethod(".deflineID", "DeflineSet", function (x, ...) {
   vapply(x, .deflineID, character(1))
 })
 
-
-#' @keywords internal
 setMethod(".deflineDesc", "Defline", function (x, with_species = TRUE) {
   if (with_species)
     paste0( x@description %|na|% '',
@@ -69,8 +66,6 @@ setMethod(".deflineDesc", "DeflineSet", function (x, with_species = TRUE) {
   vapply(x, .deflineDesc, with_species = with_species, FUN.VALUE=character(1))
 })
 
-
-#' @keywords internal
 setMethod(".getDeflineID", 'Defline', function (x, db = 'any') {
   db <- match.arg(db, c('any', .tags))
   if (db == 'any') {

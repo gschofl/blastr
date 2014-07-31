@@ -1,14 +1,9 @@
 #' @include utils.r
-#' @importFrom stringr str_split_fixed
-#' @importFrom stringr str_extract_all
-#' @importFrom stringr str_detect
-#' @importFrom stringr str_match
-#' @importFrom stringr perl
+#' @importFrom stringr str_split_fixed str_extract_all str_detect str_match perl
 NULL
 
 ## NCBI BLAST defline database tags
 .tags  <- c("lcl","gb","emb","pir","sp","ref","gnl", "gi","dbj","prf","pdb","pat","bbs")
-
 
 #' @keywords internal
 .escape <- function(s, httpPOST=FALSE) {
@@ -26,7 +21,6 @@ NULL
   s <- gsub("\\+(and)\\+|\\+(or)\\+|\\+(not)\\+","\\+\\U\\1\\U\\2\\U\\3\\+", s, perl=TRUE)
   s
 }
-
 
 #' Construct deflines
 #' @keywords internal
@@ -63,7 +57,6 @@ make_deflines <- function(query, prefix = "lcl") {
   list(defline=paste(id, desc), parse_defline=parse_defline)
 }
 
-
 #' @importFrom Biostrings fasta.info
 #' @keywords internal
 make_blast_query <- function(query, transl = FALSE) {
@@ -91,7 +84,6 @@ make_blast_query <- function(query, transl = FALSE) {
   writeLines(paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse="\n"), tmp)
   list(query=tmp, nqueries=length(seqnames$defline), parse_deflines=seqnames$parse_defline) 
 }
-
 
 #' @keywords internal
 wrapAlignment <- function(seq1, ...,  prefix=c(""), suffix=c(""),

@@ -4,15 +4,15 @@
 #'  \tabular{ll}{
 #'    Package: \tab blastr\cr
 #'    Type: \tab Package\cr
-#'    Version: \tab 0.2.1\cr
-#'    Date: \tab 2013-11-22\cr
+#'    Version: \tab 0.2.2\cr
+#'    Date: \tab 2014-07-31\cr
 #'    License: \tab MIT\cr
 #'  }
 #'
 #' @author
-#' Gerhard Schoefl \email{gschofl@@yahoo.de}
+#' Gerhard Schoefl \email{gerhard.schofl@@gmail.com}
 #'
-#' Maintainer: Gerhard Schoefl \email{gschofl@@yahoo.de}
+#' Maintainer: Gerhard Schoefl \email{gerhard.schofl@@gmail.com}
 #' @name blastr
 #' @docType package
 #' @title A wrapper around NCBI Blast.

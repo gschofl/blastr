@@ -1,8 +1,5 @@
 #' @include blastReportDB-class.r
-#' @importFrom XML xmlEventParse
-#' @importFrom XML xmlValue
-#' @importFrom XML xmlStopParser
-#' @importFrom XML xpathApply
+#' @importFrom XML xmlEventParse xmlValue xmlStopParser xpathApply
 NULL
 
 BlastOutput.Iterations <- function(

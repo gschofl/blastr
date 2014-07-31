@@ -3,11 +3,7 @@
 
 #' @include blastReport-class.r
 #' @importFrom Biostrings BString
-#' @importFrom XML xmlInternalTreeParse
-#' @importFrom XML xmlRoot
-#' @importFrom XML xpathApply
-#' @importFrom XML xmlDoc
-#' @importFrom XML xmlValue
+#' @importFrom XML xmlInternalTreeParse xmlRoot xpathApply xmlDoc xmlValue
 NULL
 
 #' Parse NCBI BLAST XML files into \linkS4class{blastReport} objects.

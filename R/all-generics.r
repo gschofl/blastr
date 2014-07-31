@@ -36,6 +36,7 @@ NULL
 
 # Hsp-accessor generics -------------------------------------------------
 
+
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
 #' Extract the Hsp indices.
@@ -46,9 +47,7 @@ NULL
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname HspNum-methods
 #' @export
-#' @docType methods
 setGeneric("getHspNum", function (x, ...) standardGeneric("getHspNum"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -61,21 +60,17 @@ setGeneric("getHspNum", function (x, ...) standardGeneric("getHspNum"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname Bitscore-methods
 #' @export
-#' @docType methods
 setGeneric("getBitscore", function (x, ...) standardGeneric("getBitscore"))
 
 #' @usage getMaxBitscore(x)
 #' @rdname Bitscore-methods
 #' @export
-#' @docType methods
 setGeneric("getMaxBitscore", function (x, ...) standardGeneric("getMaxBitscore"))
 
 #' @usage getTotalBitscore(x)
 #' @rdname Bitscore-methods
 #' @export
-#' @docType methods
 setGeneric("getTotalBitscore", function (x, ...) standardGeneric("getTotalBitscore"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -87,9 +82,7 @@ setGeneric("getTotalBitscore", function (x, ...) standardGeneric("getTotalBitsco
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname Score-methods
 #' @export
-#' @docType methods
 setGeneric("getScore", function (x, ...) standardGeneric("getScore"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -101,9 +94,7 @@ setGeneric("getScore", function (x, ...) standardGeneric("getScore"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname Evalue-methods
 #' @export
-#' @docType methods
 setGeneric("getEvalue", function (x, ...) standardGeneric("getEvalue"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -116,9 +107,7 @@ setGeneric("getEvalue", function (x, ...) standardGeneric("getEvalue"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname Identity-methods
 #' @export
-#' @docType methods
 setGeneric("getIdentity", function (x, ...) standardGeneric("getIdentity"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -131,9 +120,7 @@ setGeneric("getIdentity", function (x, ...) standardGeneric("getIdentity"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname Positive-methods
 #' @export
-#' @docType methods
 setGeneric("getPositive", function (x, ...) standardGeneric("getPositive"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -146,9 +133,7 @@ setGeneric("getPositive", function (x, ...) standardGeneric("getPositive"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname Gaps-methods
 #' @export
-#' @docType methods
 setGeneric("getGaps", function (x, ...) standardGeneric("getGaps"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -161,9 +146,7 @@ setGeneric("getGaps", function (x, ...) standardGeneric("getGaps"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname AlignLen-methods
 #' @export
-#' @docType methods
 setGeneric("getAlignLen", function (x, ...) standardGeneric("getAlignLen"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -176,9 +159,7 @@ setGeneric("getAlignLen", function (x, ...) standardGeneric("getAlignLen"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname QueryFrom-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryFrom", function (x, ...) standardGeneric("getQueryFrom"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -191,9 +172,7 @@ setGeneric("getQueryFrom", function (x, ...) standardGeneric("getQueryFrom"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname QueryTo-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryTo", function (x, ...) standardGeneric("getQueryTo"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -206,9 +185,7 @@ setGeneric("getQueryTo", function (x, ...) standardGeneric("getQueryTo"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname QueryFrame-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryFrame", function (x, ...) standardGeneric("getQueryFrame"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -221,9 +198,7 @@ setGeneric("getQueryFrame", function (x, ...) standardGeneric("getQueryFrame"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname HitFrom-methods
 #' @export
-#' @docType methods
 setGeneric("getHitFrom", function (x, ...) standardGeneric("getHitFrom"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -236,9 +211,7 @@ setGeneric("getHitFrom", function (x, ...) standardGeneric("getHitFrom"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname HitTo-methods
 #' @export
-#' @docType methods
 setGeneric("getHitTo", function (x, ...) standardGeneric("getHitTo"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -251,9 +224,7 @@ setGeneric("getHitTo", function (x, ...) standardGeneric("getHitTo"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname HitFrame-methods
 #' @export
-#' @docType methods
 setGeneric("getHitFrame", function (x, ...) standardGeneric("getHitFrame"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -266,9 +237,7 @@ setGeneric("getHitFrame", function (x, ...) standardGeneric("getHitFrame"))
 #' @return An \linkS4class{IRanges} object.
 #' @rdname QueryRange-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryRange", function (x, ...) standardGeneric("getQueryRange"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -281,9 +250,7 @@ setGeneric("getQueryRange", function (x, ...) standardGeneric("getQueryRange"))
 #' @return An \linkS4class{IRanges} object.
 #' @rdname HitRange-methods
 #' @export
-#' @docType methods
 setGeneric("getHitRange", function (x, ...) standardGeneric("getHitRange"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -296,9 +263,7 @@ setGeneric("getHitRange", function (x, ...) standardGeneric("getHitRange"))
 #' @return An \linkS4class{BString} or \linkS4class{BStringSet} object.
 #' @rdname QuerySeq-methods
 #' @export
-#' @docType methods
 setGeneric("getQuerySeq", function (x, ...) standardGeneric("getQuerySeq"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -311,9 +276,7 @@ setGeneric("getQuerySeq", function (x, ...) standardGeneric("getQuerySeq"))
 #' @return An \linkS4class{BString} or \linkS4class{BStringSet} object.
 #' @rdname HitSeq-methods
 #' @export
-#' @docType methods
 setGeneric("getHitSeq", function (x, ...) standardGeneric("getHitSeq"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -326,9 +289,7 @@ setGeneric("getHitSeq", function (x, ...) standardGeneric("getHitSeq"))
 #' @return An \linkS4class{BString} or \linkS4class{BStringSet} object.
 #' @rdname Match-methods
 #' @export
-#' @docType methods
 setGeneric("getMatch", function (x, ...) standardGeneric("getMatch"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -341,16 +302,12 @@ setGeneric("getMatch", function (x, ...) standardGeneric("getMatch"))
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname PercIdentity-methods
 #' @export
-#' @docType methods
 setGeneric("getPercIdentity", function (x, ...) standardGeneric("getPercIdentity"))
-
 
 #' @usage getMaxPercIdentity(x)
 #' @rdname PercIdentity-methods
 #' @export
-#' @docType methods
 setGeneric("getMaxPercIdentity", function (x, ...) standardGeneric("getMaxPercIdentity"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -363,9 +320,7 @@ setGeneric("getMaxPercIdentity", function (x, ...) standardGeneric("getMaxPercId
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname PercPositive-methods
 #' @export
-#' @docType methods
 setGeneric("getPercPositive", function (x, ...) standardGeneric("getPercPositive"))
-
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
@@ -378,9 +333,7 @@ setGeneric("getPercPositive", function (x, ...) standardGeneric("getPercPositive
 #' @return An numeric vector or a list of numeric vectors
 #' @rdname PercGaps-methods
 #' @export
-#' @docType methods
 setGeneric("getPercGaps", function (x, ...) standardGeneric("getPercGaps"))
-
 
 #' Extract the total Query Coverage.
 #' 
@@ -391,9 +344,7 @@ setGeneric("getPercGaps", function (x, ...) standardGeneric("getPercGaps"))
 #' @usage getQueryCoverage(x)
 #' @rdname QueryCoverage-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryCoverage", function (x, ...) standardGeneric("getQueryCoverage"))
-
 
 #' Extract the total Hit Coverage.
 #' 
@@ -404,7 +355,6 @@ setGeneric("getQueryCoverage", function (x, ...) standardGeneric("getQueryCovera
 #' @usage getHitCoverage(x)
 #' @rdname HitCoverage-methods
 #' @export
-#' @docType methods
 setGeneric("getHitCoverage", function (x, ...) standardGeneric("getHitCoverage"))
 
 
@@ -420,9 +370,7 @@ setGeneric("getHitCoverage", function (x, ...) standardGeneric("getHitCoverage")
 #' @return An numeric vector.
 #' @rdname HspID-methods
 #' @export
-#' @docType methods
 setGeneric("getHspID", function (x, ...) standardGeneric("getHspID"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -433,9 +381,7 @@ setGeneric("getHspID", function (x, ...) standardGeneric("getHspID"))
 #' @return An numeric vector.
 #' @rdname HspHitID-methods
 #' @export
-#' @docType methods
 setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -446,9 +392,7 @@ setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
 #' @return An numeric vector.
 #' @rdname nhsps-methods
 #' @export
-#' @docType methods
 setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -460,9 +404,7 @@ setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
 #' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @rdname Hsp-methods
 #' @export
-#' @docType methods
 setGeneric("getHsp", function (x, ...) standardGeneric("getHsp"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -475,9 +417,7 @@ setGeneric("getHsp", function (x, ...) standardGeneric("getHsp"))
 #' @return A numeric vector or list of numeric vectors.
 #' @rdname HitNum-methods
 #' @export
-#' @docType methods
 setGeneric("getHitNum", function (x, ...) standardGeneric("getHitNum"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -489,9 +429,7 @@ setGeneric("getHitNum", function (x, ...) standardGeneric("getHitNum"))
 #' @return A numeric vector or list of numeric vectors.
 #' @rdname HitLen-methods
 #' @export
-#' @docType methods
 setGeneric("getHitLen", function (x, ...) standardGeneric("getHitLen"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -504,9 +442,7 @@ setGeneric("getHitLen", function (x, ...) standardGeneric("getHitLen"))
 #' @return An character matrix or character vector.
 #' @rdname HitID-methods
 #' @export
-#' @docType methods
 setGeneric("getHitID", function (x, ...) standardGeneric("getHitID"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -516,11 +452,9 @@ setGeneric("getHitID", function (x, ...) standardGeneric("getHitID"))
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A character vector or list of character vectors.
-#' @docType methods
 #' @rdname Accession-methods
 #' @export
 setGeneric("getAccession", function (x, ...) standardGeneric("getAccession"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -532,9 +466,7 @@ setGeneric("getAccession", function (x, ...) standardGeneric("getAccession"))
 #' @return A character vector or list of character vectors.
 #' @rdname GeneID-methods
 #' @export
-#' @docType methods
 setGeneric("getGeneID", function (x, ...) standardGeneric("getGeneID"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -546,16 +478,12 @@ setGeneric("getGeneID", function (x, ...) standardGeneric("getGeneID"))
 #' @return A character vector or list of character vectors.
 #' @rdname HitDef-methods
 #' @export
-#' @docType methods
 setGeneric("getHitDef", function (x, ...) standardGeneric("getHitDef"))
-
 
 #' @usage getPrimaryHitDef(x, ...)
 #' @rdname HitDef-methods
 #' @export
-#' @docType methods
 setGeneric("getPrimaryHitDef", function (x, ...) standardGeneric("getPrimaryHitDef"))
-
 
 #' Access components of Blast Hits
 #' 
@@ -567,18 +495,16 @@ setGeneric("getPrimaryHitDef", function (x, ...) standardGeneric("getPrimaryHitD
 #' @return A character vector or list of character vectors.
 #' @rdname Defline-methods
 #' @export
-#' @docType methods
 setGeneric("getDefline", function (x, ...) standardGeneric("getDefline"))
-
 
 #' @usage getPrimaryDefline(x, ...)
 #' @rdname Defline-methods
 #' @export
-#' @docType methods
 setGeneric("getPrimaryDefline", function (x, ...) standardGeneric("getPrimaryDefline"))
 
 
 # query-accessor generics ------------------------------------------------
+
 
 #' Access components of Blast Iterations (Queries)
 #' 
@@ -603,9 +529,7 @@ setGeneric("getQuery", function (x, ...) standardGeneric("getQuery"))
 #' @return A numeric vector or list of numeric vectors.
 #' @rdname IterNum-methods
 #' @export
-#' @docType methods
 setGeneric("getIterNum", function (x, ...) standardGeneric("getIterNum"))
-
 
 #' Access components of Blast Iterations (Queries)
 #' 
@@ -617,9 +541,7 @@ setGeneric("getIterNum", function (x, ...) standardGeneric("getIterNum"))
 #' @return A numeric vector or list of numeric vectors.
 #' @rdname QueryID-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryID", function (x, ...) standardGeneric("getQueryID"))
-
 
 #' Access components of Blast Iterations (Queries)
 #' 
@@ -631,9 +553,7 @@ setGeneric("getQueryID", function (x, ...) standardGeneric("getQueryID"))
 #' @return A character vector or list of character vectors.
 #' @rdname QueryDef-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryDef", function (x, ...) standardGeneric("getQueryDef"))
-
 
 #' Access components of Blast Iterations (Queries)
 #' 
@@ -645,9 +565,7 @@ setGeneric("getQueryDef", function (x, ...) standardGeneric("getQueryDef"))
 #' @return A numeric vector or list of numeric vectors.
 #' @rdname QueryLen-methods
 #' @export
-#' @docType methods
 setGeneric("getQueryLen", function (x, ...) standardGeneric("getQueryLen"))
-
 
 #' Access components of Blast Iterations (Queries)
 #' 
@@ -659,9 +577,7 @@ setGeneric("getQueryLen", function (x, ...) standardGeneric("getQueryLen"))
 #' @return A \linkS4class{hit} or \linkS4class{HitList} object.
 #' @rdname Hit-methods
 #' @export
-#' @docType methods
 setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
-
 
 #' Access components of Blast Iterations (Queries)
 #' 
@@ -672,7 +588,6 @@ setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
 #' @return An numeric vector.
 #' @rdname nhits-methods
 #' @export
-#' @docType methods
 setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
 
 
@@ -687,9 +602,7 @@ setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
 #' @return A \linkS4class{blastHeader} object.
 #' @rdname Header-methods
 #' @export
-#' @docType methods
 setGeneric("getHeader", function (x, ...) standardGeneric("getHeader"))
-
 
 #' Extract Iterations/Queries from a BLAST report
 #' 
@@ -699,9 +612,7 @@ setGeneric("getHeader", function (x, ...) standardGeneric("getHeader"))
 #' @return A \linkS4class{Iteration} or \linkS4class{IterationList} object.
 #' @rdname Iteration-methods
 #' @export
-#' @docType methods
 setGeneric("getIteration", function (x, ...) standardGeneric("getIteration"))
-
 
 #' Extract BLAST parameters and statistics from a report
 #' 
@@ -711,7 +622,6 @@ setGeneric("getIteration", function (x, ...) standardGeneric("getIteration"))
 #' @return A \linkS4class{blastParameters} object.
 #' @rdname Params-methods
 #' @export
-#' @docType methods
 setGeneric("getParams", function (x, ...) standardGeneric("getParams"))
 
 
