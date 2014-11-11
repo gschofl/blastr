@@ -6,20 +6,18 @@
 #' @importFrom XML xmlInternalTreeParse xmlRoot xpathApply xmlDoc xmlValue
 NULL
 
-#' Parse NCBI BLAST XML files into \linkS4class{blastReport} objects.
+#' Parse NCBI BLAST XML files.
 #' 
-#' @param blastfile Blast output in XML format (file path or character vector)
+#' @param blast Blast output in XML format (file path or character vector)
 #' @param asText If \code{TRUE} the XML blast output is passed in as a string
 #' instead of a file path.
-#' 
-#' @return A \code{\linkS4class{blastReport}} object.
-#' @rdname blastReport
+#' @return A \code{\linkS4class{BlastReport}} object.
 #' @export
 blastReport <- function(blast, asText = FALSE) {
   doc <- xmlRoot(xmlInternalTreeParse(blast, asText = asText))
   dbr <- parseBlastDatabaseReport(doc)
   iter_elems <- xpathApply(doc, '/BlastOutput/BlastOutput_iterations/Iteration')
-  new_blastReport(
+  new_BlastReport(
     header = dbr$header,
     parameters = dbr$params,
     iterations = parseIterations(iter_elems)

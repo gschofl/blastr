@@ -86,47 +86,10 @@ make_blast_query <- function(query, transl = FALSE) {
 }
 
 #' @keywords internal
-wrapAlignment <- function(seq1, ...,  prefix=c(""), suffix=c(""),
-                          start=c(1), reverse=c(FALSE), sep=2) {
-  # seqs <- c(seq1, list(seq2, seq3))
-  seqs <- c(list(seq1), list(...))
-  lseqs <- vapply(seqs, nchar, FUN.VALUE=numeric(1))
+wrap_alignment <- function(seq1, ...,  prefix = "", suffix = "",
+                          start = 1, reverse = FALSE, sep = 2) {
   
-  if (!length(unique(lseqs)) == 1L)
-    stop("Sequences are of different length")
-  
-  pref_width <- max(vapply(prefix, nchar, numeric(1))) 
-  aln_start_width <- aln_end_width <-  max(c(nchar(start), nchar(unique(lseqs))))
-  suf_width <- max(vapply(suffix, nchar, numeric(1)))
-  offset <- pref_width + sep + aln_start_width + 1 + 1 + aln_end_width + sep + suf_width  
-  
-  # break up sequences  
-  s <- linebreak(seqs, getOption("width") - offset - 2, FULL_FORCE=TRUE)
-  s <- strsplit(s, "\n")  
-  seq_widths <- nchar(s[[1L]])
-  max_seq_width <- max(seq_widths)
-  
-  seq_starts <- mapply(function(start, rev) {
-    x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
-    x <- x[-which.max(x)]
-    x
-  }, start=start, rev=reverse, SIMPLIFY=FALSE, USE.NAMES=TRUE)
-  
-  new_starts <- mapply(function(s, rev) if (rev) s[length(s) - 1] - 1 else s[2] - 1,
-                       s=seq_starts, rev=reverse)
-  
-  seq_ends <- mapply(function(start, rev) {
-    x <- Reduce("+", seq_widths, init=start, right=rev, accumulate=TRUE)
-    x <- x[-which.max(x)]
-  }, start=new_starts, rev=reverse, SIMPLIFY=FALSE, USE.NAMES=TRUE)  
-  
-  tmp <- seq_ends[reverse]
-  seq_ends[reverse] <- seq_starts[reverse]
-  seq_starts[reverse] <- tmp
- 
-  seq_starts[vapply(seq_starts, function(x) length(x)==0, FALSE)] <- ""
-  seq_ends[vapply(seq_ends, function(x) length(x)==0, FALSE)] <- ""
-  pasteAlignment <- function(prefix, seq_starts, s, seq_ends, suffix) {
+  paste_alignment <- function(prefix, seq_starts, s, seq_ends, suffix) {
     paste0(
       pad(prefix, pref_width, "right"), blanks(sep),
       pad(seq_starts, aln_start_width, "left"), blanks(1),
@@ -135,8 +98,50 @@ wrapAlignment <- function(seq1, ...,  prefix=c(""), suffix=c(""),
       pad(suffix, suf_width, "right")
     )
   }
-  s <- .mapply(pasteAlignment, list(prefix=prefix, seq_starts=seq_starts, s=s,
-                                    seq_ends=seq_ends, suffix=suffix), NULL)
+  
+  # seqs <- c(seq1, list(seq2, seq3))
+  seqs <- c(list(seq1), list(...))
+  lseqs <- vapply(seqs, nchar, numeric(1))
+  
+  if (!length(unique(lseqs)) == 1L) {
+    stop("Sequences are of different length")
+  }
+  
+  pref_width <- max(vapply(prefix, nchar, numeric(1))) 
+  aln_start_width <- aln_end_width <-  max(c(nchar(start), nchar(unique(lseqs))))
+  suf_width <- max(vapply(suffix, nchar, numeric(1)))
+  offset <- pref_width + sep + aln_start_width + 1 + 1 + aln_end_width + sep + suf_width  
+  
+  # break up sequences  
+  s <- linebreak(seqs, getOption("width") - offset - 2, FULL_FORCE = TRUE)
+  s <- strsplit(s, "\n")  
+  seq_widths <- nchar(s[[1L]])
+  max_seq_width <- max(seq_widths)
+  
+  seq_starts <- mapply(function(start, rev) {
+    x <- Reduce("+", seq_widths, init = start, right = rev, accumulate = TRUE)
+    x <- x[-which.max(x)]
+    x
+  }, start = start, rev = reverse, SIMPLIFY = FALSE, USE.NAMES = TRUE)
+  
+  new_starts <- mapply(function(s, rev) if (rev) s[length(s) - 1] - 1 else s[2] - 1,
+                       s = seq_starts, rev = reverse)
+  
+  seq_ends <- mapply(function(start, rev) {
+    x <- Reduce("+", seq_widths, init = start, right = rev, accumulate = TRUE)
+    x <- x[-which.max(x)]
+  }, start = new_starts, rev = reverse, SIMPLIFY = FALSE, USE.NAMES = TRUE)  
+  
+  tmp <- seq_ends[reverse]
+  seq_ends[reverse] <- seq_starts[reverse]
+  seq_starts[reverse] <- tmp
+ 
+  seq_starts[vapply(seq_starts, function(x) length(x) == 0, FALSE)] <- ""
+  seq_ends[vapply(seq_ends, function(x) length(x) == 0, FALSE)] <- ""
+
+  s <- .mapply(paste_alignment, list(prefix = prefix, seq_starts = seq_starts,
+                                     s = s, seq_ends = seq_ends, suffix = suffix),
+               NULL)
   paste0(do.call(function(...) paste(..., sep="\n"), s), collapse="\n\n")
 }
 

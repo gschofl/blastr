@@ -44,55 +44,40 @@ NULL
 #' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @param max If \code{TRUE} return index of the Hsp with the highest
 #' bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname HspNum-methods
+#' @return An numeric vector or a list of numeric vectors.
 #' @export
 setGeneric("getHspNum", function (x, ...) standardGeneric("getHspNum"))
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
-#' Extract the bit score.
+#' Extract the bit score, raw score, or expect values.
 #' 
 #' @usage getBitscore(x, max = FALSE, sum = FALSE)
 #' @param x  A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @param max If \code{TRUE} return only the highest score.
 #' @param sum If \code{TRUE} sum scores from all hsps of a Blast hit.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname Bitscore-methods
+#' @return An numeric vector or a list of numeric vectors.
+#' @rdname scores
 #' @export
 setGeneric("getBitscore", function (x, ...) standardGeneric("getBitscore"))
 
 #' @usage getMaxBitscore(x)
-#' @rdname Bitscore-methods
+#' @rdname scores
 #' @export
 setGeneric("getMaxBitscore", function (x, ...) standardGeneric("getMaxBitscore"))
 
 #' @usage getTotalBitscore(x)
-#' @rdname Bitscore-methods
+#' @rdname scores
 #' @export
 setGeneric("getTotalBitscore", function (x, ...) standardGeneric("getTotalBitscore"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the raw score.
-#' 
 #' @usage getScore(x, max = FALSE)
-#' @param x  A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return only the highest score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname Score-methods
+#' @rdname scores
 #' @export
 setGeneric("getScore", function (x, ...) standardGeneric("getScore"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the expect value.
-#' 
 #' @usage getEvalue(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return only the highest evalue.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname Evalue-methods
+#' @rdname scores
 #' @export
 setGeneric("getEvalue", function (x, ...) standardGeneric("getEvalue"))
 
@@ -105,7 +90,6 @@ setGeneric("getEvalue", function (x, ...) standardGeneric("getEvalue"))
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname Identity-methods
 #' @export
 setGeneric("getIdentity", function (x, ...) standardGeneric("getIdentity"))
 
@@ -118,7 +102,6 @@ setGeneric("getIdentity", function (x, ...) standardGeneric("getIdentity"))
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname Positive-methods
 #' @export
 setGeneric("getPositive", function (x, ...) standardGeneric("getPositive"))
 
@@ -131,7 +114,6 @@ setGeneric("getPositive", function (x, ...) standardGeneric("getPositive"))
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname Gaps-methods
 #' @export
 setGeneric("getGaps", function (x, ...) standardGeneric("getGaps"))
 
@@ -144,150 +126,79 @@ setGeneric("getGaps", function (x, ...) standardGeneric("getGaps"))
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname AlignLen-methods
 #' @export
 setGeneric("getAlignLen", function (x, ...) standardGeneric("getAlignLen"))
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
-#' Extract the position of the start residues the query sequence.
+#' Extract the position of the start, end, frame, or range of the residues of
+#' query and hit sequences.
 #' 
 #' @usage getQueryFrom(x, max = FALSE)
 #' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname QueryFrom-methods
+#' @return An numeric vector or a list of numeric vectors.
+#' @rdname coordinates
 #' @export
 setGeneric("getQueryFrom", function (x, ...) standardGeneric("getQueryFrom"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the position of end residues for the query sequence.
-#' 
 #' @usage getQueryTo(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname QueryTo-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getQueryTo", function (x, ...) standardGeneric("getQueryTo"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the frame of the query sequence.
-#' 
 #' @usage getQueryFrame(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname QueryFrame-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getQueryFrame", function (x, ...) standardGeneric("getQueryFrame"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the position of the start residues for the hit sequence.
-#' 
 #' @usage getHitFrom(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname HitFrom-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getHitFrom", function (x, ...) standardGeneric("getHitFrom"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the position of end residues for the hit sequence.
-#' 
 #' @usage getHitTo(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname HitTo-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getHitTo", function (x, ...) standardGeneric("getHitTo"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the frame of the hit sequence.
-#' 
 #' @usage getHitFrame(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An numeric vector or a list of numeric vectors
-#' @rdname HitFrame-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getHitFrame", function (x, ...) standardGeneric("getHitFrame"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the alignment ranges for the query sequence.
-#' 
 #' @usage getQueryRange(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
 #' @return An \linkS4class{IRanges} object.
-#' @rdname QueryRange-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getQueryRange", function (x, ...) standardGeneric("getQueryRange"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the alignment ranges for the hit sequence.
-#' 
 #' @usage getHitRange(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An \linkS4class{IRanges} object.
-#' @rdname HitRange-methods
+#' @rdname coordinates
 #' @export
 setGeneric("getHitRange", function (x, ...) standardGeneric("getHitRange"))
 
 #' Access components of High-Scoring Pairs (Hsps)
 #' 
-#' Extract the query sequence.
+#' Extract the query or hit sequence.
 #' 
 #' @usage getQuerySeq(x, max = FALSE)
 #' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An \linkS4class{BString} or \linkS4class{BStringSet} object.
-#' @rdname QuerySeq-methods
+#' @rdname sequence
 #' @export
 setGeneric("getQuerySeq", function (x, ...) standardGeneric("getQuerySeq"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the hit sequence.
-#' 
 #' @usage getHitSeq(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An \linkS4class{BString} or \linkS4class{BStringSet} object.
-#' @rdname HitSeq-methods
+#' @rdname sequence
 #' @export
 setGeneric("getHitSeq", function (x, ...) standardGeneric("getHitSeq"))
 
-#' Access components of High-Scoring Pairs (Hsps)
-#' 
-#' Extract the match sequence (midline).
-#' 
 #' @usage getMatch(x, max = FALSE)
-#' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @param max If \code{TRUE} return data only for the hsp with the
-#' highest bit score.
-#' @return An \linkS4class{BString} or \linkS4class{BStringSet} object.
-#' @rdname Match-methods
+#' @rdname sequence
 #' @export
 setGeneric("getMatch", function (x, ...) standardGeneric("getMatch"))
 
@@ -300,12 +211,11 @@ setGeneric("getMatch", function (x, ...) standardGeneric("getMatch"))
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname PercIdentity-methods
 #' @export
 setGeneric("getPercIdentity", function (x, ...) standardGeneric("getPercIdentity"))
 
 #' @usage getMaxPercIdentity(x)
-#' @rdname PercIdentity-methods
+#' @rdname getPercIdentity
 #' @export
 setGeneric("getMaxPercIdentity", function (x, ...) standardGeneric("getMaxPercIdentity"))
 
@@ -318,7 +228,6 @@ setGeneric("getMaxPercIdentity", function (x, ...) standardGeneric("getMaxPercId
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname PercPositive-methods
 #' @export
 setGeneric("getPercPositive", function (x, ...) standardGeneric("getPercPositive"))
 
@@ -331,7 +240,6 @@ setGeneric("getPercPositive", function (x, ...) standardGeneric("getPercPositive
 #' @param max If \code{TRUE} return data only for the hsp with the
 #' highest bit score.
 #' @return An numeric vector or a list of numeric vectors
-#' @rdname PercGaps-methods
 #' @export
 setGeneric("getPercGaps", function (x, ...) standardGeneric("getPercGaps"))
 
@@ -342,7 +250,6 @@ setGeneric("getPercGaps", function (x, ...) standardGeneric("getPercGaps"))
 #' 
 #' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @usage getQueryCoverage(x)
-#' @rdname QueryCoverage-methods
 #' @export
 setGeneric("getQueryCoverage", function (x, ...) standardGeneric("getQueryCoverage"))
 
@@ -353,12 +260,11 @@ setGeneric("getQueryCoverage", function (x, ...) standardGeneric("getQueryCovera
 #' 
 #' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @usage getHitCoverage(x)
-#' @rdname HitCoverage-methods
 #' @export
 setGeneric("getHitCoverage", function (x, ...) standardGeneric("getHitCoverage"))
 
 
-# hit-accessor generics --------------------------------------------------
+# Hit-accessor generics --------------------------------------------------
 
 
 #' Access components of Blast Hits
@@ -368,7 +274,6 @@ setGeneric("getHitCoverage", function (x, ...) standardGeneric("getHitCoverage")
 #' @usage getHspID(x)
 #' @param x A \linkS4class{blastReportDB} connection.
 #' @return An numeric vector.
-#' @rdname HspID-methods
 #' @export
 setGeneric("getHspID", function (x, ...) standardGeneric("getHspID"))
 
@@ -379,7 +284,6 @@ setGeneric("getHspID", function (x, ...) standardGeneric("getHspID"))
 #' @usage getHspHitID(x)
 #' @param x A \linkS4class{blastReportDB} connection.
 #' @return An numeric vector.
-#' @rdname HspHitID-methods
 #' @export
 setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
 
@@ -390,7 +294,6 @@ setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
 #' @usage nhsps(x)
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @return An numeric vector.
-#' @rdname nhsps-methods
 #' @export
 setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
 
@@ -402,7 +305,6 @@ setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @rdname Hsp-methods
 #' @export
 setGeneric("getHsp", function (x, ...) standardGeneric("getHsp"))
 
@@ -415,7 +317,6 @@ setGeneric("getHsp", function (x, ...) standardGeneric("getHsp"))
 #' @param ... Further arguments passed to methods.
 #' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @return A numeric vector or list of numeric vectors.
-#' @rdname HitNum-methods
 #' @export
 setGeneric("getHitNum", function (x, ...) standardGeneric("getHitNum"))
 
@@ -427,7 +328,6 @@ setGeneric("getHitNum", function (x, ...) standardGeneric("getHitNum"))
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A numeric vector or list of numeric vectors.
-#' @rdname HitLen-methods
 #' @export
 setGeneric("getHitLen", function (x, ...) standardGeneric("getHitLen"))
 
@@ -440,7 +340,6 @@ setGeneric("getHitLen", function (x, ...) standardGeneric("getHitLen"))
 #' @param db Database tag (e.g. 'gi', 'ref', 'gb', 'dbj', 'any')
 #' @param ... Further arguments passed to methods.
 #' @return An character matrix or character vector.
-#' @rdname HitID-methods
 #' @export
 setGeneric("getHitID", function (x, ...) standardGeneric("getHitID"))
 
@@ -452,7 +351,6 @@ setGeneric("getHitID", function (x, ...) standardGeneric("getHitID"))
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A character vector or list of character vectors.
-#' @rdname Accession-methods
 #' @export
 setGeneric("getAccession", function (x, ...) standardGeneric("getAccession"))
 
@@ -464,7 +362,6 @@ setGeneric("getAccession", function (x, ...) standardGeneric("getAccession"))
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A character vector or list of character vectors.
-#' @rdname GeneID-methods
 #' @export
 setGeneric("getGeneID", function (x, ...) standardGeneric("getGeneID"))
 
@@ -476,12 +373,11 @@ setGeneric("getGeneID", function (x, ...) standardGeneric("getGeneID"))
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A character vector or list of character vectors.
-#' @rdname HitDef-methods
 #' @export
 setGeneric("getHitDef", function (x, ...) standardGeneric("getHitDef"))
 
 #' @usage getPrimaryHitDef(x, ...)
-#' @rdname HitDef-methods
+#' @rdname getHitDef
 #' @export
 setGeneric("getPrimaryHitDef", function (x, ...) standardGeneric("getPrimaryHitDef"))
 
@@ -493,12 +389,11 @@ setGeneric("getPrimaryHitDef", function (x, ...) standardGeneric("getPrimaryHitD
 #' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A character vector or list of character vectors.
-#' @rdname Defline-methods
 #' @export
 setGeneric("getDefline", function (x, ...) standardGeneric("getDefline"))
 
 #' @usage getPrimaryDefline(x, ...)
-#' @rdname Defline-methods
+#' @rdname getDefline
 #' @export
 setGeneric("getPrimaryDefline", function (x, ...) standardGeneric("getPrimaryDefline"))
 
@@ -515,7 +410,6 @@ setGeneric("getPrimaryDefline", function (x, ...) standardGeneric("getPrimaryDef
 #' @param x A \linkS4class{blastReport} or \linkS4class{blastReportDB} object.
 #' @param ... Further arguments passed to methods.
 #' @return A numeric vector or list of numeric vectors.
-#' @rdname getQuery-methods
 #' @export
 setGeneric("getQuery", function (x, ...) standardGeneric("getQuery"))
 
@@ -527,7 +421,6 @@ setGeneric("getQuery", function (x, ...) standardGeneric("getQuery"))
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A numeric vector or list of numeric vectors.
-#' @rdname IterNum-methods
 #' @export
 setGeneric("getIterNum", function (x, ...) standardGeneric("getIterNum"))
 
@@ -539,7 +432,6 @@ setGeneric("getIterNum", function (x, ...) standardGeneric("getIterNum"))
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A numeric vector or list of numeric vectors.
-#' @rdname QueryID-methods
 #' @export
 setGeneric("getQueryID", function (x, ...) standardGeneric("getQueryID"))
 
@@ -551,7 +443,6 @@ setGeneric("getQueryID", function (x, ...) standardGeneric("getQueryID"))
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A character vector or list of character vectors.
-#' @rdname QueryDef-methods
 #' @export
 setGeneric("getQueryDef", function (x, ...) standardGeneric("getQueryDef"))
 
@@ -563,7 +454,6 @@ setGeneric("getQueryDef", function (x, ...) standardGeneric("getQueryDef"))
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A numeric vector or list of numeric vectors.
-#' @rdname QueryLen-methods
 #' @export
 setGeneric("getQueryLen", function (x, ...) standardGeneric("getQueryLen"))
 
@@ -575,7 +465,6 @@ setGeneric("getQueryLen", function (x, ...) standardGeneric("getQueryLen"))
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @param ... Further arguments passed to methods.
 #' @return A \linkS4class{hit} or \linkS4class{HitList} object.
-#' @rdname Hit-methods
 #' @export
 setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
 
@@ -586,7 +475,6 @@ setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
 #' @usage nhits(x)
 #' @param x A \linkS4class{blastReport} or \linkS4class{IterationList} object.
 #' @return An numeric vector.
-#' @rdname nhits-methods
 #' @export
 setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
 
@@ -600,7 +488,6 @@ setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
 #' @param x A \code{\linkS4class{blastReport}} object.
 #' @param ... Further arguments passed to methods.
 #' @return A \linkS4class{blastHeader} object.
-#' @rdname Header-methods
 #' @export
 setGeneric("getHeader", function (x, ...) standardGeneric("getHeader"))
 
@@ -610,7 +497,6 @@ setGeneric("getHeader", function (x, ...) standardGeneric("getHeader"))
 #' @param x A \code{\linkS4class{blastReport}} object.
 #' @param ... Further arguments passed to methods.
 #' @return A \linkS4class{Iteration} or \linkS4class{IterationList} object.
-#' @rdname Iteration-methods
 #' @export
 setGeneric("getIteration", function (x, ...) standardGeneric("getIteration"))
 
@@ -620,7 +506,6 @@ setGeneric("getIteration", function (x, ...) standardGeneric("getIteration"))
 #' @param x A \code{\linkS4class{blastReport}} object.
 #' @param ... Further arguments passed to methods.
 #' @return A \linkS4class{blastParameters} object.
-#' @rdname Params-methods
 #' @export
 setGeneric("getParams", function (x, ...) standardGeneric("getParams"))
 

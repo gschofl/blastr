@@ -1,9 +1,5 @@
-#' @include defline.r
-#' @importFrom IRanges IRanges
-#' @importFrom IRanges IRangesList
-#' @importFrom IRanges reduce
-#' @importFrom IRanges width
-#' @importFrom IRanges unlist
+#' @include all-generics.r defline.r
+#' @importFrom IRanges IRanges IRangesList reduce width unlist
 #' @importFrom Biostrings BStringSet
 NULL
 
@@ -18,49 +14,53 @@ setOldClass("list")
 #' Information about each high-scoring pair (hsp) within a hit contained in a
 #' single \sQuote{Hsp} element.
 #'
-#'  \describe{
-#'    \item{\code{hsp_num}:}{The number of the hsp; \code{"integer"}.}
-#'    \item{\code{score}:}{The BLAST score of the hsp; \code{"numeric"}.}
-#'    \item{\code{bit_score}:}{The bit score of the hsp; \code{"numeric"}.}
-#'    \item{\code{evalue}:}{The expect value; \code{"numeric"}.}
-#'    \item{\code{identity}:}{Number of identities; \code{"integer"}.}
-#'    \item{\code{positive}:}{Number of positives; \code{"integer"}.}
-#'    \item{\code{gaps}:}{Number of gaps; \code{"integer"}.}
-#'    \item{\code{query_from}:}{Start residue for query sequence; \code{"integer"}.}
-#'    \item{\code{query_to}:}{End residue for query sequence; \code{"integer"}.}
-#'    \item{\code{hit_from}:}{Start residue for hit sequence; \code{"integer"}.}
-#'    \item{\code{hit_to}:}{End residue for hit sequence; \code{"integer"}.}
-#'    \item{\code{query_frame}:}{\code{"integer"}.}
-#'    \item{\code{hit_frame}:}{\code{"integer"}.}
-#'    \item{\code{qseq}:}{Query sequence; \code{"XString"}.}
-#'    \item{\code{hseq}:}{Hit sequence; \code{"XString"}.}
-#'    \item{\code{match}:}{Match sequence/midline; \code{"XString"}.}
-#'    \item{\code{query_env}:}{Shared container for \code{query_id},
+#' @slot hsp_num The number of the hsp; \code{"integer"}.
+#' @slot score The BLAST score of the hsp; \code{"numeric"}.
+#' @slot bit_score The bit score of the hsp; \code{"numeric"}.
+#' @slot evalue The expect value; \code{"numeric"}.
+#' @slot identity Number of identities; \code{"integer"}.
+#' @slot positive Number of positives; \code{"integer"}.
+#' @slot gaps Number of gaps; \code{"integer"}.
+#' @slot query_from Start residue for query sequence; \code{"integer"}.
+#' @slot query_to End residue for query sequence; \code{"integer"}.
+#' @slot hit_from Start residue for hit sequence; \code{"integer"}.
+#' @slot hit_to End residue for hit sequence; \code{"integer"}.
+#' @slot query_frame \code{"integer"}.
+#' @slot hit_frame \code{"integer"}.
+#' @slot qseq Query sequence; \code{"XString"}.
+#' @slot hseq Hit sequence; \code{"XString"}.
+#' @slot match Match sequence/midline; \code{"XString"}.
+#' @slot query_env Shared container for \code{query_id},
 #'    \code{query_def}, \code{query_len}, and \code{hit_len};
-#'    \code{"environment"}.}
-#'  } 
-#' 
-#' @name Hsp-class
-#' @rdname Hsp-class
-#' @exportClass Hsp
+#'    \code{"environment"}.
+#' @seealso \code{"\linkS4class{BlastReport}"} 
+#' @export
 new_Hsp <- 
-  setClass("Hsp",
-           slots = c(hsp_num = "integer", score = "numeric",        
-                     bit_score = "numeric", evalue = "numeric",
-                     identity = "integer", positive = "integer",
-                     gaps = "integer", align_len = "integer",
-                     query_from = "integer", query_to = "integer",
-                     hit_from = "integer", hit_to = "integer",
-                     query_frame = "integer", hit_frame = "integer",
-                     qseq = "XString", hseq = "XString",
-                     match = "XString", query_env = 'environment')
+  setClass(Class = "Hsp",
+           slots = c(
+             hsp_num = "integer", score = "numeric",        
+             bit_score = "numeric", evalue = "numeric",
+             identity = "integer", positive = "integer",
+             gaps = "integer", align_len = "integer",
+             query_from = "integer", query_to = "integer",
+             hit_from = "integer", hit_to = "integer",
+             query_frame = "integer", hit_frame = "integer",
+             qseq = "XString", hseq = "XString",
+             match = "XString", query_env = 'environment')
   )
 
-#' @name HspList-class
-#' @rdname Hsp-class
-#' @exportClass HspList
-setClass("HspList", representation(query_env = 'environment'), contains="list",
-         validity=listclassValidator('HspList', 'Hsp'))
+#' HspList
+#' 
+#' A list of \code{"\linkS4class{Hsp}"} objects.
+#'
+#' @slot query_env Shared container for \code{query_id},
+#'    \code{query_def}, \code{query_len}, and \code{hit_len};
+#'    \code{"environment"}.
+#' @slot .Data Inherited from the \code{\link{list}} class.
+#' @seealso \code{"\linkS4class{BlastReport}"} 
+#' @export
+setClass("HspList", representation(query_env = 'environment'), contains = "list",
+         validity = listclassValidator('HspList', 'Hsp'))
 
 ## constructor
 HspList <- listclassConstructor('HspList', 'Hsp')
@@ -85,19 +85,13 @@ bs.max <- function(x) {
 ##  : Hsp -> integer
 ##  : HspList [max = FALSE] -> vector<integer>
 ##  : HspList [max = TRUE] -> integer
-
-#' @rdname HspNum-methods
-#' @aliases getHspNum,Hsp-method
 setMethod('getHspNum', 'Hsp', function(x, max = FALSE) x@hsp_num)
 
-#' @rdname HspNum-methods
-#' @aliases getHspNum,HspList-method
 setMethod('getHspNum', 'HspList', function(x, max = FALSE) {
-  ans <- vapply(x, slot, 'hsp_num', FUN.VALUE=integer(1))
+  ans <- vapply(x, slot, 'hsp_num', FUN.VALUE = integer(1))
   if (max && length(ans) > 1L) {
     ans[bs.max(x)]
-  }
-  else ans
+  } else ans
 })
 
 ## BitScore, Score, Evalue ####
@@ -105,12 +99,8 @@ setMethod('getHspNum', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> numeric
 ##  : HspList  [max,sum = FALSE] -> vector<numeric>
 ##  : HspList  [max,sum = TRUE] -> numeric
-#' @rdname Bitscore-methods
-#' @aliases getBitscore,Hsp-method
 setMethod('getBitscore', 'Hsp', function(x, max = FALSE, sum = FALSE) x@bit_score)
 
-#' @rdname Bitscore-methods
-#' @aliases getBitscore,HspList-method
 setMethod('getBitscore', 'HspList', function(x, max = FALSE, sum = FALSE) {
   ans <- vapply(x, slot, 'bit_score', FUN.VALUE=numeric(1))
   if (length(ans) > 1) {
@@ -124,32 +114,19 @@ setMethod('getBitscore', 'HspList', function(x, max = FALSE, sum = FALSE) {
   } else ans
 })
 
-#' @rdname Bitscore-methods
-#' @aliases getBitscore,Hsp-method
 setMethod('getMaxBitscore', 'Hsp', function(x) x@bit_score)
 
-#' @rdname Bitscore-methods
-#' @aliases getBitscore,HspList-method
 setMethod('getMaxBitscore', 'HspList', function(x) getBitscore(x, max = TRUE))
 
-#' @rdname Bitscore-methods
-#' @aliases getBitscore,Hsp-method
 setMethod('getTotalBitscore', 'Hsp', function(x) x@bit_score)
 
-#' @rdname Bitscore-methods
-#' @aliases getBitscore,HspList-method
 setMethod('getTotalBitscore', 'HspList', function(x) getBitscore(x, sum = TRUE))
 
 ##  : Hsp -> numeric
 ##  : HspList  [max = FALSE] -> vector<numeric>
 ##  : HspList [max = TRUE] -> numeric
-
-#' @rdname Score-methods
-#' @aliases getScore,Hsp-method
 setMethod('getScore', 'Hsp', function(x, max = FALSE) x@score)
 
-#' @rdname Score-methods
-#' @aliases getScore,HspList-method
 setMethod('getScore', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'score', FUN.VALUE=numeric(1))
   if (max && length(ans) > 1L) {
@@ -158,12 +135,8 @@ setMethod('getScore', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname Evalue-methods
-#' @aliases getEvalue,Hsp-method
 setMethod('getEvalue', 'Hsp', function(x, max = FALSE) x@evalue)
 
-#' @rdname Evalue-methods
-#' @aliases getEvalue,HspList-method
 setMethod('getEvalue', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'evalue', FUN.VALUE=numeric(1))
   if (max && length(ans) > 1L) {
@@ -177,13 +150,8 @@ setMethod('getEvalue', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> integer
 ##  : HspList  [max = FALSE] -> vector<integer>
 ##  : HspList [max = TRUE] -> integer
-
-#' @rdname Identity-methods
-#' @aliases getIdentity,Hsp-method
 setMethod('getIdentity', 'Hsp', function(x, max = FALSE) x@identity)
 
-#' @rdname Identity-methods
-#' @aliases getIdentity,HspList-method
 setMethod('getIdentity', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'identity', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -192,12 +160,8 @@ setMethod('getIdentity', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname Positive-methods
-#' @aliases getPositive,Hsp-method
 setMethod('getPositive', 'Hsp', function(x, max = FALSE) x@positive)
 
-#' @rdname Positive-methods
-#' @aliases getPositive,HspList-method
 setMethod('getPositive', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'positive', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -206,12 +170,8 @@ setMethod('getPositive', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname Gaps-methods
-#' @aliases getGaps,Hsp-method
 setMethod('getGaps', 'Hsp', function(x, max = FALSE) x@gaps)
 
-#' @rdname Gaps-methods
-#' @aliases getGaps,HspList-method
 setMethod('getGaps', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'gaps', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -220,12 +180,8 @@ setMethod('getGaps', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname AlignLen-methods
-#' @aliases getAlignLen,Hsp-method
 setMethod('getAlignLen', 'Hsp', function(x, max = FALSE) x@align_len)
 
-#' @rdname AlignLen-methods
-#' @aliases getAlignLen,HspList-method
 setMethod('getAlignLen', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'align_len', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -239,13 +195,8 @@ setMethod('getAlignLen', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> integer
 ##  : HspList  [max = FALSE] -> vector<integer>
 ##  : HspList [max = TRUE] -> integer
-
-#' @rdname QueryFrom-methods
-#' @aliases getQueryFrom,Hsp-method
 setMethod('getQueryFrom', 'Hsp', function(x, max = FALSE) x@query_from)
 
-#' @rdname QueryFrom-methods
-#' @aliases getQueryFrom,HspList-method
 setMethod('getQueryFrom', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'query_from', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -254,12 +205,8 @@ setMethod('getQueryFrom', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname QueryTo-methods
-#' @aliases getQueryTo,Hsp-method
 setMethod('getQueryTo', 'Hsp', function(x, max = FALSE) x@query_to)
 
-#' @rdname QueryTo-methods
-#' @aliases getQueryTo,HspList-method
 setMethod('getQueryTo', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'query_to', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -268,12 +215,8 @@ setMethod('getQueryTo', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname HitFrom-methods
-#' @aliases getHitFrom,Hsp-method
 setMethod('getHitFrom', 'Hsp', function(x, max = FALSE) x@hit_from)
 
-#' @rdname HitFrom-methods
-#' @aliases getHitFrom,HspList-method
 setMethod('getHitFrom', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'hit_from', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -282,12 +225,8 @@ setMethod('getHitFrom', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname HitTo-methods
-#' @aliases getHitTo,Hsp-method
 setMethod('getHitTo', 'Hsp', function(x, max = FALSE) x@hit_to)
 
-#' @rdname HitTo-methods
-#' @aliases getHitTo,HspList-method
 setMethod('getHitTo', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'hit_to', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -301,13 +240,8 @@ setMethod('getHitTo', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> integer
 ##  : HspList  [max = FALSE] -> vector<integer>
 ##  : HspList [max = TRUE] -> integer
-
-#' @rdname QueryFrame-methods
-#' @aliases getQueryFrame,Hsp-method
 setMethod('getQueryFrame', 'Hsp', function(x, max = FALSE) x@query_frame)
 
-#' @rdname QueryFrame-methods
-#' @aliases getQueryFrame,HspList-method
 setMethod('getQueryFrame', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'query_frame', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -317,12 +251,8 @@ setMethod('getQueryFrame', 'HspList', function(x, max = FALSE) {
 })
 
 ## @return vector<integer> 
-#' @rdname HitFrame-methods
-#' @aliases getHitFrame,Hsp-method
 setMethod('getHitFrame', 'Hsp', function(x, max = FALSE) x@hit_frame)
 
-#' @rdname HitFrame-methods
-#' @aliases getHitFrame,HspList-method
 setMethod('getHitFrame', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, slot, 'hit_frame', FUN.VALUE=integer(1))
   if (max && length(ans) > 1L) {
@@ -332,7 +262,6 @@ setMethod('getHitFrame', 'HspList', function(x, max = FALSE) {
 })
 
 ## QueryRange, HitRange ####
-
 
 .range <- function(frame, from, to, width = FALSE) {
   start <- ifelse(frame >= 0L, from, to)
@@ -344,29 +273,20 @@ setMethod('getHitFrame', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> IRanges (single range)
 ##  : HspList  [max = FALSE] -> IRanges (possibly multiple ranges)
 ##  : HspList [max = TRUE] -> IRanges (single range)
-
-#' @rdname QueryRange-methods
-#' @aliases getQueryRange,Hsp-method
 setMethod("getQueryRange", "Hsp", function(x, max = FALSE) {
   .range(x@query_frame, x@query_from, x@query_to)
 })
 
-#' @rdname QueryRange-methods
-#' @aliases getQueryRange,HspList-method
 setMethod("getQueryRange", "HspList", function(x, max = FALSE) {
   if (max)
     x <- x[bs.max(x)]
   .range(getQueryFrame(x), getQueryFrom(x), getQueryTo(x))
 })
 
-#' @rdname HitRange-methods
-#' @aliases getHitRange,Hsp-method
 setMethod("getHitRange", "Hsp", function(x, max = FALSE) {
   .range(x@hit_frame, x@hit_from, x@hit_to)
 })
 
-#' @rdname HitRange-methods
-#' @aliases getHitRange,HspList-method
 setMethod("getHitRange", "HspList", function(x, max = FALSE) {
   if (max)
     x <- x[bs.max(x)]
@@ -377,13 +297,8 @@ setMethod("getHitRange", "HspList", function(x, max = FALSE) {
 
 ##  : Hsp -> BString
 ##  : HspList -> BStringSet
-
-#' @rdname QuerySeq-methods
-#' @aliases getQuerySeq,Hsp-method
 setMethod('getQuerySeq', 'Hsp', function(x, max = FALSE) x@qseq)
 
-#' @rdname QuerySeq-methods
-#' @aliases getQuerySeq,HspList-method
 setMethod('getQuerySeq', 'HspList', function(x, max = FALSE) {
   ans <- BStringSet(lapply(x, slot, 'qseq'))
   if (max && length(ans) > 1L) {
@@ -392,12 +307,8 @@ setMethod('getQuerySeq', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname HitSeq-methods
-#' @aliases getHitSeq,Hsp-method
 setMethod('getHitSeq', 'Hsp', function(x, max = FALSE) x@hseq)
 
-#' @rdname HitSeq-methods
-#' @aliases getHitSeq,HspList-method
 setMethod('getHitSeq', 'HspList', function(x, max = FALSE) {
   ans <- BStringSet(lapply(x, slot, 'hseq'))
   if (max && length(ans) > 1L) {
@@ -406,12 +317,8 @@ setMethod('getHitSeq', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname Match-methods
-#' @aliases getMatch,Hsp-method
 setMethod('getMatch', 'Hsp', function(x, max = FALSE) x@match)
 
-#' @rdname Match-methods
-#' @aliases getMatch,HspList-method
 setMethod('getMatch', 'HspList', function(x, max = FALSE) {
   ans <- BStringSet(lapply(x, slot, 'match'))
   if (max && length(ans) > 1L) {
@@ -425,15 +332,10 @@ setMethod('getMatch', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> numeric
 ##  : HspList  [max = FALSE] -> vector<numeric>
 ##  : HspList  [max = TRUE] -> numeric
-
-#' @rdname PercIdentity-methods
-#' @aliases getPercIdentity,Hsp-method
 setMethod('getPercIdentity', 'Hsp', function(x, max = FALSE) {
   x@identity/x@align_len
 })
 
-#' @rdname PercIdentity-methods
-#' @aliases getPercIdentity,HspList-method
 setMethod('getPercIdentity', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, function(x) x@identity/x@align_len, numeric(1))
   if (max && length(ans) > 1L) {
@@ -442,14 +344,10 @@ setMethod('getPercIdentity', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname PercIdentity-methods
-#' @aliases getMaxPercIdentity,Hsp-method
 setMethod('getMaxPercIdentity', 'Hsp', function(x) {
   x@identity/x@align_len
 })
 
-#' @rdname PercIdentity-methods
-#' @aliases getMaxPercIdentity,HspList-method
 setMethod('getMaxPercIdentity', 'HspList', function(x) {
   best <- bs.max(x)
   getMaxPercIdentity(x[[best]])
@@ -458,14 +356,10 @@ setMethod('getMaxPercIdentity', 'HspList', function(x) {
 ##  : Hsp -> numeric
 ##  : HspList [max = FALSE] -> vector<numeric>
 ##  : HspList [max = TRUE] -> numeric
-#' @rdname PercPositive-methods
-#' @aliases getPercPositive,Hsp-method
 setMethod('getPercPositive', 'Hsp', function(x, max = FALSE) {
   x@positive/x@align_len
 })
 
-#' @rdname PercPositive-methods
-#' @aliases getPercPositive,HspList-method
 setMethod('getPercPositive', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, function(x) x@positive/x@align_len, numeric(1))
   if (max && length(ans) > 1L) {
@@ -474,14 +368,10 @@ setMethod('getPercPositive', 'HspList', function(x, max = FALSE) {
   else ans
 })
 
-#' @rdname PercGaps-methods
-#' @aliases getPercGaps,Hsp-method
 setMethod('getPercGaps', 'Hsp', function(x, max = FALSE) {
   x@gaps/x@align_len
 })
 
-#' @rdname PercGaps-methods
-#' @aliases getPercGaps,HspList-method
 setMethod('getPercGaps', 'HspList', function(x, max = FALSE) {
   ans <- vapply(x, function(x) x@gaps/x@align_len, numeric(1))
   if (max && length(ans) > 1L) {
@@ -501,28 +391,19 @@ setMethod('getPercGaps', 'HspList', function(x, max = FALSE) {
 ##  : Hsp -> numeric
 ##  : HspList [max = FALSE] -> vector<numeric>
 ##  : HspList [max = TRUE] -> numeric
-
-#' @rdname QueryCoverage-methods
-#' @aliases getQueryCoverage,Hsp-method
 setMethod('getQueryCoverage', 'Hsp', function(x) {
   ( x@align_len - x@gaps )/x@query_env[['query_len']]
 })
 
-#' @rdname QueryCoverage-methods
-#' @aliases getQueryCoverage,HspList-method
 setMethod('getQueryCoverage', 'HspList', function(x) {
   sum(.range(getQueryFrame(x), getQueryFrom(x), getQueryTo(x), width=TRUE))/
     x@query_env[['query_len']]
 })
 
-#' @rdname HitCoverage-methods
-#' @aliases getHitCoverage,Hsp-method
 setMethod('getHitCoverage', 'Hsp', function(x) {
   ( x@align_len - x@gaps )/x@query_env[['hit_len']]
 })
 
-#' @rdname HitCoverage-methods
-#' @aliases getHitCoverage,HspList-method
 setMethod('getHitCoverage', 'HspList', function(x) {
   sum(.range(getQueryFrame(x), getQueryFrom(x), getQueryTo(x), width=TRUE))/
     x@query_env[['hit_len']]
@@ -536,7 +417,6 @@ setMethod("[", "HspList",
             query_env <- x@query_env
             HspList( callNextMethod(), query_env = query_env )
           })
-
 
 setMethod("[[", "HspList",
           function(x, i, j, ...) {
@@ -565,25 +445,21 @@ setMethod("[[", "HspList",
     qrev <- ifelse(getQueryFrom(hsp) > getQueryTo(hsp), TRUE,  FALSE)
     hstart <- min(getHitFrom(hsp), getHitTo(hsp))
     hrev <- ifelse(getHitFrom(hsp) > getHitTo(hsp), TRUE, FALSE)
-    aln <- wrapAlignment(toString(getQuerySeq(hsp)), toString(getMatch(hsp)), toString(getHitSeq(hsp)),
-                         prefix=c("Query", "", "Spjct"), start=c(qstart, NA, hstart),
-                         reverse=c(qrev, FALSE, hrev))
+    aln <- wrap_alignment(toString(getQuerySeq(hsp)), toString(getMatch(hsp)), toString(getHitSeq(hsp)),
+                          prefix = c("Query", "", "Spjct"), start = c(qstart, NA, hstart),
+                          reverse = c(qrev, FALSE, hrev))
     aln <- paste0(aln, '\n')
   }
   
   cat(head, aln, sep="")
 }
 
-#' @aliases show,Hsp-method
-#' @rdname show-methods
 setMethod("show", "Hsp",
           function(object) {
             cat(sprintf("A %s instance", sQuote(class(object))))
             .show_hsp(object, show_aln = getOption("showAlignment", default=TRUE))
           })
 
-#' @aliases show,HspList-method
-#' @rdname show-methods
 setMethod("show", "HspList",
           function(object) {
             olen <- length(object)

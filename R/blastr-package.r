@@ -4,8 +4,8 @@
 #'  \tabular{ll}{
 #'    Package: \tab blastr\cr
 #'    Type: \tab Package\cr
-#'    Version: \tab 0.2.2\cr
-#'    Date: \tab 2014-07-31\cr
+#'    Version: \tab 0.2.3\cr
+#'    Date: \tab 2015-11-11\cr
 #'    License: \tab MIT\cr
 #'  }
 #'

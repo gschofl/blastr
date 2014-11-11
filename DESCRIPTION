@@ -1,5 +1,5 @@
 Package: blastr
-Version: 0.2.2
+Version: 0.2.3
 Date: 2014-07-31
 Type: Package
 Title: An R wrapper for NCBI Blast.

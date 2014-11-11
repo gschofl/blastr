@@ -5,7 +5,6 @@
 #' @importFrom stringr str_match
 NULL
 
-
 #' Wrapper for NCBI makeblastdb
 #' 
 #' @param input_file Input file/database name. Multiple file/database names
@@ -16,11 +15,10 @@ NULL
 #' @param ... further arguments passed to makeblastdb.
 #' @param show_log print log file.
 #' @param show_cmd print the command line instead of executing it.
-#' 
 #' @family blast applications
 #' @export
 makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
-                         ..., show_log=TRUE, show_cmd=FALSE) {
+                         ..., show_log = TRUE, show_cmd = FALSE) {
   assert_that(has_command('makeblastdb'))
   if (missing(input_file)) {
     return(SysCall("makeblastdb", help=TRUE, redirection=FALSE))
@@ -64,24 +62,23 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' @param timeout Timeout on connection to NCBI (default: 120 seconds)
 #' @param force Force download even if there is a archive already on local
 #' directory
-#' 
 #' @family blast applications
 #' @export
-update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.',
-                           decompress=TRUE, showall=FALSE, passive=FALSE,
-                           timeout=120, force=FALSE) {
+update_blastdb <- function(..., destdir = getOption("blastr.blastdb.path") %||% '.',
+                           decompress = TRUE, showall = FALSE, passive = FALSE,
+                           timeout = 120, force = FALSE) {
   destdir <- normalizePath(destdir)
   assert_that(has_command("update_blastdb"))
   blastdb <- unlist(dots(...))
-  args <- list(decompress=FALSE, passive=passive, force=force, timeout=timeout)  
+  args <- list(decompress = FALSE, passive = passive, force = force, timeout = timeout)  
   if (showall) {
-    ans <- SysCall('update_blastdb', showall=TRUE, style='gnu', intern=TRUE)
+    ans <- SysCall('update_blastdb', showall = TRUE, style = 'gnu', intern = TRUE)
     return( ans[-1] )
   } else if (all_empty(blastdb) && all(are_false(args)[-4])) {
     SysCall('update_blastdb')
   } else {
-    available_dbs <- SysCall('update_blastdb', showall=TRUE,
-                             style='gnu', intern=TRUE)[-1]
+    available_dbs <- SysCall('update_blastdb', showall = TRUE,
+                             style = 'gnu', intern = TRUE)[-1]
     if (!all(idx <- blastdb %in% available_dbs)) {
       stop(sQuote(paste0(blastdb[!idx], collapse=", ")),
            " not among the available databases")
@@ -104,7 +101,6 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.
   }
 }
 
-
 #' Wrapper for the new NCBI BLAST+ tools
 #' 
 #' @param program One of blastn, blastp, blastx, tblastn, or tblastx
@@ -122,7 +118,6 @@ update_blastdb <- function(..., destdir=getOption("blastr.blastdb.path") %||% '.
 #' @param show_cmd If \code{TRUE} print the constructed command line
 #' instead of passing it to \code{\link{system}}.
 #' @param parse
-#' 
 #' @keywords internal
 .blast <- function(exec, query, db, outfmt = 'xml', max_hits = 20,
                    strand = 'both', ..., intern = FALSE, show_cmd = FALSE,

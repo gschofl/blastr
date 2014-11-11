@@ -1,14 +1,12 @@
-#' @include blastReport-class.r
-#' @include blast-parser-db.r
-#' @include sqlite-db.r
+#' @include blastReport-class.r blast-parser-db.r sqlite-db.r
 #' @importFrom IRanges IRanges IRangesList reduce width unlist
 NULL
 
 
-# blastReportDB-class ----------------------------------------------------
+# BlastReportDB-class ----------------------------------------------------
 
 
-#' blastReportDB-class
+#' BlastReportDB
 #' 
 #' \sQuote{\bold{blastReportDB}}: A connection to an SQLite database
 #' containing blast records organised in three tables:
@@ -57,26 +55,22 @@ NULL
 #'    \item hseq         TEXT
 #'    \item midline      TEXT
 #' }
-#'    
+#'  
 #' @seealso
 #'  The constructors \code{\link{blastReportDB}} and \code{\link{blastReportDBConnect}},
-#'  and the BLAST classes \code{\linkS4class{blastReport}} and
+#'  and the BLAST classes \code{\linkS4class{BlastReport}} and
 #'  \code{\linkS4class{blastTable}}.
-#'   
-#' @name blastReportDB-class
-#' @rdname blastReportDB-class
-#' @exportClass blastReportDB
-.blastReportDB <- setRefClass(
-  Class='blastReportDB',
-  contains='sqliteDB',
-  methods=list(
-    initialize=function(con = db_create(dbSchema=blast_db.sql(), verbose=FALSE), ...) {
+#' @export
+new_BlastReportDB <- setRefClass(
+  Class    = 'BlastReportDB',
+  contains = 'sqliteDB',
+  methods  = list(
+    initialize = function(con = db_create(dbSchema = blast_db.sql(), verbose=FALSE), ...) {
       callSuper(con, ...)
     })
 )
 
-
-setValidity('blastReportDB', function(object) {
+setValidity('BlastReportDB', function(object) {
   errors <- character()
   if (length(db_list_tables(object)) == 0L) {
     return("No tables in 'blastReportDB'")
@@ -102,10 +96,7 @@ setValidity('blastReportDB', function(object) {
   if (length(errors) == 0L) TRUE else errors
 })
 
-
-#' @aliases show,blastReportDB-method
-#' @rdname show-methods
-setMethod('show', 'blastReportDB',
+setMethod('show', 'BlastReportDB',
           function(object) {
             showme <- sprintf('%s connection object with:\n| %s queries | %s hits | %s hsps |',
                               sQuote(class(object)),
@@ -115,8 +106,7 @@ setMethod('show', 'blastReportDB',
             cat(showme, sep="\n")
           })
 
-
-setMethod('lapply', 'blastReportDB', function(X, FUN, ...) {
+setMethod('lapply', 'BlastReportDB', function(X, FUN, ...) {
   lapply(db_query(X, "select query_id from query", 1L), function(j)
     FUN(X[j], ...)
   )
@@ -134,21 +124,20 @@ setMethod('lapply', 'blastReportDB', function(X, FUN, ...) {
 #' @param reset_at After how many iterations should the parser dump the
 #' data into the db before continuing.
 #' @param verbose Message if a new database is created.
-#'
-#' @return A \code{\linkS4class{blastReportDB}} object.
-#' @rdname blastReportDB
+#' @return A \code{\linkS4class{BlastReportDB}} object.
 #' @export
 blastReportDB <- function(blastfile, db_path = ":memory:", max_hit = NULL,
                           max_hsp = NULL, reset_at = 1000, verbose = TRUE) {
-  db <- .blastReportDB(db_create(db_path, blast_db.sql(), overwrite=TRUE, verbose=verbose))
+  db <- new_BlastReportDB(db_create(db_path, blast_db.sql(), overwrite = TRUE,
+                                    verbose = verbose))
   if (missing(blastfile)) {
     return(db)
   }
   assert_that(is.readable(blastfile), has_extension(blastfile, 'xml'))
   handler <- BlastOutput.Iterations(conn(db), max_hit, max_hsp, reset_at)
-  out <- xmlEventParse(blastfile, list(), branches=handler)
+  out <- xmlEventParse(blastfile, list(), branches = handler)
   ## load final part into db
-  assert_that(.db_bulk_insert(con=conn(db), tbl="query", df=handler$getQuery()))
+  assert_that(.db_bulk_insert(con=conn(db), tbl = "query", df = handler$getQuery()))
   assert_that(.db_bulk_insert(conn(db), "hit", handler$getHit()))
   assert_that(.db_bulk_insert(conn(db), "hsp", handler$getHsp()))
   validObject(db)
@@ -157,7 +146,6 @@ blastReportDB <- function(blastfile, db_path = ":memory:", max_hit = NULL,
 
 
 #' @usage blastReportDBConnect(db_path)
-#' @return A \code{\linkS4class{blastReportDB}} object.
 #' @rdname blastReportDB
 #' @export
 blastReportDBConnect <- function(db_path) {
@@ -167,7 +155,7 @@ blastReportDBConnect <- function(db_path) {
   if (db_path == "") {
     stop("Cannot connect to a temporary database", call.=FALSE)
   }
-  db <- .blastReportDB(db_connect(db_path))
+  db <- new_BlastReportDB(db_connect(db_path))
   validObject(db)
   db
 }

@@ -4,32 +4,26 @@ NULL
 # blastTable-class -------------------------------------------------------
 
 
-#' blastTable-class
+#' BlastTable
 #' 
-#' blastTable is an S4 class that provides a container for data retrived
+#' BlastTable is an S4 class that provides a container for data retrived
 #' by calls to the NCBI Blast utility.
 #' 
-#' blastReport objects have ten slots:
-#' \describe{
-#'   \item{\code{program}:}{The BLAST flavour that generated the data; \code{"character"}.}
-#'   \item{\code{query}:}{Query definition; \code{"character"}.}
-#'   \item{\code{reference}:}{Reference for BLAST; \code{"character"}.}
-#'   \item{\code{database}:}{Name of the database; \code{"character"}.}
-#'   \item{\code{bit_score}:}{The bit score of the hsp; \code{"numeric"}.}
-#'   \item{\code{evalue}:}{The expect value; \code{"numeric"}.}
-#'   \item{\code{mlog.evalue}:}{}
-#'   \item{\code{accession}:}{Accession number; \code{"character"}.}
-#'   \item{\code{geneid}:}{Accession number; \code{"character"}.}
-#'   \item{\code{table}:}{Hit table; \code{"data.frame"}.}
-#' }
-#'
+#' @slot program The BLAST flavour that generated the data; \code{"character"}.
+#' @slot query Query definition; \code{"character"}.
+#' @slot reference Reference for BLAST; \code{"character"}.
+#' @slot database Name of the database; \code{"character"}.
+#' @slot bit_score The bit score of the hsp; \code{"numeric"}.
+#' @slot evalue The expect value; \code{"numeric"}.
+#' @slot mlog.evalue
+#' @slot accession Accession number; \code{"character"}.
+#' @slot geneid Accession number; \code{"character"}.
+#' @slot table Hit table; \code{"data.frame"}.
 #' @seealso
 #'  The constructor \code{\link{blastTable}}; the BLAST classes
 #'  \code{\linkS4class{blastReport}} and \code{\linkS4class{blastReportDB}} 
-#' @name blastTable-class
-#' @rdname blastTable-class
-#' @exportClass blastTable
-setClass("blastTable",
+#' @export
+setClass(Class = "BlastTable",
          slots = c(program = "character", query = "character",
                    database = "character", bit_score = "numeric",
                    evalue = "numeric", mlog.evalue = "numeric",
@@ -41,9 +35,7 @@ setClass("blastTable",
                                accession = NA_character_, geneid = NA_character_,
                                table = data.frame()))
 
-#' @aliases show,blastTable-method
-#' @rdname show-methods
-setMethod("show", "blastTable",
+setMethod("show", "BlastTable",
           function (object) {
             cat(sprintf("Query:    %s\nProgram:  %s\nDatabase: %s\n\n",
                         linebreak(object@query, offset=10),
@@ -55,26 +47,22 @@ setMethod("show", "blastTable",
 
 # subsetting-methods, blastTable ####
 
-
-setMethod("$", "blastTable",
+setMethod("$", "BlastTable",
           function(x, name) {
             slot(x, "table")[[name]]
           })
 
-
-setMethod("[", "blastTable",
+setMethod("[", "BlastTable",
           function (x, i, j, ..., drop = TRUE) {
             slot(x, "table")[i,j,...]
           })
 
-
-setMethod("[[", "blastTable",
+setMethod("[[", "BlastTable",
           function(x, i) {
             slot(x, "table")[[i]]
           })
 
-
-setMethod("names", "blastTable",
+setMethod("names", "BlastTable",
           function(x) {
             names(slot(x, "table"))
           })

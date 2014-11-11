@@ -11,7 +11,7 @@ listclassConstructor <- function(listClass, elemClass) {
     } else {
       if (length(listData) == 1L && is.list(listData[[1L]])) 
         listData <- listData[[1L]]
-      if (!all(vapply(listData, is, elemClass, FUN.VALUE=logical(1L)))) 
+      if (!all(vapply(listData, is, elemClass, FUN.VALUE = logical(1L)))) 
         stop("All elements in '...' must be '", elemClass,"' objects")
       if (!missing(query_env)) {
         new(listClass, .Data = listData, query_env = query_env)

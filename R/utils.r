@@ -27,11 +27,11 @@ on_failure(is.empty) <- function(call, env) {
 "%ni%" <- Negate(`%in%`)
 
 compact <- function(x) {
-  x[!vapply(x, is.null, FALSE, USE.NAMES=FALSE)]
+  x[!vapply(x, is.null, FALSE, USE.NAMES = FALSE)]
 }
 
 compactChar <- function(x) {
-  x[vapply(x, nzchar, FALSE, USE.NAMES=FALSE)]
+  x[vapply(x, nzchar, FALSE, USE.NAMES = FALSE)]
 }
 
 compactNA <- function(x) {
@@ -109,7 +109,6 @@ pad <- function(x, n = 10, where = 'left', pad = ' ') {
   paste0(padding[match(left, lengths)], x, padding[match(right, lengths)])
 }
 
-
 trim <- function(x, trim = '\\s+') {
   assert_that(is.vector(x))
   gsub(paste0("^", trim, "|", trim, "$"), '', x)
@@ -121,6 +120,8 @@ ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
          paste0(substring(str, 1, width - nchar(ellipsis)), ellipsis),
          str)
 }
+
+comma <- function(...) paste0(..., collapse = ",")
 
 strsplitN <- function (x, split, n, from = "start", collapse = split, ...) {
   assert_that(is.vector(x))
@@ -261,11 +262,11 @@ set_mode <- function(x, as) {
 subl <- function(x, ...) {
   assert_that(has_command('subl'))
   if (tryCatch(is.readable(x), assertError = function (e) FALSE)) {
-    SysCall('subl', stdin=x, redirection=FALSE, ...)
+    SysCall('subl', stdin = x, redirection = FALSE, ...)
   } else {
     tmp <- tempfile()
-    write(x, file=tmp)
-    SysCall('subl', stdin=tmp, redirection=FALSE, ...)
+    write(x, file = tmp)
+    SysCall('subl', stdin = tmp, redirection = FALSE, ...)
   }
 }
 
@@ -333,13 +334,34 @@ SysCall <- function(exec, ..., args = list(), stdin = NULL, stdout = NULL,
   args[are_true(args)] <- ""
   args[are_false(args) | are_null(args)] <- NULL
   args <- switch(style,
-                 unix=paste0(trim(sprintf("-%s%s%s", names(args), sep, args)), collapse=" "),
-                 gnu=paste0(trim(sprintf("--%s%s%s", names(args), sep, args)), collapse=" "))
+                 unix = paste0(trim(sprintf("-%s%s%s", names(args), sep, args)), collapse=" "),
+                 gnu  = paste0(trim(sprintf("--%s%s%s", names(args), sep, args)), collapse=" "))
   
   if (show_cmd) {
     print(trim(paste(exec, args, stdin, stdout)))
   } else{
     system(trim(paste(exec, args, stdin, stdout)), intern = intern, input = input)
+  }
+}
+
+
+# logging ----------------------------------------------------------------
+
+
+#' Generate a timestamp string.
+#' @return A character string
+#' @keywords internal
+timestamp <- function() {
+  paste0('[', format(Sys.time(), "%d/%m/%Y %T"), '] ')
+}
+
+#' Log a message to stderr.
+#' @param ... Message strings.
+#' @param to Where to write the log message to. If \code{NULL} no logging performed.
+#' @keywords internal
+do_log <- function(..., to = stderr()) {
+  if (!is.null(to)) {
+    cat(paste0(timestamp(), ..., "\n"), file = to, sep = "", append = TRUE)
   }
 }
 

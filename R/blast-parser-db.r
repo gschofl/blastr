@@ -11,16 +11,16 @@ BlastOutput.Iterations <- function(
   if (!is.null(con)) {
     assert_that(is(con, "SQLiteConnection"), con %has_tables% c("query", "hit", "hsp"))
     query_order <- db_list_fields(con, "query")
-    hit_order <- db_list_fields(con, "hit")
-    hsp_order <- db_list_fields(con, "hsp")
+    hit_order   <- db_list_fields(con, "hit")
+    hsp_order   <- db_list_fields(con, "hsp")
   } else {
     query_order <- hit_order <- hsp_order <- TRUE
   }
   
   ## Environments to accumulate parsed data
   query <- new.env()
-  hit <- new.env()
-  hsp <- new.env()
+  hit   <- new.env()
+  hsp   <- new.env()
   
   ## To keep track of hit_id and hsp_id
   init_hit <- 0
@@ -37,7 +37,7 @@ BlastOutput.Iterations <- function(
   resetEnv <- function(...) {
     env <- list(...)
     lapply(env, function(e) {
-      remove(list=ls(envir=e), envir=e, inherits=FALSE)
+      remove(list = ls(envir = e), envir = e, inherits = FALSE)
     })
   }
   
@@ -50,8 +50,8 @@ BlastOutput.Iterations <- function(
   }
   
   getLast <- function(tag, env, init_val) {
-    val <- tryCatch(get(tag, envir=env, inherits=TRUE),
-                    error=function(e) NULL)
+    val <- tryCatch(get(tag, envir = env, inherits = TRUE),
+                    error = function(e) NULL)
     val[length(val)] %||% init_val
   }
   
@@ -114,14 +114,14 @@ BlastOutput.Iterations <- function(
   }
   
   'Iteration_query-len' <- function(node) {
-    accumulate('query_len', as.integer( xmlValue(node) ), query)
+    accumulate('query_len', as.integer(xmlValue(node)), query)
   }
   
   'Iteration_hits' <- function(node) {
     ## Accumulate over Hits
     xp <- paste0('/Iteration_hits/Hit[position() <= ', max_hit, ']/')
     
-    hit_num <- xvalue(node,  xp%.%'Hit_num', as="integer")
+    hit_num <- xvalue(node,  xp%.%'Hit_num', as = "integer")
     if (all(is.na(hit_num))) return(NULL)
     accumulate("hit_num",    hit_num, hit)
     
@@ -129,12 +129,12 @@ BlastOutput.Iterations <- function(
     accumulate("query_id",   hit_query_id, hit)
     
     hit_id <- getLast('hit_id', hit, init_hit) + hit_num
-    accumulate("hit_id",     hit_id, hit)
+    accumulate("hit_id", hit_id, hit)
     
-    accumulate("gene_id",    xvalue(node, xp%.%'Hit_id', fun=geneId), hit)
+    accumulate("gene_id",    xvalue(node, xp%.%'Hit_id', fun = geneId), hit)
     accumulate("accession",  xvalue(node, xp%.%'Hit_accession'), hit)
     accumulate("definition", xvalue(node, xp%.%'Hit_def'), hit)
-    accumulate("length",     xvalue(node, xp%.%'Hit_len', as='integer'), hit)
+    accumulate("length",     xvalue(node, xp%.%'Hit_len', as = 'integer'), hit)
     
     ## Accumulate over Hsps
     xp1 <- paste0('/Iteration_hits/Hit[position() <= ', max_hit, ']/Hit_hsps')
