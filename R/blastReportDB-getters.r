@@ -258,12 +258,12 @@ setMethod("getHitTo", "BlastReportDB", function(x, id, max=FALSE, ...) {
 })
 
 setMethod("getQueryRange", "BlastReportDB", function(x, id, max = FALSE, ...) {
-  res <- lapply(id, Compose(IRangesList, .rangeDB), con=conn(x), type='query', max=max, ...)
+  res <- lapply(id, Compose(IRangesList, .rangeDB), con = conn(x), type = 'query', max = max, ...)
   if (length(res)==1) res[[1]] else res
 })
 
 setMethod("getHitRange", "BlastReportDB", function(x, id, max = FALSE, ...) {
-  res <- lapply(id, Compose(IRangesList, .rangeDB), con=conn(x), type='hit', max=max, ...)
+  res <- lapply(id, Compose(IRangesList, .rangeDB), con = conn(x), type = 'hit', max = max, ...)
   if (length(res)==1) res[[1]] else res
 })
 

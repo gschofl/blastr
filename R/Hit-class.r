@@ -381,7 +381,7 @@ setMethod("getQueryRange", "HitList", function(x, max = FALSE) {
 setMethod("getHitRange", "Hit", function(x, max = FALSE) {
   if (max)
     x <- x[[bs.max(x@hsps)]]
-  .range(getQueryFrame(x), getQueryFrom(x), getQueryTo(x))
+  .range(getHitFrame(x), getHitFrom(x), getHitTo(x))
 }) 
 
 ## @return IRangesList|IRanges 
