@@ -61,16 +61,16 @@ make_deflines <- function(query, prefix = "lcl") {
 #' @keywords internal
 make_blast_query <- function(query, transl = FALSE) {
   ## Set up tempfile to use as input for blast
-  tmp <- tempfile(fileext=".fa")
+  tmp <- tempfile(fileext = ".fa")
   if (is.string(query) && tryCatch(is.readable(query), assertError = function(e) FALSE )) {
     # query must be the path to a valid FASTA file
     nqueries <- length(fasta.info(query))
     # copy query to tempfile because blast deletes the query file
     # after it's finished
     file.copy(query, tmp)
-    return(list(query=tmp, nqueries=nqueries, parse_defline=FALSE))
+    return( list(query = tmp, nqueries = nqueries, parse_defline = FALSE) )
   }
-  if (class(query) %in% c("gbReportList","gbReport","gbFeatureList","gbFeature")) {
+  if (class(query) %in% c("gbReportList", "gbReport", "gbFeatureList", "gbFeature")) {
     check_biofiles() ## conditionally load biofiles
     seq <- getSequence(query)
   } else if (inherits(query, "XStringSet") || inherits(query, "XString")) {
@@ -81,8 +81,8 @@ make_blast_query <- function(query, transl = FALSE) {
     stop("Objects of class ", sQuote(class(query)), " are not supported as query.")
   }
   seqnames <- make_deflines(seq)
-  writeLines(paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse="\n"), tmp)
-  list(query=tmp, nqueries=length(seqnames$defline), parse_deflines=seqnames$parse_defline) 
+  writeLines(paste0(paste0(">", seqnames$defline, "\n", as.character(seq)), collapse = "\n"), tmp)
+  list(query = tmp, nqueries = length(seqnames$defline), parse_deflines = seqnames$parse_defline) 
 }
 
 #' @keywords internal

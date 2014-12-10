@@ -3,14 +3,14 @@ NULL
 
 # Iteration-class, IterationList-class -----------------------------------
 
-setClassUnion("HitListOrChar", members=c("HitList", "character"))
+setClassUnion("HitListOrChar", members = c("HitList", "character"))
 
-#' Iteration
+#' Class \code{"Iteration"}
 #' 
 #' An S4 class that holds data parsed from an NCBI BLAST XML \sQuote{Iteration} 
 #' element. Each Iteration contains data about a query.
 #'
-#' @slot iter_num The number of the iteration;  \code{"integer"}.
+#' @slot iter_num The number of the iteration; \code{"integer"}.
 #' @slot query_id Query identifier; \code{"character"}.
 #' @slot query_def Query definition; \code{"character"}.
 #' @slot query_len Query length; \code{"integer"}.
@@ -18,7 +18,10 @@ setClassUnion("HitListOrChar", members=c("HitList", "character"))
 #' @slot query_env Shared container for \code{query_id},
 #'    \code{query_def}, \code{query_len}, and \code{hit_len};
 #'    \code{"environment"}.
+#' @keywords classes
 #' @export
+#' @examples 
+#' showClass("Iteration")
 new_Iteration <- 
   setClass(Class = "Iteration",
            slots = c(iter_num = "integer",
@@ -30,17 +33,19 @@ new_Iteration <-
            prototype = prototype(query_env = new.env(parent = emptyenv()))
   )
 
-
-#' IterationList
+#' Class \code{"IterationList"} of \code{"Iteration"} objects
 #' 
-#' A list of \linkS4class{Iteration} objects.
+#' An S4 class that holds a list of \code{\linkS4class{Iteration}} objects.
 #'
 #' @slot query_env Shared container for \code{query_id},
 #'    \code{query_def}, \code{query_len}, and \code{hit_len};
 #'    \code{"environment"}.
 #' @slot .Data Inherited from the \code{\link{list}} class.
-#' @seealso \code{\linkS4class{blastReport}}
+#' @seealso \code{\linkS4class{BlastReport}}
+#' @keywords classes
 #' @export
+#' @examples 
+#' showClass("IterationList")
 setClass(Class    = "IterationList",
          contains = "list",
          validity = listclassValidator('IterationList', 'Iteration')
@@ -69,7 +74,7 @@ setMethod('nhsps', 'IterationList', function(x) {
 
 ## Hit, nhits, IterNum, QueryID, QueryDef, QueryLen ####
 
-## @return Hit|HitList
+#' @describeIn Iteration Return a \code{\linkS4class{Hit}} or \code{\linkS4class{HitList}}
 setMethod("getHit", "Iteration",
           function(x, n = NULL, drop = TRUE, ...) {
             hit <- if (is.null(n)) x@hits else x@hits[n]
@@ -79,16 +84,16 @@ setMethod("getHit", "Iteration",
               hit
           })
 
-## @return list<Hit|HitList>
+#' @describeIn IterationList Returns a list of \code{\linkS4class{Hit}}s or \code{\linkS4class{HitList}}s
 setMethod("getHit", "IterationList",
           function(x, n = NULL, drop = TRUE, ...) {
             lapply(x, getHit, n = n, drop = drop)
           })
 
-## @return numeric
+#' @describeIn Iteration Returns the number of hits; <\code{numeric}>. 
 setMethod('nhits', 'Iteration', function(x) length(x@hits))
 
-## @return vector<numeric>
+#' @describeIn IterationList Returns the numbers of hits; <\code{numeric}>.
 setMethod('nhits', 'IterationList', function(x) {
   vapply(x, nhits, numeric(1))
 })

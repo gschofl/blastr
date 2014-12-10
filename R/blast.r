@@ -11,12 +11,14 @@ NULL
 #' can be provided as a character vector.
 #' @param input_type Type of data specified in input file. One of \dQuote{fasta},
 #' \dQuote{blastdb}, \dQuote{asn1_bin}, or \dQuote{asn1_txt}.
-#' @param dbtype Molecule type of target db. (\dQuote{nucl} or \dQuote{prot})
-#' @param ... further arguments passed to makeblastdb.
+#' @param dbtype Molecule type of target db (\dQuote{nucl} or \dQuote{prot}).
+#' @param ... further arguments passed to \code{makeblastdb}.
 #' @param show_log print log file.
 #' @param show_cmd print the command line instead of executing it.
-#' @family blast applications
+#' @family blast functions
 #' @export
+#' @examples 
+#' ##
 makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
                          ..., show_log = TRUE, show_cmd = FALSE) {
   assert_that(has_command('makeblastdb'))
@@ -48,7 +50,7 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
   }
 }
 
-#' Wrapper for update_blastdb.pl
+#' Wrapper for \code{update_blastdb}
 #' 
 #' Download pre-formatted BLAST databases from NCBI ftp site.
 #' 
@@ -57,13 +59,18 @@ makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
 #' @param decompress if \code{TRUE}, decompresses the archives in \code{destdir}
 #' and deletes the downloaded archives.
 #' @param showall if \code{TRUE}, show all available pre-formatted BLAST
-#' databases
-#' @param passive Use passive FTP
-#' @param timeout Timeout on connection to NCBI (default: 120 seconds)
+#' databases.
+#' @param passive Use passive FTP.
+#' @param timeout Timeout on connection to NCBI (default: 120 seconds).
 #' @param force Force download even if there is a archive already on local
-#' directory
-#' @family blast applications
+#' directory.
+#' @family blast function
 #' @export
+#' @examples 
+#' update_blastdb(showall = TRUE)
+#' \dontrun{
+#' update_blastdb("16SMicrobial", "human_genomic")
+#' }
 update_blastdb <- function(..., destdir = getOption("blastr.blastdb.path") %||% '.',
                            decompress = TRUE, showall = FALSE, passive = FALSE,
                            timeout = 120, force = FALSE) {
@@ -119,6 +126,7 @@ update_blastdb <- function(..., destdir = getOption("blastr.blastdb.path") %||% 
 #' instead of passing it to \code{\link{system}}.
 #' @param parse
 #' @keywords internal
+#' @rdname dot_blast
 .blast <- function(exec, query, db, outfmt = 'xml', max_hits = 20,
                    strand = 'both', ..., intern = FALSE, show_cmd = FALSE,
                    parse = TRUE) {
@@ -199,7 +207,7 @@ is.blastdb <- function(db) {
   ## Protein and DNA database estensions, respectively.
   ## three of these must be present
   db_ext <- c("pin", "psq", ".phr", "nin", "nsq", "nhr")
-  if (length(dbs <- dir(dirname(db), pattern = paste0(basename(db), '\\..+'))) > 0) {
+  if (length(dbs <- dir(dirname(db), pattern = paste0(basename(db), '\\..+'), recursive = TRUE)) > 0) {
     sum(db_ext %in% strsplitN(dbs, "\\.", 1, "end")) == 3
   } else {
     FALSE
@@ -209,80 +217,86 @@ is.blastdb <- function(db) {
 
 #' Wrapper for the NCBI Nucleotide-Nucleotide BLAST
 #' 
+#' @description 
 #' \itemize{
 #' \item{\code{blastn}} is the traditional BLASTN requiring an exact
 #' match of 11.
-#' \item{\code{blastn_short}} is BLASTN optimised for sequences shorter
-#' than 50 bases.
+#' \item{\code{blastn_short}} is the BLASTN programme optimised for sequences
+#' shorter than 50 bases.
 #' \item{\code{megablast}} is the traditional megablast used to find
-#' very similar sequences.
+#' very similar sequences (intracpecies or closely related species).
 #' \item{\code{dc_megablast}} is discontiguous megablast used to find
 #' more distant (e.g. interspecies) sequences.
 #' }
 #' 
+#' @details 
 #' Run \code{blastn()} without arguments to print usage and
 #' arguments description.
 #' 
-#' @usage blastn(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
-#'  evalue=10, remote=FALSE, ...)
+#' @usage blastn(query, db = "nt", out = NULL, outfmt = "xml", max_hits = 20,
+#'  evalue = 10, remote = FALSE, ...)
 #'
 #' @param query Query sequences as path to a FASTA file,
 #' an \code{\linkS4class{XStringSet}} object, or a character vector.
 #' @param db The database to BLAST against (default: nt).
 #' @param out (optional) Output file for alignment.
 #' If \code{NULL} and the BLAST result is returned as
-#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' a \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}}
 #' object.
 #' @param outfmt Output format, \code{'xml'} or \code{'table'}.
 #' @param max_hits How many hits to return (default: 20).
 #' @param evalue Expect value cutoff (default: 10).
-#' @param remote Execute search remotely.
+#' @param remote Execute search remotely at the NCBI servers.
 #' @param ... Additional parameters passed on to the BLAST commmand line
 #' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
 #' for a description of common options.
 #' 
-#' @family blast applications
+#' @family blast functions
 #' @export blastn blastn_short megablast dc_megablast
 #' @aliases blastn blastn_short megablast dc_megablast
+#' @return A \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}} object,
+#'   depending on the value of \code{outfmt}.
+#' @seealso BLAST documentation at \url{http://www.ncbi.nlm.nih.gov/books/NBK1763/}.
 #' @examples
 #' ##
 blastn <- Partial(.blast, exec = "blastn", task = "blastn")
 
-#' @usage blastn_short(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
-#'  evalue=10, remote=FALSE, ...)
-#' @export
+#' @usage blastn_short(query, db = "nt", out = NULL, outfmt = "xml", max_hits = 20,
+#'  evalue = 10, remote = FALSE, ...)
 #' @rdname blastn
 blastn_short <- Partial(.blast, exec = "blastn", task = "blastn-short")
 
-#' @usage megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
-#'  evalue=10, remote=FALSE, ...)
-#' @export
+#' @usage megablast(query, db = "nt", out = NULL, outfmt = "xml", max_hits = 20,
+#'  evalue = 10, remote = FALSE, ...)
 #' @rdname blastn
 megablast <- Partial(.blast, exec = "blastn", task = "megablast")
 
-#' @usage dc_megablast(query, db="nt", out=NULL, outfmt="xml", max_hits=20,
-#'  evalue=10, remote=FALSE, ...)
-#' @export
+#' @usage dc_megablast(query, db = "nt", out = NULL, outfmt = "xml", max_hits = 20,
+#'  evalue = 10, remote = FALSE, ...)
 #' @rdname blastn
 dc_megablast <- Partial(.blast, exec = "blastn", task = "dc-megablast")
 
 #' Wrapper for the NCBI Protein-Protein BLAST
 #' 
-#' \code{blastp} is the traditional BLASTP.
-#' \code{blastp_short} is BLASTP optimised for residues shorter than 30.
+#' @description 
+#' \itemize{
+#' \item{\code{blastp}} is the traditional BLASTP.
+#' \item {\code{blastp_short}} is BLASTP optimised for residues shorter than 30.
+#' }
 #' 
+#' @details 
 #' Run \code{blastp()} without arguments to print usage and
 #' arguments description.
 #' 
-#' @usage blastp(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
-#'  evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
+#' @usage blastp(query, db = "nr", out = NULL, outfmt = "xml", max_hits = 20,
+#'  evalue = 10, matrix = "BLOSUM62", remote = FALSE, ...)
 #'
 #' @param query Query sequences as path to a FASTA file,
 #' an \code{\linkS4class{XStringSet}} object, or a character vector.
 #' @param db The database to BLAST against (default: nr).
 #' @param out (optional) Output file for alignment.
 #' If \code{NULL} and the BLAST result is returned as
-#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' a \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}}
 #' object.
 #' @param outfmt Output format, \code{'xml'} or \code{'table'}.
 #' @param max_hits How many hits to return (default: 20).
@@ -293,18 +307,17 @@ dc_megablast <- Partial(.blast, exec = "blastn", task = "dc-megablast")
 #' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
 #' for a description of common options.
 #' 
-#' @family blast applications
+#' @family blast functions
 #' @export blastp blastp_short
 #' @aliases blastp blastp_short
+#' @seealso BLAST documentation at \url{http://www.ncbi.nlm.nih.gov/books/NBK1763/}.
 #' @examples
 #' ##
 blastp <- Partial(.blast, exec = "blastp", task = "blastp")
 
-#' @usage blastp_short(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
-#'  evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
-#' @export
+#' @usage blastp_short(query, db = "nr", out = NULL, outfmt = "xml", max_hits = 20,
+#'  evalue = 10, matrix = "BLOSUM62", remote = FALSE, ...)
 #' @rdname blastp
-#' @inheritParams blastp
 blastp_short <- Partial(.blast, exec = "blastp", task = "blastp-short")
 
 #' Wrapper for the NCBI Translated Query-Protein Subject BLAST
@@ -312,8 +325,8 @@ blastp_short <- Partial(.blast, exec = "blastp", task = "blastp-short")
 #' Run \code{blastx()} without arguments to print usage and
 #' arguments description.
 #' 
-#' @usage blastx(query, query_gencode=1, db="nr", out=NULL, outfmt="xml",
-#'  max_hits=20, evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
+#' @usage blastx(query, query_gencode = 1, db = "nr", out = NULL, outfmt = "xml",
+#'  max_hits = 20, evalue = 10, matrix = "BLOSUM62", remote = FALSE, ...)
 #' 
 #' @param query Query sequences as path to a FASTA file,
 #' an \code{\linkS4class{XStringSet}} object, or a character vector.
@@ -321,7 +334,7 @@ blastp_short <- Partial(.blast, exec = "blastp", task = "blastp-short")
 #' @param db The database to BLAST against (default: nr).
 #' @param out (optional) Output file for alignment.
 #' If \code{NULL} and the BLAST result is returned as
-#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' a \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}}
 #' object.
 #' @param outfmt Output format, \code{'xml'} or \code{'table'}.
 #' @param max_hits How many hits to return (default: 20).
@@ -332,7 +345,7 @@ blastp_short <- Partial(.blast, exec = "blastp", task = "blastp-short")
 #' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
 #' for a description of common options.
 #' 
-#' @family blast applications
+#' @family blast functions
 #' @export blastx
 #' @aliases blastx
 #' @examples
@@ -344,8 +357,8 @@ blastx <- Partial(.blast, exec = "blastx")
 #' Run \code{tblastx()} without arguments to print usage and
 #' arguments description.
 #' 
-#' @usage tblastx(query, query_gencode=1, db="nr", out=NULL, outfmt="xml",
-#'  max_hits=20, evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
+#' @usage tblastx(query, query_gencode = 1, db = "nr", out = NULL, outfmt = "xml",
+#'  max_hits = 20, evalue = 10, matrix = "BLOSUM62", remote = FALSE, ...)
 #' 
 #' @param query Query sequences as path to a FASTA file,
 #' an \code{\linkS4class{XStringSet}} object, or a character vector.
@@ -353,7 +366,7 @@ blastx <- Partial(.blast, exec = "blastx")
 #' @param db The database to BLAST against (default: nr).
 #' @param out (optional) Output file for alignment.
 #' If \code{NULL} and the BLAST result is returned as
-#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' a \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}}
 #' object.
 #' @param outfmt Output format, \code{'xml'} or \code{'table'}.
 #' @param max_hits How many hits to return (default: 20).
@@ -364,7 +377,7 @@ blastx <- Partial(.blast, exec = "blastx")
 #' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
 #' for a description of common options.
 #' 
-#' @family blast applications
+#' @family blast functions
 #' @export tblastx
 #' @aliases tblastx
 #' @examples
@@ -376,15 +389,15 @@ tblastx <- Partial(.blast, exec = "tblastx")
 #' Run \code{tblastn()} without arguments to print usage and
 #' arguments description.
 #' 
-#' @usage tblastn(query, db="nr", out=NULL, outfmt="xml", max_hits=20,
-#' evalue=10, matrix="BLOSUM62", remote=FALSE, ...)
+#' @usage tblastn(query, db = "nr", out = NULL, outfmt = "xml", max_hits = 20,
+#' evalue = 10, matrix = "BLOSUM62", remote = FALSE, ...)
 #' 
 #' @param query Query sequences as path to a FASTA file,
 #' an \code{\linkS4class{XStringSet}} object, or a character vector.
 #' @param db The database to BLAST against (default: nr).
 #' @param out (optional) Output file for alignment.
 #' If \code{NULL} and the BLAST result is returned as
-#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' a \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}}
 #' object.
 #' @param outfmt Output format, \code{'xml'} or \code{'table'}.
 #' @param max_hits How many hits to return (default: 20).
@@ -395,7 +408,7 @@ tblastx <- Partial(.blast, exec = "tblastx")
 #' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
 #' for a description of common options.
 #' 
-#' @family blast applications
+#' @family blast functions
 #' @export tblastn
 #' @aliases tblastn
 #' @examples
@@ -408,15 +421,15 @@ tblastn <- Partial(.blast, exec = "tblastn")
 #' Run \code{rpsblast()} without arguments to print usage and
 #' arguments description.
 #' 
-#' @usage rpsblast(query, db="Cdd", out=NULL, outfmt="xml", max_hits=20,
-#' evalue=10, remote=FALSE, ...)
+#' @usage rpsblast(query, db = "Cdd", out = NULL, outfmt = "xml", max_hits = 20,
+#' evalue = 10, remote = FALSE, ...)
 #' 
 #' @param query Query sequences as path to a FASTA file,
 #' an \code{\linkS4class{XStringSet}} object, or a character vector.
 #' @param db The database to BLAST against (default: Cdd).
 #' @param out (optional) Output file for alignment.
 #' If \code{NULL} and the BLAST result is returned as
-#' a \code{\linkS4class{blastReport}} or \code{\linkS4class{blastTable}}
+#' a \code{\linkS4class{BlastReport}} or \code{\linkS4class{BlastTable}}
 #' object.
 #' @param outfmt Output format, \code{'xml'} or \code{'table'}.
 #' @param max_hits How many hits to return (default: 20).
@@ -426,7 +439,7 @@ tblastn <- Partial(.blast, exec = "tblastn")
 #' tools. See \href{http://www.ncbi.nlm.nih.gov/books/NBK1763/#CmdLineAppsManual.4_User_manual}{here}
 #' for a description of common options.
 #' 
-#' @family blast applications
+#' @family blast functions
 #' @export rpsblast
 #' @aliases rpsblast
 #' @examples
@@ -455,7 +468,7 @@ rpsblast <- Partial(.blast, exec = "rpsblast+")
 #' 
 #' @return A \code{\link{blastReport-class}} object.
 #'
-#' @family blast applications
+#' @family blast functions
 #' @export
 #' @examples
 #' ##

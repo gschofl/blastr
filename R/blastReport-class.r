@@ -3,15 +3,17 @@ NULL
 
 # BlastHeader-class ------------------------------------------------------
 
-#' BlastHeader
+#' Class \code{"BlastHeader"}
 #' 
-#' A container for blast header information:
+#' An S4 class that that serves as a container for BLAST header information:
 #'
-#' @slot version Version of BLAST used; \code{"character"}.
-#' @slot reference Reference for BLAST; \code{"character"}.
-#' @slot database Name of the database; \code{"character"}.
-#' @seealso \code{\linkS4class{BlastReport}}, \code{\linkS4class{blastParameters}}
+#' @slot version <\code{character}>; version of BLAST used.
+#' @slot reference <\code{character}>; reference for BLAST.
+#' @slot database <\code{character}>; name of the database.
+#' @seealso \code{\linkS4class{BlastReport}}, \code{\linkS4class{BlastParameters}}
 #' @keywords internal
+#' @examples 
+#' showClass("BlastHeader")
 new_BlastHeader <- 
   setClass(Class = "BlastHeader",
            slots = c(version = 'character',
@@ -26,27 +28,36 @@ setMethod('show', 'BlastHeader',
           })
 
 
-# blastParameters-class --------------------------------------------------
+# BlastParameters-class --------------------------------------------------
 
 
-#' blastParameters
+#' Class \code{"BlastParameters"}
 #'
-#' A container for blast parameters and statistics.
+#' @description
+#' An S4 class that that serves as the container for blast parameters and
+#' statistics.
 #' 
-#' @slot program The BLAST flavour that generated the data; \code{"character"}.
-#' @slot matrix Name of the matrix (\code{NA} for nucleotide blast); \code{"character"}.
-#' @slot expect Cutoff value; \code{"numeric"}.
-#' @slot penalties Open and extend penalties; \code{"numeric"}.
-#' @slot sc_match Match score for nucleotide-nucleotide comparison; \code{"integer"}.
-#' @slot sc_mismatch Mismatch penalty for nucleotide-nucleotide comparison; \code{"integer"}.
-#' @slot filter Filter string; \code{"character"}.
-#' @slot num_sequences Number of sequences in the database; \code{"character"}.
-#' @slot num_letters Number of letters in the database; \code{"character"}.
-#' @slot hsp_length Effective HSP length; \code{"numeric"}.
-#' @slot effective_space Effective search space; \code{"numeric"}.
-#' @slot ka_params kappa, lambda, entropy; \code{"numeric"}.
+#' @slot program \code{character} vector; the BLAST flavour that generated the
+#'   data.
+#' @slot matrix \code{character} vector; name of the matrix (\code{NA} for
+#'   nucleotide blast).
+#' @slot expect \code{numeric} vector; cutoff value.
+#' @slot penalties \code{numeric} vector; open and extend penalties.
+#' @slot sc_match \code{integer} vector; match score for nucleotide-nucleotide
+#'   comparison.
+#' @slot sc_mismatch \code{integer} vector; mismatch penalty for nucleotide-
+#'   nucleotide comparison.
+#' @slot filter \code{character} vector; filter string.
+#' @slot num_sequences \code{character} vector; number of sequences in the 
+#'   database.
+#' @slot num_letters \code{character} vector; number of letters in the database.
+#' @slot hsp_length \code{numeric} vector; effective HSP length.
+#' @slot effective_space \code{numeric} vector; effective search space.
+#' @slot ka_params \code{numeric} vector; kappa, lambda, entropy.
 #' @seealso \code{\linkS4class{BlastReport}}, \code{\linkS4class{BlastHeader}}
 #' @keywords internal
+#' @examples 
+#' showClass("BlastParameters")
 new_BlastParameters <- 
   setClass(Class = "BlastParameters",
            slots = c(program = "character", matrix = "character",
@@ -86,26 +97,30 @@ setMethod('show', 'BlastParameters',
           })
 
 
-# BlastTable-class ------------------------------------------------------
+# BlastReport-class ------------------------------------------------------
 
 
-#' BlastReport
+#' Class \code{"BlastReport"}
 #'
 #' @description
-#' \code{"BlastReport"} is the top-level container for data parsed from NCBI
-#' Blast XML output. It contains the component data classes:
-#' \code{\linkS4class{BlastHeader}},
-#' \code{\linkS4class{BlastParameters}}, and
-#' \code{\linkS4class{IterationList}}.
+#' An S4 class that that serves as the top-level container for data parsed from
+#' NCBI BLAST XML output. It contains the following top-level components:
 #' 
+#' \itemize{
+#'    \item \code{\linkS4class{BlastHeader}}
+#'    \item \code{\linkS4class{BlastParameters}}
+#'    \item \code{\linkS4class{IterationList}}
+#' }
+#' 
+#' @details
 #' The \code{\linkS4class{Iteration}} elements store results from individual
 #' BLAST queries. Each \code{Iteration} holds a \code{\linkS4class{HitList}}
 #' with possibly multiple \code{\linkS4class{Hit}s}, which, in turn, can
 #' contain multiple high-scoring pairs (\code{\linkS4class{Hsp}s}).
 #' 
 #' Iterations, Hits, and Hsps can be extracted using the accessors
-#'  \code{\link{getIteration}}, \code{\link{getHit}}, and \code{\link{getHsp}},
-#'  or by directly subsetting a \code{blastReport} object.
+#' \code{\link{getIteration}}, \code{\link{getHit}}, and \code{\link{getHsp}},
+#'  or by directly subsetting a \code{BlastReport} object.
 #'  
 #' E.g. \code{report[[1]][[1]]} will return the first hit in the first query.
 #'  
@@ -114,7 +129,8 @@ setMethod('show', 'BlastParameters',
 #' @slot iterations Iterations; \code{\linkS4class{IterationList}}.
 #' @seealso
 #'  The constructor \code{\link{blastReport}}; the BLAST classes
-#'  \code{\linkS4class{blastReportDB}} and \code{\linkS4class{blastTable}} 
+#'  \code{\linkS4class{BlastReportDB}} and \code{\linkS4class{BlastTable}}
+#' @keywords classes 
 #' @export
 new_BlastReport <- 
   setClass(Class = "BlastReport",
@@ -127,43 +143,42 @@ new_BlastReport <-
 # getter, BlastReport ----------------------------------------------------
 
 
-## @return BlastHeader
+#' @describeIn BlastReport Return the \code{\linkS4class{BlastHeader}}.
 setMethod("getHeader", "BlastReport", function(x, ...) x@header)
 
-## @return BlastParameters
+#' @describeIn BlastReport Return the \code{\linkS4class{BlastParameters}}.
 setMethod("getParams", "BlastReport", function(x) x@parameters)
 
-## @return Iteration|IterationList
+#' @describeIn BlastReport Return the \code{\linkS4class{Iteration}} or 
+#'   \code{\linkS4class{IterationList}}.
 setMethod("getIteration", "BlastReport", function(x, drop = TRUE) {
   it <- x@iterations
-  if (drop && length(it) == 1)
+  if (drop && length(it) == 1) {
     it[[1]]
-  else
-    it
+  } else it
 })
 
-## @return list<HitLists>
-setMethod("getHit", "BlastReport",
-          function(x, n = NULL, drop = TRUE) {
+#' @describeIn BlastReport Return a list of \code{\linkS4class{HitList}}s.
+setMethod("getHit", "BlastReport", function(x, n = NULL, drop = TRUE) {
   getHit(getIteration(x), n = n, drop = drop)
 })
 
-## @return vector<integer>
+#' @describeIn BlastReport Return iteration numbers; <\code{integer}>.
 setMethod("getIterNum", "BlastReport", function(x) {
   getIterNum(getIteration(x))
 })
 
-## @return vector<character>
+#' @describeIn BlastReport Return query IDs; <\code{character}>.
 setMethod("getQueryID", "BlastReport", function(x) {
   getQueryID(getIteration(x))
 })
 
-## @return vector<character>
+#' @describeIn BlastReport Return query definitions; <\code{character}>.
 setMethod("getQueryDef", "BlastReport", function(x) {
   getQueryDef(getIteration(x))
 })
 
-## @return vector<integer>
+#' @describeIn BlastReport Return query lengths; <\code{integer}>.
 setMethod("getQueryLen", "BlastReport", function(x) {
   getQueryLen(getIteration(x))
 })
@@ -172,18 +187,19 @@ setMethod("getQueryLen", "BlastReport", function(x) {
 # subsetting, blastReport ------------------------------------------------
 
 
-## Subset to IterationList
+#' @describeIn BlastReport Subset to return an \code{\linkS4class{IterationList}}.
 setMethod("[", "BlastReport", function(x, i, j, ..., drop) {
   x@iterations[i]
 })
 
-## Subset to Iteration
+#' @describeIn BlastReport Subset to return an \code{\linkS4class{Iteration}}.
 setMethod("[[", "BlastReport", function(x, i, j, ...) {
   x@iterations[[i]]
 })
 
+#' @describeIn BlastReport Indicate missing \code{\linkS4class{Iteration}}s.
 setMethod("is.na", "BlastReport", function(x) {
-  vapply(x@iterations, is.na, FALSE, USE.NAMES=FALSE)
+  vapply(x@iterations, is.na, FALSE, USE.NAMES = FALSE)
 })
 
 
@@ -201,7 +217,6 @@ setMethod("is.na", "BlastReport", function(x) {
   x <- lapply(object@iterations, .show_Iteration)
   options(op)
 }
-
 
 #' @details
 #' The \code{show} methods for various blast objects can be modified by
@@ -223,7 +238,6 @@ setMethod("is.na", "BlastReport", function(x) {
 #' # show(hitlist)
 #' # options("showHits" = NULL)
 #' # show(hitlist)
-setMethod("show", "BlastReport",
-          function(object) {
-            .show_BlastReport(object)
-          })
+setMethod("show", "BlastReport", function(object) {
+  .show_BlastReport(object)
+})

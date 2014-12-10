@@ -15,6 +15,16 @@ NULL
   if (length(errors) == 0L) TRUE else errors
 }
 
+#' Class \code{"Defline"}
+#' 
+#' @slot tag
+#' @slot accession
+#' @slot locus
+#' @slot description
+#' @slot species
+#' @keywords internal classes
+#' @examples 
+#' showClass("Defline")
 setClass(Class = "Defline",
          slots = c(tag = "character",
                    accession = "character",
@@ -27,6 +37,12 @@ setClass(Class = "Defline",
 # DeflineSet-class --------------------------------------------------------
 
 
+#' Class \code{"DeflineSet"} of \code{"Defline"} objects
+#' 
+#' @slot .Data Inherited from the \code{\link{list}} class.
+#' @keywords internal classes
+#' @examples 
+#' showClass("DeflineSet")
 setClass(Class = "DeflineSet", contains = "list",
          validity = listclassValidator('DeflineSet', 'Defline'))
 
@@ -149,11 +165,11 @@ Deflines <- function(x) {
   # first split into identifier and description at the first blank space
   x <- compactChar(unlist(strsplit(unlist(x), "^>")))
   x <- str_split_fixed(x, " ", 2)
-  ids <- x[,1]
-  x <- x[,2]
+  ids <- x[, 1]
+  x <- x[, 2]
   x <- str_split_fixed(x, " \\[|\\]", 3)
-  descriptions <- as.list(x[,1] %|% NA_character_)
-  species <- as.list(x[,2] %|% NA_character_)
+  descriptions <- as.list(x[, 1] %|% NA_character_)
+  species <- as.list(x[, 2] %|% NA_character_)
   
   # parse identifier patterns
   # first we extract the database tags which always are 2 or 3 lowercase

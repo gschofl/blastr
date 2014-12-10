@@ -92,22 +92,21 @@ on_failure(has_tables) <- function(call, env) {
   paste0("Missing table(s) ", tbl, " in database ", sQuote(dbName))
 }
 
-#' @export
 #' @keywords internal
 "%has_tables%" <- has_tables
 
 
-# sqliteDB-class ---------------------------------------------------------
+# SQLiteDB-class ---------------------------------------------------------
 
 
-#' sqliteDB-class
+#' Class \code{"SQLiteDB"}
 #' 
 #' @field .con An \code{\linkS4class{SQLiteConnection}}.
 #' @field .info A list.
 #' @field .path Path to the database.
 #' @keywords internal   
-.sqliteDB <- setRefClass(
-  Class = 'sqliteDB',
+sqliteDB <- setRefClass(
+  Class = 'SQLiteDB',
   fields = list(
     .con = 'SQLiteConnection',
     .info = 'list',
@@ -127,15 +126,15 @@ on_failure(has_tables) <- function(call, env) {
 
 #' @keywords internal
 setGeneric("conn", function(x) standardGeneric("conn"))
-setMethod("conn", "sqliteDB", function(x) x$.con)
+setMethod("conn", "SQLiteDB", function(x) x$.con)
 
 #' @keywords internal
 setGeneric("info", function(x) standardGeneric("info"))
-setMethod("info", "sqliteDB", function(x) x$.info)
+setMethod("info", "SQLiteDB", function(x) x$.info)
 
 #' @keywords internal
 setGeneric("path", function(x) standardGeneric("path"))
-setMethod("path", "sqliteDB", function(x) x$.path)
+setMethod("path", "SQLiteDB", function(x) x$.path)
 
 
 # SQLite transactions -----------------------------------------------------
@@ -166,7 +165,7 @@ setGeneric("db_query", function(x, stmt, j = NA, ...) standardGeneric("db_query"
   }
 }
 
-setMethod("db_query", "sqliteDB", function(x, stmt, j = NA, ...) {
+setMethod("db_query", "SQLiteDB", function(x, stmt, j = NA, ...) {
   .db_query(conn(x), stmt = stmt, j = j, log = list(...)$log)
 })
 
@@ -194,7 +193,7 @@ setGeneric("db_bulk_insert", function(x, tbl, df, ...) standardGeneric("db_bulk_
   dbCommit(con)
 }
 
-setMethod("db_bulk_insert", "sqliteDB", function(x, tbl, df, ...) {
+setMethod("db_bulk_insert", "SQLiteDB", function(x, tbl, df, ...) {
   .db_bulk_insert(conn(x), tbl, df, log = list(...)$log)
 })
 
@@ -210,7 +209,7 @@ setMethod("db_bulk_insert", "SQLiteConnection", function(x, tbl, df, ...) {
 #' @keywords internal
 setGeneric("db_list_tables", function(x, ...) standardGeneric("db_list_tables"))
 
-setMethod("db_list_tables", "sqliteDB", function(x, ...) dbListTables(conn(x)))
+setMethod("db_list_tables", "SQLiteDB", function(x, ...) dbListTables(conn(x)))
 
 setMethod("db_list_tables", "SQLiteConnection", function(x, ...) dbListTables(x))
 
@@ -223,7 +222,7 @@ setMethod("db_list_tables", "SQLiteConnection", function(x, ...) dbListTables(x)
 #' @keywords internal
 setGeneric("db_list_fields", function(x, tbl, ...) standardGeneric("db_list_fields"))
 
-setMethod("db_list_fields", "sqliteDB", function(x, tbl, ...) dbListFields(conn(x), tbl))
+setMethod("db_list_fields", "SQLiteDB", function(x, tbl, ...) dbListFields(conn(x), tbl))
 
 setMethod("db_list_fields", "SQLiteConnection", function(x, tbl, ...) dbListFields(x, tbl))
 
@@ -241,7 +240,7 @@ setGeneric("db_count", function(x, tbl, ...) standardGeneric("db_count"))
   .db_query(con, paste0("select count(*) from ", tbl), 1L, ...)
 }
 
-setMethod("db_count", "sqliteDB", function(x, tbl, ...) .db_count(conn(x), tbl, ...))
+setMethod("db_count", "SQLiteDB", function(x, tbl, ...) .db_count(conn(x), tbl, ...))
 
 setMethod("db_count", "SQLiteConnection", function(x, tbl, ...) .db_count(x, tbl, ...))
 

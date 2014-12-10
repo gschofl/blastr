@@ -6,10 +6,10 @@ NULL
 # BlastReportDB-class ----------------------------------------------------
 
 
-#' BlastReportDB
+#' Class \code{"blastReportDB"}
 #' 
-#' \sQuote{\bold{blastReportDB}}: A connection to an SQLite database
-#' containing blast records organised in three tables:
+#' A reference calss that provides a connection to an SQLite database
+#' containing BLAST records organised in three tables:
 #' 
 #' \bold{query} with fields:
 #' 
@@ -55,7 +55,7 @@ NULL
 #'    \item hseq         TEXT
 #'    \item midline      TEXT
 #' }
-#'  
+#'
 #' @seealso
 #'  The constructors \code{\link{blastReportDB}} and \code{\link{blastReportDBConnect}},
 #'  and the BLAST classes \code{\linkS4class{BlastReport}} and
@@ -63,9 +63,9 @@ NULL
 #' @export
 new_BlastReportDB <- setRefClass(
   Class    = 'BlastReportDB',
-  contains = 'sqliteDB',
+  contains = 'SQLiteDB',
   methods  = list(
-    initialize = function(con = db_create(dbSchema = blast_db.sql(), verbose=FALSE), ...) {
+    initialize = function(con = db_create(dbSchema = blast_db.sql(), verbose = FALSE), ...) {
       callSuper(con, ...)
     })
 )
@@ -112,8 +112,7 @@ setMethod('lapply', 'BlastReportDB', function(X, FUN, ...) {
   )
 })
 
-
-#' Parse NCBI BLAST XML files into \linkS4class{blastReportDB} objects.
+#' Parse NCBI BLAST XML files into \linkS4class{BlastReportDB} objects.
 #' 
 #' Create (or connect to) a  blastReport SQLite database.
 #' 
@@ -126,6 +125,8 @@ setMethod('lapply', 'BlastReportDB', function(X, FUN, ...) {
 #' @param verbose Message if a new database is created.
 #' @return A \code{\linkS4class{BlastReportDB}} object.
 #' @export
+#' @examples 
+#' ##
 blastReportDB <- function(blastfile, db_path = ":memory:", max_hit = NULL,
                           max_hsp = NULL, reset_at = 1000, verbose = TRUE) {
   db <- new_BlastReportDB(db_create(db_path, blast_db.sql(), overwrite = TRUE,

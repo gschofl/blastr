@@ -8,13 +8,15 @@ NULL
 
 #' Parse NCBI BLAST XML files.
 #' 
-#' @param blast Blast output in XML format (file path or character vector)
-#' @param asText If \code{TRUE} the XML blast output is passed in as a string
+#' @param x BLAST output in XML format (as file path or character string).
+#' @param asText If \code{TRUE} the XML BLAST output is passed in as a string
 #' instead of a file path.
 #' @return A \code{\linkS4class{BlastReport}} object.
 #' @export
-blastReport <- function(blast, asText = FALSE) {
-  doc <- xmlRoot(xmlInternalTreeParse(blast, asText = asText))
+#' @examples 
+#' ##
+blastReport <- function(x, asText = FALSE) {
+  doc <- xmlRoot(xmlInternalTreeParse(x, asText = asText))
   dbr <- parseBlastDatabaseReport(doc)
   iter_elems <- xpathApply(doc, '/BlastOutput/BlastOutput_iterations/Iteration')
   new_BlastReport(
@@ -23,7 +25,6 @@ blastReport <- function(blast, asText = FALSE) {
     iterations = parseIterations(iter_elems)
   )
 }
-
 
 parseBlastDatabaseReport  <- function(doc) {
   list(
@@ -58,7 +59,6 @@ parseBlastDatabaseReport  <- function(doc) {
   )
 }
 
-
 parseIterations <- function(iter_elems) {
   IterationList(
     lapply(iter_elems, function(elem) {
@@ -79,7 +79,6 @@ parseIterations <- function(iter_elems) {
     })
   )
 }
-
 
 parseHits <- function(hit_elems, query_env) {
   HitList(
@@ -102,7 +101,6 @@ parseHits <- function(hit_elems, query_env) {
     query_env = query_env
   )
 }
-
 
 parseHsps <- function(hsp_elems, query_env) {
   HspList(
@@ -133,27 +131,23 @@ parseHsps <- function(hsp_elems, query_env) {
   )
 }
 
-
-#' Parse NCBI BLAST table files into \linkS4class{blastTable} objects.
+#' Parse NCBI BLAST table files into \linkS4class{BlastTable} objects.
 #' 
-#' @param blastfile Blast output in tabular format
-#' (file path or character vector)
-#' 
+#' @param x BLAST output in tabular format (file path or character string)
 #' @return A \code{\linkS4class{blastTable}} object.
 #' @rdname blastTable
 #' @export
-blastTable <- function(blastfile) {
+blastTable <- function(x) {
   res <- list()
-  for (blout in blastfile) {
+  for (blout in x) {
     if (is.character(blout) && file.exists(blout)) {
-      cf <- count.fields(blout, sep="\t", comment.char="#")
-      file_path <- file(blout, open="r")
+      cf <- count.fields(blout, sep = "\t", comment.char = "#")
+      file_path <- file(blout, open = "r")
     } else {
       cf <- count.fields(textConnection(as.character(blout)),
-                         sep="\t", comment.char="#")
+                         sep = "\t", comment.char = "#")
       file_path <- textConnection(as.character(blout))
     }
-    
     if (!all(cf == 12)) {
       stop(sprintf("Malformed blast table. %s columns in row %s.\n",
                    sQuote(cf[cf > 12]), sQuote(which(cf > 12))))
@@ -170,30 +164,29 @@ blastTable <- function(blastfile) {
     
     pushBack(line, connection=file_path)  
     hit_table <- 
-      read.table(file_path, header=FALSE, sep="\t",
-                 as.is=TRUE, nrows=length(cf),
-                 col.names=c("qid", "sid", "pident",
-                             "length", "mismatch", "gapopen",
-                             "qstart", "qend", "sstart",
-                             "send","evalue","bit_score"),
-                 colClasses=c("character", "character", "numeric",
-                              "integer", "integer", "integer",
-                              "integer", "integer", "integer",
-                              "integer", "numeric", "numeric"))
+      read.table(file_path, header = FALSE, sep = "\t",
+                 as.is = TRUE, nrows = length(cf),
+                 col.names = c("qid", "sid", "pident",
+                               "length", "mismatch", "gapopen",
+                               "qstart", "qend", "sstart",
+                               "send","evalue","bit_score"),
+                 colClasses = c("character", "character", "numeric",
+                                "integer", "integer", "integer",
+                                "integer", "integer", "integer",
+                                "integer", "numeric", "numeric"))
     
     ## parse subjectIds in 'hit_table'
     all_ids <- with(hit_table, strsplit(sid, "\\|"))
-    gi  <- vapply(all_ids, '[', 2, FUN.VALUE=character(1))
-    source_tag <- vapply(all_ids, '[', 3, FUN.VALUE=character(1))
+    gi  <- vapply(all_ids, '[', 2, FUN.VALUE = character(1))
+    source_tag <- vapply(all_ids, '[', 3, FUN.VALUE = character(1))
     accn <- ifelse(grepl("pdb", source_tag),
                    paste0(sapply(all_ids, '[', 4), "_", sapply(all_ids, '[', 5)),
                    sapply(all_ids, '[', 4))
-    if (all(is.na(accn)))
+    if (all(is.na(accn))) {
       accn <- hit_table[["sid"]]
-    
+    }
     neg_log_evalue <- with(hit_table, -log(as.numeric(evalue)))
     neg_log_evalue[is.infinite(neg_log_evalue)] <- -log(1e-323)
-    
     if (!is.null(comStr) && length(comStr) == 5) {
       program <- comStr[1]
       query <- str_split_fixed(comStr[2], "Query: ", 2)[,2]
@@ -204,7 +197,7 @@ blastTable <- function(blastfile) {
     
     close(file_path)
     
-    res <- c(res, new('blastTable', program = program, database = database,
+    res <- c(res, new('BlastTable', program = program, database = database,
                       query = query,
                       bit_score = as.numeric(hit_table[["bit_score"]]),
                       evalue = as.numeric(hit_table[["evalue"]]),

@@ -4,22 +4,24 @@ NULL
 # Hit-class --------------------------------------------------------------
 
 
-#' An S4 class to represent a BLAST hit.
+#' Class \code{"Hit"}
 #' 
-#' A container for information parsed from an XML NCBI BLAST hit element.
-#' Information about multiple Blast hits within a query is contained in a
-#' \code{HitList}.
+#' An S4 class that serves as a container for information parsed from an
+#' NCBI BLAST XML hit element. Information about multiple BLAST hits within a 
+#' query is contained in a \code{\linkS4class{HitList}}.
 #'  
-#' @slot hit_num The number of the hit; \code{"integer"}.
-#' @slot hit_def Hit definition; \code{"\linkS4class{DeflineSet}"}.
-#' @slot hit_acc Accession number; \code{"character"}.
-#' @slot hit_len Length of hit; \code{"integer"}.
-#' @slot hsps List of HSPs; \code{"\linkS4class{HspList}"}.
+#' @slot hit_num The number of the hit; <\code{integer}>.
+#' @slot hit_def Hit definition; <\code{\linkS4class{DeflineSet}}>.
+#' @slot hit_acc Accession number; <\code{character}>.
+#' @slot hit_len Length of hit; <\code{integer}>.
+#' @slot hsps List of HSPs; <\code{\linkS4class{HspList}}>.
 #' @slot query_env Shared container for \code{query_id},
 #'    \code{query_def}, \code{query_len}, and \code{hit_len};
-#'    \code{"environment"}.
-#' @seealso \code{"\linkS4class{BlastReport}"}
+#'    >\code{environment}>.
+#' @seealso \code{\linkS4class{BlastReport}}
 #' @export
+#' @examples 
+#' showClass("Hit")
 new_Hit <- 
   setClass(Class = "Hit",
            slots = c(
@@ -31,9 +33,9 @@ new_Hit <-
              query_env = 'environment'
            ))
 
-#' HitList
+#' Class \code{"HitList"} of \code{"Hit"} objects
 #' 
-#' A list of \code{"\linkS4class{Hit}"} objects.
+#' An S4 class that holds a list of \code{\linkS4class{Hit}} objects.
 #'
 #' @slot query_env Shared container for \code{query_id},
 #'    \code{query_def}, \code{query_len}, and \code{hit_len};
@@ -41,6 +43,8 @@ new_Hit <-
 #' @slot .Data Inherited from the \code{\link{list}} class.
 #' @seealso \code{"\linkS4class{BlastReport}"}
 #' @export
+#' @examples 
+#' showClass("HitList")
 setClass(Class    = "HitList",
          slots    = c(query_env = 'environment'),
          contains = "list",

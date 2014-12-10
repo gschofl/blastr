@@ -4,24 +4,25 @@ NULL
 # blastTable-class -------------------------------------------------------
 
 
-#' BlastTable
+#' Class \code{"BlastTable"}
+#'
+#' @description
+#' An S4 class that serves as a container for data parsed from
+#' NCBI BLAST tabular output.
 #' 
-#' BlastTable is an S4 class that provides a container for data retrived
-#' by calls to the NCBI Blast utility.
-#' 
-#' @slot program The BLAST flavour that generated the data; \code{"character"}.
-#' @slot query Query definition; \code{"character"}.
-#' @slot reference Reference for BLAST; \code{"character"}.
-#' @slot database Name of the database; \code{"character"}.
-#' @slot bit_score The bit score of the hsp; \code{"numeric"}.
-#' @slot evalue The expect value; \code{"numeric"}.
-#' @slot mlog.evalue
-#' @slot accession Accession number; \code{"character"}.
-#' @slot geneid Accession number; \code{"character"}.
-#' @slot table Hit table; \code{"data.frame"}.
+#' @slot program <\code{character}>; The BLAST flavour that generated the data.
+#' @slot query <\code{character}>; Query definition.
+#' @slot reference <\code{character}>; Reference for BLAST.
+#' @slot database <\code{character}>; Name of the database.
+#' @slot bit_score <\code{numeric}>; The bit score of the hsp.
+#' @slot evalue <\code{numeric}>; The expect value.
+#' @slot mlog.evalue <\code{numeric}>; 
+#' @slot accession <\code{character}>; Accession number.
+#' @slot geneid <\code{character}>; NCBI GI number.
+#' @slot table <\code{data.frame}>; Hit table.
 #' @seealso
 #'  The constructor \code{\link{blastTable}}; the BLAST classes
-#'  \code{\linkS4class{blastReport}} and \code{\linkS4class{blastReportDB}} 
+#'  \code{\linkS4class{BlastReport}} and \code{\linkS4class{BlastReportDB}} 
 #' @export
 setClass(Class = "BlastTable",
          slots = c(program = "character", query = "character",
@@ -45,24 +46,24 @@ setMethod("show", "BlastTable",
           })
 
 
-# subsetting-methods, blastTable ####
+# subsetting-methods, BlastTable ####
 
-setMethod("$", "BlastTable",
-          function(x, name) {
-            slot(x, "table")[[name]]
-          })
+#' @describeIn BlastTable Return a column from a BLAST hit table.
+setMethod("$", "BlastTable", function(x, name) {
+  slot(x, "table")[[name]]
+})
 
-setMethod("[", "BlastTable",
-          function (x, i, j, ..., drop = TRUE) {
-            slot(x, "table")[i,j,...]
-          })
+#' @describeIn BlastTable Return selected elements from a BLAST hit table as a \code{data.frame}.
+setMethod("[", "BlastTable", function (x, i, j, ..., drop = TRUE) {
+  slot(x, "table")[i, j,...]
+})
 
-setMethod("[[", "BlastTable",
-          function(x, i) {
-            slot(x, "table")[[i]]
-          })
+#' @describeIn BlastTable Return selected columns from a BLAST hit table.
+setMethod("[[", "BlastTable", function(x, i) {
+  slot(x, "table")[[i]]
+})
 
-setMethod("names", "BlastTable",
-          function(x) {
-            names(slot(x, "table"))
-          })
+#' @describeIn BlastTable Get the column names from a BLAST hit table.
+setMethod("names", "BlastTable", function(x) {
+  names(slot(x, "table"))
+})

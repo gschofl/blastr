@@ -9,10 +9,10 @@ setOldClass("list")
 # Hsp-class --------------------------------------------------------------
 
 
-#' Contains information parsed from an XML NCBI BLAST hsp element.
-#'
-#' Information about each high-scoring pair (hsp) within a hit contained in a
-#' single \sQuote{Hsp} element.
+#' Class \code{"Hsp"}
+#' 
+#' An S4 class that serves as a container for information parsed from an
+#' NCBI BLAST XML high-scoring pair (hsp) element.
 #'
 #' @slot hsp_num The number of the hsp; \code{"integer"}.
 #' @slot score The BLAST score of the hsp; \code{"numeric"}.
@@ -35,6 +35,8 @@ setOldClass("list")
 #'    \code{"environment"}.
 #' @seealso \code{"\linkS4class{BlastReport}"} 
 #' @export
+#' @examples 
+#' showClass("Hsp")
 new_Hsp <- 
   setClass(Class = "Hsp",
            slots = c(
@@ -49,9 +51,9 @@ new_Hsp <-
              match = "XString", query_env = 'environment')
   )
 
-#' HspList
+#' Class \code{"HspList"} of \code{"Hsp"} objects
 #' 
-#' A list of \code{"\linkS4class{Hsp}"} objects.
+#' An S4 class that holds a list of \code{\linkS4class{Hsp}} objects.
 #'
 #' @slot query_env Shared container for \code{query_id},
 #'    \code{query_def}, \code{query_len}, and \code{hit_len};
@@ -59,6 +61,8 @@ new_Hsp <-
 #' @slot .Data Inherited from the \code{\link{list}} class.
 #' @seealso \code{"\linkS4class{BlastReport}"} 
 #' @export
+#' @examples 
+#' showClass("HspList")
 setClass("HspList", representation(query_env = 'environment'), contains = "list",
          validity = listclassValidator('HspList', 'Hsp'))
 
