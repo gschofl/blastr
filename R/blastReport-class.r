@@ -151,16 +151,17 @@ setMethod("getParams", "BlastReport", function(x) x@parameters)
 
 #' @describeIn BlastReport Return the \code{\linkS4class{Iteration}} or 
 #'   \code{\linkS4class{IterationList}}.
-setMethod("getIteration", "BlastReport", function(x, drop = TRUE) {
-  it <- x@iterations
+setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
+  it <- x@iterations[i]
   if (drop && length(it) == 1) {
     it[[1]]
   } else it
 })
 
 #' @describeIn BlastReport Return a list of \code{\linkS4class{HitList}}s.
-setMethod("getHit", "BlastReport", function(x, n = NULL, drop = TRUE) {
-  getHit(getIteration(x), n = n, drop = drop)
+setMethod("getHit", "BlastReport", function(x, i, drop = TRUE) {
+  .fun <- if (missing(i)) getHit else Partial(getHit, i = i)
+  lapply(getIteration(x), .fun, drop = drop)
 })
 
 #' @describeIn BlastReport Return iteration numbers; <\code{integer}>.

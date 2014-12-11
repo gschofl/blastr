@@ -6,7 +6,7 @@
 \alias{nhits,IterationList-method}
 \title{Class \code{"IterationList"} of \code{"Iteration"} objects}
 \usage{
-\S4method{getHit}{IterationList}(x, n = NULL, drop = TRUE, ...)
+\S4method{getHit}{IterationList}(x, i, drop = TRUE, ...)
 
 \S4method{nhits}{IterationList}(x)
 }

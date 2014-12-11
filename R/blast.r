@@ -136,12 +136,12 @@ update_blastdb <- function(..., destdir = getOption("blastr.blastdb.path") %||% 
                             "tblastx", "rpsblast+", 'rpstblastn'))
   assert_that(has_command(exec))
   strand <- match.arg(strand, c("both", "plus", "minus"))
-  outfmt <- switch(match.arg(outfmt, c('xml', 'table')), xml=5, table=7)
+  outfmt <- switch(match.arg(outfmt, c('xml', 'table')), xml = 5, table = 7)
   dot_args <- list(...)
   
   # dealing with query
   if (missing(query)) {
-    return(SysCall(exec, help=TRUE, intern=FALSE))
+    return(SysCall(exec, help = TRUE, intern = FALSE))
   }
   if (exec %in% c("blastp", "blastp_short", "rpsblast+")) {
     strand <- NULL
@@ -156,7 +156,7 @@ update_blastdb <- function(..., destdir = getOption("blastr.blastdb.path") %||% 
   # set a number of defaults different from the internal defaults of
   # the blast applications
   if (missing(db)) {
-    db <- switch(exec, blastn='nt', `rpsblast+`='Cdd', 'nr')
+    db <- switch(exec, blastn = 'nt', `rpsblast+` = 'Cdd', 'nr')
   }
   
   ## if we query the NCBI blast server we don't want to fetch the path to local
@@ -168,19 +168,19 @@ update_blastdb <- function(..., destdir = getOption("blastr.blastdb.path") %||% 
   }
   args <- merge_list(
     dot_args,
-    list(query=query, db=db, outfmt=outfmt,
-         num_descriptions=NULL, num_alignments=NULL,
-         max_target_seqs=max_hits, strand=strand,
-         parse_deflines=parse_deflines)
+    list(query = query, db = db, outfmt = outfmt,
+         num_descriptions = NULL, num_alignments = NULL,
+         max_target_seqs = max_hits, strand = strand,
+         parse_deflines = parse_deflines)
   ) 
   # check if 'out' was specified, otherwise return results internally
   intern <- if (is.null(args[["out"]])) TRUE else FALSE
   cat(paste0("Blasting ", nqueries, " queries [", exec, "]", "\n"), sep="")
-  res <- SysCall(exec=exec, args=args, redirection= FALSE, style="unix",
-                 show_cmd=show_cmd, intern=intern)
+  res <- SysCall(exec = exec, args = args, redirection = FALSE, style = "unix",
+                 show_cmd = show_cmd, intern = intern)
   if (intern && parse && !has_attr(res, 'status')) {
     if (outfmt == 5) {
-      blastReport(res, asText=TRUE)
+      blastReport(res, asText = TRUE)
     } else if (outfmt == 7) {
       blastTable(res)
     } else {

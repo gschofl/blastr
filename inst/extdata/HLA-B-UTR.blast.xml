@@ -1,0 +1,796 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastn</BlastOutput_program>
+  <BlastOutput_version>BLASTN 2.2.30+</BlastOutput_version>
+  <BlastOutput_reference>Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb Miller (2000), &quot;A greedy algorithm for aligning DNA sequences&quot;, J Comput Biol 2000; 7(1-2):203-14.</BlastOutput_reference>
+  <BlastOutput_db>hs_ref</BlastOutput_db>
+  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+  <BlastOutput_query-def>human HLA-B-5UTR, 100 bp</BlastOutput_query-def>
+  <BlastOutput_query-len>100</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_sc-match>1</Parameters_sc-match>
+      <Parameters_sc-mismatch>-2</Parameters_sc-mismatch>
+      <Parameters_gap-open>0</Parameters_gap-open>
+      <Parameters_gap-extend>0</Parameters_gap-extend>
+      <Parameters_filter>L;m;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>Query_1</Iteration_query-ID>
+  <Iteration_query-def>human HLA-B-5UTR, 100 bp</Iteration_query-def>
+  <Iteration_query-len>100</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|568815592|ref|NC_000006.12|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6, GRCh38 Primary Assembly</Hit_def>
+  <Hit_accession>NC_000006</Hit_accession>
+  <Hit_len>170805979</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>174.705</Hsp_bit-score>
+      <Hsp_score>94</Hsp_score>
+      <Hsp_evalue>6.00033e-42</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>31357442</Hsp_hit-from>
+      <Hsp_hit-to>31357343</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>98</Hsp_identity>
+      <Hsp_positive>98</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCGCGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_qseq>
+      <Hsp_hseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGGGCCGCGTCTGCAATGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||| |||||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|568815569|ref|NT_167249.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_7 HSCHR6_MHC_SSTO_CTG1</Hit_def>
+  <Hit_accession>NT_167249</Hit_accession>
+  <Hit_len>4929269</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>174.705</Hsp_bit-score>
+      <Hsp_score>94</Hsp_score>
+      <Hsp_evalue>6.00033e-42</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2659680</Hsp_hit-from>
+      <Hsp_hit-to>2659581</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>98</Hsp_identity>
+      <Hsp_positive>98</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCGCGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_qseq>
+      <Hsp_hseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGGGCCGCGTCTGCAATGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||| |||||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|568815564|ref|NT_167247.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_5 HSCHR6_MHC_MCF_CTG1</Hit_def>
+  <Hit_accession>NT_167247</Hit_accession>
+  <Hit_len>4827813</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>174.705</Hsp_bit-score>
+      <Hsp_score>94</Hsp_score>
+      <Hsp_evalue>6.00033e-42</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2699427</Hsp_hit-from>
+      <Hsp_hit-to>2699328</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>98</Hsp_identity>
+      <Hsp_positive>98</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCGCGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_qseq>
+      <Hsp_hseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCTTGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  |||||||||||||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|568815561|ref|NT_167246.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_4 HSCHR6_MHC_MANN_CTG1</Hit_def>
+  <Hit_accession>NT_167246</Hit_accession>
+  <Hit_len>4677643</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>174.705</Hsp_bit-score>
+      <Hsp_score>94</Hsp_score>
+      <Hsp_evalue>6.00033e-42</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2666054</Hsp_hit-from>
+      <Hsp_hit-to>2665955</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>98</Hsp_identity>
+      <Hsp_positive>98</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCGCGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_qseq>
+      <Hsp_hseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGGGCCGCGTCTGCAATGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||| |||||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|568815529|ref|NT_113891.3|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_2 HSCHR6_MHC_COX_CTG1</Hit_def>
+  <Hit_accession>NT_113891</Hit_accession>
+  <Hit_len>4795265</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>174.705</Hsp_bit-score>
+      <Hsp_score>94</Hsp_score>
+      <Hsp_evalue>6.00033e-42</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2837801</Hsp_hit-from>
+      <Hsp_hit-to>2837702</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>98</Hsp_identity>
+      <Hsp_positive>98</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCGCGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_qseq>
+      <Hsp_hseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGGGCCGCGTCTGCAATGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||| |||||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|568815567|ref|NT_167248.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_6 HSCHR6_MHC_QBL_CTG1</Hit_def>
+  <Hit_accession>NT_167248</Hit_accession>
+  <Hit_len>4606388</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>158.086</Hsp_bit-score>
+      <Hsp_score>85</Hsp_score>
+      <Hsp_evalue>6.04293e-37</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2613139</Hsp_hit-from>
+      <Hsp_hit-to>2613040</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>95</Hsp_identity>
+      <Hsp_positive>95</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>GATCAGGACGAAGTCCCAGGTCCCGGACGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCGCGTCTGCATTGGGGAGGCGCAGCGTTGGGGATTCCCCACT</Hsp_qseq>
+      <Hsp_hseq>GATCAGGACGAAGTCCCAGGCCCCGGGCGGGGCTCTCAGGGTCTCAGGCTCCGAGAGCCTTGTCTGCATTGGGGAGGCGCAGCATTGGGGATTCCCCACT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||| ||||| ||||||||||||||||||||||||||||||||  |||||||||||||||||||||| ||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>455</Statistics_db-num>
+      <Statistics_db-len>3209286105</Statistics_db-len>
+      <Statistics_hsp-len>27</Statistics_hsp-len>
+      <Statistics_eff-space>234276988860</Statistics_eff-space>
+      <Statistics_kappa>0.46</Statistics_kappa>
+      <Statistics_lambda>1.28</Statistics_lambda>
+      <Statistics_entropy>0.85</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+<Iteration>
+  <Iteration_iter-num>2</Iteration_iter-num>
+  <Iteration_query-ID>Query_2</Iteration_query-ID>
+  <Iteration_query-def>human HLA-B-3UTR, 100 bp</Iteration_query-def>
+  <Iteration_query-len>100</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|568815592|ref|NC_000006.12|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6, GRCh38 Primary Assembly</Hit_def>
+  <Hit_accession>NC_000006</Hit_accession>
+  <Hit_len>170805979</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>178.399</Hsp_bit-score>
+      <Hsp_score>96</Hsp_score>
+      <Hsp_evalue>4.63854e-43</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>31354218</Hsp_hit-from>
+      <Hsp_hit-to>31354120</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>99</Hsp_identity>
+      <Hsp_positive>99</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>156.239</Hsp_bit-score>
+      <Hsp_score>84</Hsp_score>
+      <Hsp_evalue>2.17343e-36</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>31269096</Hsp_hit-from>
+      <Hsp_hit-to>31268998</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>95</Hsp_identity>
+      <Hsp_positive>95</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>3</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>3</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>29929480</Hsp_hit-from>
+      <Hsp_hit-to>29929575</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>83</Hsp_identity>
+      <Hsp_positive>83</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>TCTCTTTCTGCAAAGGCACCTGAATGTGCCTGTGTTCCTGTAGGCATAATATGAGGAGGTGGGGAGACCAACCCACCCCCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||| ||| || |||||  ||||||| ||||||||||| ||||||| |||||||   |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|568815564|ref|NT_167247.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_5 HSCHR6_MHC_MCF_CTG1</Hit_def>
+  <Hit_accession>NT_167247</Hit_accession>
+  <Hit_len>4827813</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>178.399</Hsp_bit-score>
+      <Hsp_score>96</Hsp_score>
+      <Hsp_evalue>4.63854e-43</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2696190</Hsp_hit-from>
+      <Hsp_hit-to>2696092</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>99</Hsp_identity>
+      <Hsp_positive>99</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>150.699</Hsp_bit-score>
+      <Hsp_score>81</Hsp_score>
+      <Hsp_evalue>1.0112e-34</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2611824</Hsp_hit-from>
+      <Hsp_hit-to>2611726</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>94</Hsp_identity>
+      <Hsp_positive>94</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCATCTGAATGTGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||| |||||||||||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>3</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1147567</Hsp_hit-from>
+      <Hsp_hit-to>1147659</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|568815529|ref|NT_113891.3|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_2 HSCHR6_MHC_COX_CTG1</Hit_def>
+  <Hit_accession>NT_113891</Hit_accession>
+  <Hit_len>4795265</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>178.399</Hsp_bit-score>
+      <Hsp_score>96</Hsp_score>
+      <Hsp_evalue>4.63854e-43</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2834578</Hsp_hit-from>
+      <Hsp_hit-to>2834480</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>99</Hsp_identity>
+      <Hsp_positive>99</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>145.159</Hsp_bit-score>
+      <Hsp_score>78</Hsp_score>
+      <Hsp_evalue>4.70464e-33</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2750022</Hsp_hit-from>
+      <Hsp_hit-to>2749924</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>93</Hsp_identity>
+      <Hsp_positive>93</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCGTCTGAATGTGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||  |||||||||||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>3</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1372135</Hsp_hit-from>
+      <Hsp_hit-to>1372227</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>4</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>3</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1410836</Hsp_hit-from>
+      <Hsp_hit-to>1410931</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>83</Hsp_identity>
+      <Hsp_positive>83</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>TCTCTTTCTGCAAAGGCACCTGAATGTGCCTGTGTTCCTGTAGGCATAATATGAGGAGGTGGGGAGACCAACCCACCCCCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||| ||| || |||||  ||||||| ||||||||||| ||||||| |||||||   |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|568815569|ref|NT_167249.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_7 HSCHR6_MHC_SSTO_CTG1</Hit_def>
+  <Hit_accession>NT_167249</Hit_accession>
+  <Hit_len>4929269</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>161.779</Hsp_bit-score>
+      <Hsp_score>87</Hsp_score>
+      <Hsp_evalue>4.67147e-38</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2656456</Hsp_hit-from>
+      <Hsp_hit-to>2656358</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>96</Hsp_identity>
+      <Hsp_positive>96</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>150.699</Hsp_bit-score>
+      <Hsp_score>81</Hsp_score>
+      <Hsp_evalue>1.0112e-34</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2571052</Hsp_hit-from>
+      <Hsp_hit-to>2570954</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>94</Hsp_identity>
+      <Hsp_positive>94</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCATCTGAATGTGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||| |||||||||||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>3</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1190552</Hsp_hit-from>
+      <Hsp_hit-to>1190644</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>4</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>3</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1229175</Hsp_hit-from>
+      <Hsp_hit-to>1229270</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>83</Hsp_identity>
+      <Hsp_positive>83</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>TCTCTTTCTGCAAAGGCACCTGAATGTGCCTGTGTTCCTGTAGGCATAATATGAGGAGGTGGGGAGACCAACCCACCCCCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||| ||| || |||||  ||||||| ||||||||||| ||||||| |||||||   |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|568815561|ref|NT_167246.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_4 HSCHR6_MHC_MANN_CTG1</Hit_def>
+  <Hit_accession>NT_167246</Hit_accession>
+  <Hit_len>4677643</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>161.779</Hsp_bit-score>
+      <Hsp_score>87</Hsp_score>
+      <Hsp_evalue>4.67147e-38</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2662830</Hsp_hit-from>
+      <Hsp_hit-to>2662732</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>96</Hsp_identity>
+      <Hsp_positive>96</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>145.159</Hsp_bit-score>
+      <Hsp_score>78</Hsp_score>
+      <Hsp_evalue>4.70464e-33</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2578146</Hsp_hit-from>
+      <Hsp_hit-to>2578048</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>93</Hsp_identity>
+      <Hsp_positive>93</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCATCTGAATGCGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||| ||||||| |||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>3</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1147168</Hsp_hit-from>
+      <Hsp_hit-to>1147260</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>4</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>3</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1185845</Hsp_hit-from>
+      <Hsp_hit-to>1185940</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>83</Hsp_identity>
+      <Hsp_positive>83</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>TCTCTTTCTGCAAAGGCACCTGAATGTGCCTGTGTTCCTGTAGGCATAATATGAGGAGGTGGGGAGACCAACCCACCCCCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||| ||| || |||||  ||||||| ||||||||||| ||||||| |||||||   |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|568815567|ref|NT_167248.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_6 HSCHR6_MHC_QBL_CTG1</Hit_def>
+  <Hit_accession>NT_167248</Hit_accession>
+  <Hit_len>4606388</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>156.239</Hsp_bit-score>
+      <Hsp_score>84</Hsp_score>
+      <Hsp_evalue>2.17343e-36</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2609915</Hsp_hit-from>
+      <Hsp_hit-to>2609817</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>95</Hsp_identity>
+      <Hsp_positive>95</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCTCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||| |||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>150.699</Hsp_bit-score>
+      <Hsp_score>81</Hsp_score>
+      <Hsp_evalue>1.0112e-34</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2524526</Hsp_hit-from>
+      <Hsp_hit-to>2524428</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>94</Hsp_identity>
+      <Hsp_positive>94</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCATCTGAATGTGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||| |||||||||||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>3</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1147595</Hsp_hit-from>
+      <Hsp_hit-to>1147687</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>4</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>3</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1186271</Hsp_hit-from>
+      <Hsp_hit-to>1186366</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>83</Hsp_identity>
+      <Hsp_positive>83</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>TCTCTTTCTGCAAAGGCACCTGAATGTGCCTGTGTTCCTGTAGGCATAATATGAGGAGGTGGGGAGACCAACCCACCCCCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||| ||| || |||||  ||||||| ||||||||||| ||||||| |||||||   |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|568815551|ref|NT_167245.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_3 HSCHR6_MHC_DBB_CTG1</Hit_def>
+  <Hit_accession>NT_167245</Hit_accession>
+  <Hit_len>4604811</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>150.699</Hsp_bit-score>
+      <Hsp_score>81</Hsp_score>
+      <Hsp_evalue>1.0112e-34</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>100</Hsp_query-to>
+      <Hsp_hit-from>2526894</Hsp_hit-from>
+      <Hsp_hit-to>2526796</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>94</Hsp_identity>
+      <Hsp_positive>94</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>100</Hsp_align-len>
+      <Hsp_qseq>CATCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCCCT</Hsp_qseq>
+      <Hsp_hseq>CATCTCTTTCTGCAAAGGCATCTGAATGTGTCTGCGTTCCTGTTAGCATAATGTGAGGAGGTGGAGAGAC-AGCCCACCCCCGTGTCCACCGTGACCCCT</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||| |||||||||||||||| |||||||||||||||||||||||||||||||| |||||||||  |||||||| |||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1147930</Hsp_hit-from>
+      <Hsp_hit-to>1148022</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|568815454|ref|NT_167244.2|</Hit_id>
+  <Hit_def>Homo sapiens chromosome 6 genomic scaffold, GRCh38 alternate locus group ALT_REF_LOCI_1 HSCHR6_MHC_APD_CTG1</Hit_def>
+  <Hit_accession>NT_167244</Hit_accession>
+  <Hit_len>4672374</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>6</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1150461</Hsp_hit-from>
+      <Hsp_hit-to>1150553</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>81</Hsp_identity>
+      <Hsp_positive>81</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>93</Hsp_align-len>
+      <Hsp_qseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>CTTTCTGCAAAGGCACCTGAATGTGTCTGTGTTCCTGTAGGCATAATGTGTGGAGGAGGGGAGACCAACCCACCCTCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||||||||||| || |||||  |||||||||| ||||| || ||||||| ||||||||  |||||||  ||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>106.379</Hsp_bit-score>
+      <Hsp_score>57</Hsp_score>
+      <Hsp_evalue>2.22005e-21</Hsp_evalue>
+      <Hsp_query-from>3</Hsp_query-from>
+      <Hsp_query-to>98</Hsp_query-to>
+      <Hsp_hit-from>1189162</Hsp_hit-from>
+      <Hsp_hit-to>1189257</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>83</Hsp_identity>
+      <Hsp_positive>83</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>96</Hsp_align-len>
+      <Hsp_qseq>TCTCTTTCTGCAAAGGCACCTGAATGTGTCTGCGTCCCTGTTAGCATAATGTGAGGAGGTGGAGAGACCAGCCCACCCTTGTGTCCACTGTGACCC</Hsp_qseq>
+      <Hsp_hseq>TCTCTTTCTGCAAAGGCACCTGAATGTGCCTGTGTTCCTGTAGGCATAATATGAGGAGGTGGGGAGACCAACCCACCCCCATGTCCACCATGACCC</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||||||||||||||| ||| || |||||  ||||||| ||||||||||| ||||||| |||||||   |||||||  ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>455</Statistics_db-num>
+      <Statistics_db-len>3209286105</Statistics_db-len>
+      <Statistics_hsp-len>27</Statistics_hsp-len>
+      <Statistics_eff-space>234276988860</Statistics_eff-space>
+      <Statistics_kappa>0.46</Statistics_kappa>
+      <Statistics_lambda>1.28</Statistics_lambda>
+      <Statistics_entropy>0.85</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>
+

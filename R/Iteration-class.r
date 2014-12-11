@@ -57,8 +57,8 @@ IterationList <- listclassConstructor('IterationList', 'Iteration')
 # Hsp, nhsps, HspNum ####
 
 ## @return list<Hsp|HspList>
-setMethod("getHsp", "Iteration", function(x, n = NULL, drop = TRUE) {
-  lapply(x@hits, getHsp, n = n, drop = drop)
+setMethod("getHsp", "Iteration", function(x, i, drop = TRUE) {
+  lapply(x@hits, getHsp, i = i, drop = drop)
 })
 
 ## @return vector<numeric>
@@ -75,20 +75,18 @@ setMethod('nhsps', 'IterationList', function(x) {
 ## Hit, nhits, IterNum, QueryID, QueryDef, QueryLen ####
 
 #' @describeIn Iteration Return a \code{\linkS4class{Hit}} or \code{\linkS4class{HitList}}
-setMethod("getHit", "Iteration",
-          function(x, n = NULL, drop = TRUE, ...) {
-            hit <- if (is.null(n)) x@hits else x@hits[n]
-            if (drop && length(hit) == 1)
-              hit[[1]]
-            else
-              hit
-          })
+setMethod("getHit", "Iteration", function(x, i, drop = TRUE, ...) {
+  hit <- x@hits[i]
+  if (drop && length(hit) == 1) {
+    hit[[1]]
+  } else hit
+})
 
 #' @describeIn IterationList Returns a list of \code{\linkS4class{Hit}}s or \code{\linkS4class{HitList}}s
-setMethod("getHit", "IterationList",
-          function(x, n = NULL, drop = TRUE, ...) {
-            lapply(x, getHit, n = n, drop = drop)
-          })
+setMethod("getHit", "IterationList", function(x, i, drop = TRUE, ...) {
+  .fun <- if (missing(i)) getHit else Partial(getHit, i = i)
+  lapply(x, .fun, drop = drop)
+})
 
 #' @describeIn Iteration Returns the number of hits; <\code{numeric}>. 
 setMethod('nhits', 'Iteration', function(x) length(x@hits))
@@ -415,7 +413,7 @@ setMethod("is.na", "Iteration", function(x) {
 })
 
 setMethod("[", "IterationList", function(x, i, j, ..., drop) {
-  IterationList(callNextMethod())
+  IterationList(compact(callNextMethod()))
 })
 
 setMethod("[[", "IterationList", function(x, i, j, ...) {
@@ -423,7 +421,7 @@ setMethod("[[", "IterationList", function(x, i, j, ...) {
 })
 
 setMethod("is.na", "IterationList", function(x) {
-  vapply(x, is.na, FALSE, USE.NAMES=FALSE)
+  vapply(x, is.na, FALSE, USE.NAMES = FALSE)
 })
 
 # show, Iteration, IterationList -----------------------------------------

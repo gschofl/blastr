@@ -5,8 +5,4 @@ data/
 doc/
 playground/
 scratch\.[rR]
-<<<<<<< HEAD
 ^README\.*
-=======
-^README\.*
->>>>>>> testing

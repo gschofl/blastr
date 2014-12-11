@@ -18,6 +18,40 @@ A \code{\linkS4class{BlastReport}} object.
 Parse NCBI BLAST XML files.
 }
 \examples{
-##
+hla.xml <- system.file("extdata", "HLA-B-UTR.blast.xml", package = "blastr")
+x <- blastReport(hla.xml)
+
+## look at the Header
+getHeader(x)
+
+## look at the BLAST parameters
+getParams(x)
+
+## look at the results of the first query
+getIteration(x, 1)
+
+## or easier
+x[[1]]
+
+## access the first two hits in the second query
+getHit(getIteration(x, 2), 1:2)
+
+## for better readability use piping
+\dontrun{
+library("magrittr")
+x \%>\% getIteration(2) \%>\% getHit(1:2)
+}
+
+## or simple subsetting
+x[[2]][1:2]
+
+## it's also possible to access the two best hits for all queries at once
+getHit(x, 1:2)
+
+## access the hit ranges
+getHitRange(x[[2]][1:2])
+
+## access evalues
+getEvalue(x[[2]][1:2])
 }
 

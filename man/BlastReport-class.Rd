@@ -21,9 +21,9 @@
 
 \S4method{getParams}{BlastReport}(x)
 
-\S4method{getIteration}{BlastReport}(x, drop = TRUE)
+\S4method{getIteration}{BlastReport}(x, i, drop = TRUE)
 
-\S4method{getHit}{BlastReport}(x, n = NULL, drop = TRUE)
+\S4method{getHit}{BlastReport}(x, i, drop = TRUE)
 
 \S4method{getIterNum}{BlastReport}(x)
 

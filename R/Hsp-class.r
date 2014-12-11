@@ -416,16 +416,14 @@ setMethod('getHitCoverage', 'HspList', function(x) {
 
 # subsetting, HspList ----------------------------------------------------
 
-setMethod("[", "HspList",
-          function(x, i, j, ..., drop) {
-            query_env <- x@query_env
-            HspList( callNextMethod(), query_env = query_env )
-          })
+setMethod("[", "HspList", function(x, i, j, ..., drop) {
+  query_env <- x@query_env
+  HspList(compact(callNextMethod()), query_env = query_env )
+})
 
-setMethod("[[", "HspList",
-          function(x, i, j, ...) {
-            callNextMethod() 
-          })
+setMethod("[[", "HspList", function(x, i, j, ...) {
+  callNextMethod() 
+})
 
 # show, Hsp, HspList -----------------------------------------------------
 

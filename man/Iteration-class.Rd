@@ -7,7 +7,7 @@
 \alias{nhits,Iteration-method}
 \title{Class \code{"Iteration"}}
 \usage{
-\S4method{getHit}{Iteration}(x, n = NULL, drop = TRUE, ...)
+\S4method{getHit}{Iteration}(x, i, drop = TRUE, ...)
 
 \S4method{nhits}{Iteration}(x)
 }

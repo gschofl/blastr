@@ -56,15 +56,17 @@ HitList <- listclassConstructor('HitList', 'Hit')
 ## Hsp, nhsps, HspNum ####
 
 ## @return Hsp|HspList
-setMethod("getHsp", "Hit",
-          function(x, n = NULL, drop = TRUE) {
-            hsp <- if (is.null(n)) x@hsps else x@hsps[n]
-            if (drop && length(hsp) == 1) hsp[[1]] else hsp
-          })
+setMethod("getHsp", "Hit", function(x, i, drop = TRUE) {
+  hsp <- x@hsps[i]
+  if (drop && length(hsp) == 1) {
+    hsp[[1]] 
+  } else hsp
+})
 
 ## @return list<Hsp|HspList>
-setMethod("getHsp", "HitList", function(x, n = NULL, drop = TRUE) {
-  lapply(x, getHsp, n = n, drop = drop)
+setMethod("getHsp", "HitList", function(x, i, drop = TRUE) {
+  .fun <- if (missing(i)) getHsp else Partial(getHsp, i = i)
+  lapply(x, .fun, drop = drop)
 })
 
 ## @return numeric
@@ -520,7 +522,7 @@ setMethod("[[", "Hit", function(x, i, j, ...) {
 
 setMethod("[", "HitList", function(x, i, j, ..., drop) {
   query_env = x@query_env
-  HitList( callNextMethod(), query_env = query_env )
+  HitList(compact(callNextMethod()), query_env = query_env )
 })
 
 setMethod("[[", "HitList", function(x, i, j, ...) {
