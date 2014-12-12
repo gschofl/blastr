@@ -80,14 +80,14 @@ parseBlastDatabaseReport  <- function(doc) {
       filter = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_filter'),
       sc_match = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_sc-match', as = 'integer'),
       sc_mismatch = xvalue(doc, '/BlastOutput/BlastOutput_param/Parameters/Parameters_sc-mismatch', as = 'integer'),
-      num_sequences = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_db-num'),
-      num_letters = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_db-len'),
-      hsp_length = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_hsp-len', as = 'numeric'),
-      effective_space = xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_eff-space', as = 'numeric'), 
+      num_sequences = xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_db-num'),
+      num_letters = xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_db-len'),
+      hsp_length = xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_hsp-len', as = 'numeric'),
+      effective_space = xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_eff-space', as = 'numeric'), 
       ka_params = {
-        k <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_kappa', as = 'numeric')
-        lambda <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_lambda', as = 'numeric')
-        h <- xvalue(doc, '//Iteration_stat[position() = 1]/Statistics/Statistics_entropy', as = 'numeric')
+        k <- xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_kappa', as = 'numeric')
+        lambda <- xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_lambda', as = 'numeric')
+        h <- xvalue(doc, '//Iteration[position()=1]/Iteration_stat/Statistics/Statistics_entropy', as = 'numeric')
         c(k = k, lambda = lambda, h = h)
       }
     )

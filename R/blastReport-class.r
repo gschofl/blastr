@@ -87,13 +87,13 @@ setMethod('show', 'BlastParameters',
                              "  Number of sequences:    %s\n")
             db <- sprintf(fmt.db, object@num_letters, object@num_sequences)
             fmt.stat <- paste0("Statistics:\n",
-                               "  Lambda:               %s\n",
-                               "  K:                    %s\n",
-                               "  H:                    %s\n")
-            stat <- sprintf(fmt.db, object@ka_params['lambda'],
+                               "  Lambda:                 %s\n",
+                               "  K:                      %s\n",
+                               "  H:                      %s\n")
+            stat <- sprintf(fmt.stat, object@ka_params['lambda'],
                             object@ka_params['k'], object@ka_params['h'])
             
-            cat(params, db, stat, sep='')
+            cat(params, db, stat, sep = '')
           })
 
 
