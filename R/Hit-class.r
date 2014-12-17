@@ -57,7 +57,7 @@ HitList <- listclassConstructor('HitList', 'Hit')
 
 ## @return Hsp|HspList
 setMethod("getHsp", "Hit", function(x, i, drop = TRUE) {
-  hsp <- x@hsps[i]
+  hsp <- if (missing(i)) x@hsps[] else x@hsps[i]
   if (drop && length(hsp) == 1) {
     hsp[[1]] 
   } else hsp
@@ -65,8 +65,8 @@ setMethod("getHsp", "Hit", function(x, i, drop = TRUE) {
 
 ## @return list<Hsp|HspList>
 setMethod("getHsp", "HitList", function(x, i, drop = TRUE) {
-  .fun <- if (missing(i)) getHsp else Partial(getHsp, i = i)
-  lapply(x, .fun, drop = drop)
+  f <- if (missing(i)) getHsp else Partial(getHsp, i = i)
+  lapply(x, f, drop = drop)
 })
 
 ## @return numeric
@@ -85,9 +85,9 @@ setMethod('getHspNum', 'Hit', function(x, max = FALSE) {
 ## @return vector<integer> 
 setMethod('getHspNum', 'HitList', function(x, max = FALSE) {
   ans <- lapply(x, getHspNum, max = max)
-  if (max)
+  if (max) {
     unlist(ans)
-  else ans
+  } else ans
 })
 
 ## HitNum, HitLen, Accession, GeneID ####
@@ -512,7 +512,7 @@ setMethod('getHitCoverage', 'HitList', function(x) {
 
 ## Subset to HspList
 setMethod("[", "Hit", function(x, i, j, ..., drop) {
-  x@hsps[i]
+  if (missing(i)) x@hsps[] else x@hsps[i]
 })
 
 ## Subset to Hsp

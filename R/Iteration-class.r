@@ -76,7 +76,7 @@ setMethod('nhsps', 'IterationList', function(x) {
 
 #' @describeIn Iteration Return a \code{\linkS4class{Hit}} or \code{\linkS4class{HitList}}
 setMethod("getHit", "Iteration", function(x, i, drop = TRUE, ...) {
-  hit <- x@hits[i]
+  hit <- if (missing(i)) x@hits[] else x@hits[i]
   if (drop && length(hit) == 1) {
     hit[[1]]
   } else hit
@@ -84,8 +84,8 @@ setMethod("getHit", "Iteration", function(x, i, drop = TRUE, ...) {
 
 #' @describeIn IterationList Returns a list of \code{\linkS4class{Hit}}s or \code{\linkS4class{HitList}}s
 setMethod("getHit", "IterationList", function(x, i, drop = TRUE, ...) {
-  .fun <- if (missing(i)) getHit else Partial(getHit, i = i)
-  lapply(x, .fun, drop = drop)
+  f <- if (missing(i)) getHit else Partial(getHit, i = i)
+  lapply(x, f, drop = drop)
 })
 
 #' @describeIn Iteration Returns the number of hits; <\code{numeric}>. 
@@ -399,7 +399,7 @@ setMethod('getHitCoverage', 'IterationList', function(x) {
 
 ## Subset to HitList
 setMethod("[", "Iteration", function(x, i, j, ..., drop) {
-  x@hits[i]
+  if (missing(i)) x@hits[] else x@hits[i]
 })
 
 ## Subset to Hit

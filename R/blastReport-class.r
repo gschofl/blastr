@@ -152,7 +152,7 @@ setMethod("getParams", "BlastReport", function(x) x@parameters)
 #' @describeIn BlastReport Return the \code{\linkS4class{Iteration}} or 
 #'   \code{\linkS4class{IterationList}}.
 setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
-  it <- x@iterations[i]
+  it <- if (missing(i)) x@iterations[] else x@iterations[i]
   if (drop && length(it) == 1) {
     it[[1]]
   } else it
@@ -160,8 +160,8 @@ setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
 
 #' @describeIn BlastReport Return a list of \code{\linkS4class{HitList}}s.
 setMethod("getHit", "BlastReport", function(x, i, drop = TRUE) {
-  .fun <- if (missing(i)) getHit else Partial(getHit, i = i)
-  lapply(getIteration(x), .fun, drop = drop)
+  f <- if (missing(i)) getHit else Partial(getHit, i = i)
+  lapply(getIteration(x), f, drop = drop)
 })
 
 #' @describeIn BlastReport Return iteration numbers; <\code{integer}>.
@@ -190,7 +190,7 @@ setMethod("getQueryLen", "BlastReport", function(x) {
 
 #' @describeIn BlastReport Subset to return an \code{\linkS4class{IterationList}}.
 setMethod("[", "BlastReport", function(x, i, j, ..., drop) {
-  x@iterations[i]
+  if (missing(i)) x@iterations[] else x@iterations[i]
 })
 
 #' @describeIn BlastReport Subset to return an \code{\linkS4class{Iteration}}.
