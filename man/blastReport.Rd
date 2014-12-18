@@ -29,18 +29,18 @@ getHeader(x)
 getParams(x)
 
 ## look at the results of the first query
-getIteration(x, 1)
+getQuery(x, 1)
 
 ## or easier
 x[[1]]
 
 ## access the first two hits in the second query
-getHit(getIteration(x, 2), 1:2)
+getHit(getQuery(x, 2), 1:2)
 
 ## for better readability use piping
 \dontrun{
 library("magrittr")
-x \%>\% getIteration(2) \%>\% getHit(1:2)
+x \%>\% getQuery(2) \%>\% getHit(1:2)
 }
 
 ## or simple subsetting

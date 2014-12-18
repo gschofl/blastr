@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getHspNum}
 \alias{getHspNum}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getHspNum(x, ...)
 }
@@ -16,6 +16,6 @@ bit score.}
 An numeric vector or a list of numeric vectors.
 }
 \description{
-Extract the Hsp indices.
+Extract the HSP indices.
 }
 

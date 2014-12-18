@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getPositive}
 \alias{getPositive}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getPositive(x, max = FALSE)
 }

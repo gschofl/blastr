@@ -2,20 +2,19 @@
 % Please edit documentation in R/all-generics.r
 \name{getQuery}
 \alias{getQuery}
-\title{Access components of Blast Iterations (Queries)}
+\title{Extract queries from a BLAST report}
 \usage{
 getQuery(x, ...)
 }
 \arguments{
-\item{x}{A \linkS4class{BlastReport} or \linkS4class{BlastReportDB} object.}
+\item{x}{A \code{\linkS4class{BlastReport}} object.}
 
 \item{...}{Further arguments passed to methods.}
 }
 \value{
-A numeric vector or list of numeric vectors.
+A \linkS4class{Query} or \linkS4class{QueryList} object.
 }
 \description{
-Extract a data frame with the fields:
-query_id, query_def, query_len, n_hits
+Extract queries from a BLAST report
 }
 

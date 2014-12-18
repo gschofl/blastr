@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getAlignLen}
 \alias{getAlignLen}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getIdentity(x, max = FALSE)
 }

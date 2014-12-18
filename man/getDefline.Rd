@@ -3,7 +3,7 @@
 \name{getDefline}
 \alias{getDefline}
 \alias{getPrimaryDefline}
-\title{Access components of Blast Hits}
+\title{Access components of BLAST Hits}
 \usage{
 getDefline(x, ...)
 

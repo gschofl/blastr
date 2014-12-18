@@ -1,4 +1,4 @@
-#' @include Iteration-class.r
+#' @include Query-class.r
 NULL
 
 # BlastHeader-class ------------------------------------------------------
@@ -109,24 +109,24 @@ setMethod('show', 'BlastParameters',
 #' \itemize{
 #'    \item \code{\linkS4class{BlastHeader}}
 #'    \item \code{\linkS4class{BlastParameters}}
-#'    \item \code{\linkS4class{IterationList}}
+#'    \item \code{\linkS4class{QueryList}}
 #' }
 #' 
 #' @details
-#' The \code{\linkS4class{Iteration}} elements store results from individual
-#' BLAST queries. Each \code{Iteration} holds a \code{\linkS4class{HitList}}
+#' The \code{\linkS4class{Query}} elements store results from individual
+#' BLAST queries. Each \code{Query} holds a \code{\linkS4class{HitList}}
 #' with possibly multiple \code{\linkS4class{Hit}s}, which, in turn, can
 #' contain multiple high-scoring pairs (\code{\linkS4class{Hsp}s}).
 #' 
-#' Iterations, Hits, and Hsps can be extracted using the accessors
-#' \code{\link{getIteration}}, \code{\link{getHit}}, and \code{\link{getHsp}},
+#' Queries, Hits, and Hsps can be extracted using the accessors
+#' \code{\link{getQuery}}, \code{\link{getHit}}, and \code{\link{getHsp}},
 #'  or by directly subsetting a \code{BlastReport} object.
 #'  
 #' E.g. \code{report[[1]][[1]]} will return the first hit in the first query.
 #'  
 #' @slot header Header information; \code{\linkS4class{BlastHeader}}.
 #' @slot params Blast parameters and statistics \code{\linkS4class{BlastParameters}}.
-#' @slot iterations Iterations; \code{\linkS4class{IterationList}}.
+#' @slot queries Queries; \code{\linkS4class{QueryList}}.
 #' @seealso
 #'  The constructor \code{\link{blastReport}}; the BLAST classes
 #'  \code{\linkS4class{BlastReportDB}} and \code{\linkS4class{BlastTable}}
@@ -136,7 +136,7 @@ new_BlastReport <-
   setClass(Class = "BlastReport",
            slots = c(header = "BlastHeader",
                      parameters = "BlastParameters",
-                     iterations = "IterationList")
+                     queries = "QueryList")
   )
 
 
@@ -149,10 +149,10 @@ setMethod("getHeader", "BlastReport", function(x, ...) x@header)
 #' @describeIn BlastReport Return \code{\linkS4class{BlastParameters}}.
 setMethod("getParams", "BlastReport", function(x) x@parameters)
 
-#' @describeIn BlastReport Return \code{\linkS4class{Iteration}} or 
-#'   \code{\linkS4class{IterationList}}.
-setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
-  it <- if (missing(i)) x@iterations[] else x@iterations[i]
+#' @describeIn BlastReport Return \code{\linkS4class{Query}} or 
+#'   \code{\linkS4class{QueryList}}.
+setMethod("getQuery", "BlastReport", function(x, i, drop = TRUE) {
+  it <- if (missing(i)) x@queries[] else x@queries[i]
   if (drop && length(it) == 1) {
     it[[1]]
   } else it
@@ -161,51 +161,51 @@ setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
 #' @describeIn BlastReport Return a list of \code{\linkS4class{HitList}}s.
 setMethod("getHit", "BlastReport", function(x, i, drop = TRUE) {
   f <- if (missing(i)) getHit else Partial(getHit, i = i)
-  lapply(getIteration(x), f, drop = drop)
+  lapply(getQuery(x), f, drop = drop)
 })
 
 #' @describeIn BlastReport Returns the numbers of hits; <\code{numeric}>.
 setMethod('nhits', 'BlastReport', function(x) {
-  vapply(getIteration(x), nhits, 0L)
+  vapply(getQuery(x), nhits, 0L)
 })
 
-#' @describeIn BlastReport Return iteration numbers; <\code{integer}>.
-setMethod("getIterNum", "BlastReport", function(x) {
-  getIterNum(getIteration(x))
+#' @describeIn BlastReport Return query numbers; <\code{integer}>.
+setMethod("getQueryNum", "BlastReport", function(x) {
+  getQueryNum(getQuery(x))
 })
 
 #' @describeIn BlastReport Return query IDs; <\code{character}>.
 setMethod("getQueryID", "BlastReport", function(x) {
-  getQueryID(getIteration(x))
+  getQueryID(getQuery(x))
 })
 
 #' @describeIn BlastReport Return query definitions; <\code{character}>.
 setMethod("getQueryDef", "BlastReport", function(x) {
-  getQueryDef(getIteration(x))
+  getQueryDef(getQuery(x))
 })
 
 #' @describeIn BlastReport Return query lengths; <\code{integer}>.
 setMethod("getQueryLen", "BlastReport", function(x) {
-  getQueryLen(getIteration(x))
+  getQueryLen(getQuery(x))
 })
 
 
 # subsetting, blastReport ------------------------------------------------
 
 
-#' @describeIn BlastReport Subset to return an \code{\linkS4class{IterationList}}.
+#' @describeIn BlastReport Subset to return an \code{\linkS4class{QueryList}}.
 setMethod("[", "BlastReport", function(x, i, j, ..., drop) {
-  if (missing(i)) x@iterations[] else x@iterations[i]
+  if (missing(i)) x@queries[] else x@queries[i]
 })
 
-#' @describeIn BlastReport Subset to return an \code{\linkS4class{Iteration}}.
+#' @describeIn BlastReport Subset to return an \code{\linkS4class{Query}}.
 setMethod("[[", "BlastReport", function(x, i, j, ...) {
-  x@iterations[[i]]
+  x@queries[[i]]
 })
 
-#' @describeIn BlastReport Indicate missing \code{\linkS4class{Iteration}}s.
+#' @describeIn BlastReport Indicate missing \code{\linkS4class{Query}}s.
 setMethod("is.na", "BlastReport", function(x) {
-  vapply(x@iterations, is.na, FALSE, USE.NAMES = FALSE)
+  vapply(x@queries, is.na, FALSE, USE.NAMES = FALSE)
 })
 
 
@@ -213,14 +213,14 @@ setMethod("is.na", "BlastReport", function(x) {
 
 
 .show_BlastReport <- function(object) {
-  olen <- length(object@iterations)
-  cat(sprintf("A %s instance with %s iteration%s.\n",
-              sQuote(class(object)), olen, ifelse(olen == 1, '', 's')),
+  olen <- length(object@queries)
+  cat(sprintf("A %s instance with %s quer%s.\n",
+              sQuote(class(object)), olen, ifelse(olen == 1, 'y', 'ies')),
       sep="")
   show( getHeader(object) )
   cat('\n')
   op <- options("showHits" = getOption("showHits", default = 3L))
-  x <- lapply(object@iterations, .show_Iteration)
+  x <- lapply(object@queries, .show_Query)
   options(op)
 }
 
@@ -228,7 +228,7 @@ setMethod("is.na", "BlastReport", function(x) {
 #' The \code{show} methods for various blast objects can be modified by
 #' a number of global options. Specifically, the number of
 #' \code{\linkS4class{Hit}s} shown when displaying
-#' \code{\linkS4class{Iteration}s} or \code{\linkS4class{HitList}s} are set
+#' \code{\linkS4class{Query}s} or \code{\linkS4class{HitList}s} are set
 #' by \code{showHits}. Whether alignments are displayed or not is controlled
 #' by \code{showAlignment}. Setting these options to \code{NULL}, restores
 #' the defaults.

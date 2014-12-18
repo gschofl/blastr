@@ -2,12 +2,12 @@
 % Please edit documentation in R/all-generics.r
 \name{getQueryLen}
 \alias{getQueryLen}
-\title{Access components of Blast Iterations (Queries)}
+\title{Access components of BLAST Queries}
 \usage{
 getQueryLen(x, ...)
 }
 \arguments{
-\item{x}{A \linkS4class{BlastReport} or \linkS4class{IterationList} object.}
+\item{x}{A \linkS4class{BlastReport} or \linkS4class{QueryList} object.}
 
 \item{...}{Further arguments passed to methods.}
 }

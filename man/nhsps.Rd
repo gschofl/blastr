@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{nhsps}
 \alias{nhsps}
-\title{Access components of Blast Hits}
+\title{Access components of BLAST Hits}
 \usage{
 nhsps(x)
 }
@@ -13,6 +13,6 @@ nhsps(x)
 An numeric vector.
 }
 \description{
-Extract the number of Hsps for each Hit.
+Extract the number of HSPs for each Hit.
 }
 

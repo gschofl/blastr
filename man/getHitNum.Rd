@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getHitNum}
 \alias{getHitNum}
-\title{Access components of Blast Hits}
+\title{Access components of BLAST Hits}
 \usage{
 getHitNum(x, ...)
 }

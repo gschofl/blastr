@@ -4,7 +4,7 @@
 \alias{getHitSeq}
 \alias{getMatch}
 \alias{getQuerySeq}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getQuerySeq(x, max = FALSE)
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getHeader}
 \alias{getHeader}
-\title{Extract the header from a BLAST report}
+\title{Extract the header of a BLAST report}
 \usage{
 getHeader(x, ...)
 }
@@ -15,6 +15,6 @@ getHeader(x, ...)
 A \linkS4class{BlastHeader} object.
 }
 \description{
-Extract the header from a BLAST report
+Extract the header of a BLAST report
 }
 

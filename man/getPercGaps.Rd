@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getPercGaps}
 \alias{getPercGaps}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getPercGaps(x, max = FALSE)
 }

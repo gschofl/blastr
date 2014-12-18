@@ -6,7 +6,7 @@
 \alias{getMaxBitscore}
 \alias{getScore}
 \alias{getTotalBitscore}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getBitscore(x, max = FALSE, sum = FALSE)
 
@@ -23,7 +23,7 @@ getEvalue(x, max = FALSE)
 
 \item{max}{If \code{TRUE} return only the highest score.}
 
-\item{sum}{If \code{TRUE} sum scores from all hsps of a Blast hit.}
+\item{sum}{If \code{TRUE} sum scores from all hsps of a BLAST hit.}
 }
 \value{
 An numeric vector or a list of numeric vectors.

@@ -33,7 +33,7 @@ Collate:
     'defline.r'
     'Hsp-class.r'
     'Hit-class.r'
-    'Iteration-class.r'
+    'Query-class.r'
     'blastReport-class.r'
     'blastReportDB-class.r'
     'blast-parser-db.r'

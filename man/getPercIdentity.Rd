@@ -3,7 +3,7 @@
 \name{getPercIdentity}
 \alias{getMaxPercIdentity}
 \alias{getPercIdentity}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getPercIdentity(x, max = FALSE)
 

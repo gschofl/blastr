@@ -4,13 +4,13 @@ NULL
 # The blastr API -------------------------------------------------------
 
 ##    Getters in BlastReport
-##      getHeader, getParams, getIteration, getHit, getIterNum,
+##      getHeader, getParams, getQuery, getHit, nhits, getQueryNum,
 ##      getQueryID, getQueryDef, getQueryLen
 ##
-##    Getters in Itertation, IterationList
-##      getHit, getIterNum, getQueryID, getQueryDef, getQueryLen
+##    Getters in Query, QueryList
+##      getHit, getQueryNum, getQueryID, getQueryDef, getQueryLen
 ##     
-##    Getters in Iteration
+##    Getters in Query
 ##      getHsp, getHitNum, getHitAccession, getHitLen, getHitID
 ##
 ##    Getters in Hit, HitList
@@ -34,12 +34,242 @@ NULL
 ##
 
 
+# BlastReport-accessor generics ------------------------------------------
+
+
+#' Extract the header of a BLAST report
+#'
+#' @param x A \code{\linkS4class{BlastReport}} object.
+#' @param ... Further arguments passed to methods.
+#' @return A \linkS4class{BlastHeader} object.
+#' @export
+setGeneric("getHeader", function (x, ...) standardGeneric("getHeader"))
+
+#' Extract parameters and statistics from a BLAST report
+#' 
+#' @param x A \code{\linkS4class{BlastReport}} object.
+#' @param ... Further arguments passed to methods.
+#' @return A \linkS4class{BlastParameters} object.
+#' @export
+setGeneric("getParams", function (x, ...) standardGeneric("getParams"))
+
+#' Extract queries from a BLAST report
+#' 
+#' @param x A \code{\linkS4class{BlastReport}} object.
+#' @param ... Further arguments passed to methods.
+#' @return A \linkS4class{Query} or \linkS4class{QueryList} object.
+#' @export
+setGeneric("getQuery", function (x, ...) standardGeneric("getQuery"))
+
+
+# Query-accessor generics ------------------------------------------------
+
+
+#' Access components of BLAST Queries
+#' 
+#' Extract the query (a.k.a. iteration) numbers.
+#' 
+#' @usage getQueryNum(x, ...)
+#' @param x A \linkS4class{BlastReport} or \linkS4class{QueryList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A numeric vector or list of numeric vectors.
+#' @export
+setGeneric("getQueryNum", function (x, ...) standardGeneric("getQueryNum"))
+
+#' Access components of BLAST Queries
+#' 
+#' Extract the query ID.
+#' 
+#' @usage getQueryID(x, ...)
+#' @param x A \linkS4class{BlastReport} or \linkS4class{QueryList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A numeric vector or list of numeric vectors.
+#' @export
+setGeneric("getQueryID", function (x, ...) standardGeneric("getQueryID"))
+
+#' Access components of BLAST Queries
+#' 
+#' Extract the query definition.
+#' 
+#' @usage getQueryDef(x, ...)
+#' @param x A \linkS4class{BlastReport} or \linkS4class{QueryList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A character vector or list of character vectors.
+#' @export
+setGeneric("getQueryDef", function (x, ...) standardGeneric("getQueryDef"))
+
+#' Access components of BLAST Queries
+#' 
+#' Extract the query length.
+#' 
+#' @usage getQueryLen(x, ...)
+#' @param x A \linkS4class{BlastReport} or \linkS4class{QueryList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A numeric vector or list of numeric vectors.
+#' @export
+setGeneric("getQueryLen", function (x, ...) standardGeneric("getQueryLen"))
+
+#' Access components of BLAST Queries
+#' 
+#' Extract BLAST hits.
+#' 
+#' @usage getHit(x, ...)
+#' @param x A \linkS4class{BlastReport} or \linkS4class{QueryList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A \linkS4class{hit} or \linkS4class{HitList} object.
+#' @export
+setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
+
+#' Access components of BLAST Queries
+#' 
+#' Extract the number of Hits for each Query.
+#' 
+#' @param x A \linkS4class{BlastReport} or \linkS4class{QueryList} object.
+#' @return An numeric vector.
+#' @export
+setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
+
+
+# Hit-accessor generics --------------------------------------------------
+
+
+#' Access components of BLAST Hits
+#' 
+#' Extract Hsp IDs
+#' 
+#' @usage getHspID(x)
+#' @param x A \linkS4class{BlastReportDB} connection.
+#' @return An numeric vector.
+#' @export
+setGeneric("getHspID", function (x, ...) standardGeneric("getHspID"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract Hit IDs for Hsps. 
+#' 
+#' @usage getHspHitID(x)
+#' @param x A \linkS4class{BlastReportDB} connection.
+#' @return An numeric vector.
+#' @export
+setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the number of HSPs for each Hit.
+#' 
+#' @usage nhsps(x)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @return An numeric vector.
+#' @export
+setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract Hsps from a Hit.
+#' 
+#' @usage getHsp(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
+#' @export
+setGeneric("getHsp", function (x, ...) standardGeneric("getHsp"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the Hit indices.
+#' 
+#' @usage getHitNum(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
+#' @return A numeric vector or list of numeric vectors.
+#' @export
+setGeneric("getHitNum", function (x, ...) standardGeneric("getHitNum"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the hit length.
+#' 
+#' @usage getHitLen(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A numeric vector or list of numeric vectors.
+#' @export
+setGeneric("getHitLen", function (x, ...) standardGeneric("getHitLen"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract hit IDs.
+#' 
+#' @usage getHitID(x, db = 'any', ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param db Database tag (e.g. 'gi', 'ref', 'gb', 'dbj', 'any')
+#' @param ... Further arguments passed to methods.
+#' @return An character matrix or character vector.
+#' @export
+setGeneric("getHitID", function (x, ...) standardGeneric("getHitID"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the accession numbers of hits.
+#' 
+#' @usage getAccession(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A character vector or list of character vectors.
+#' @export
+setGeneric("getAccession", function (x, ...) standardGeneric("getAccession"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the GIs (gene identifiers) of hits.
+#' 
+#' @usage getGeneID(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A character vector or list of character vectors.
+#' @export
+setGeneric("getGeneID", function (x, ...) standardGeneric("getGeneID"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the (primary) hit definition.
+#' 
+#' @usage getHitDef(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A character vector or list of character vectors.
+#' @export
+setGeneric("getHitDef", function (x, ...) standardGeneric("getHitDef"))
+
+#' @usage getPrimaryHitDef(x, ...)
+#' @rdname getHitDef
+#' @export
+setGeneric("getPrimaryHitDef", function (x, ...) standardGeneric("getPrimaryHitDef"))
+
+#' Access components of BLAST Hits
+#' 
+#' Extract the (primary) definition lines.
+#' 
+#' @usage getDefline(x, ...)
+#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
+#' @param ... Further arguments passed to methods.
+#' @return A character vector or list of character vectors.
+#' @export
+setGeneric("getDefline", function (x, ...) standardGeneric("getDefline"))
+
+#' @usage getPrimaryDefline(x, ...)
+#' @rdname getDefline
+#' @export
+setGeneric("getPrimaryDefline", function (x, ...) standardGeneric("getPrimaryDefline"))
+
+
 # Hsp-accessor generics -------------------------------------------------
 
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
-#' Extract the Hsp indices.
+#' Extract the HSP indices.
 #' 
 #' @param x A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @param max If \code{TRUE} return index of the Hsp with the highest
@@ -48,14 +278,14 @@ NULL
 #' @export
 setGeneric("getHspNum", function (x, ...) standardGeneric("getHspNum"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the bit score, raw score, or expect values.
 #' 
 #' @usage getBitscore(x, max = FALSE, sum = FALSE)
 #' @param x  A \linkS4class{Hsp} or \linkS4class{HspList}.
 #' @param max If \code{TRUE} return only the highest score.
-#' @param sum If \code{TRUE} sum scores from all hsps of a Blast hit.
+#' @param sum If \code{TRUE} sum scores from all hsps of a BLAST hit.
 #' @return An numeric vector or a list of numeric vectors.
 #' @rdname scores
 #' @export
@@ -81,7 +311,7 @@ setGeneric("getScore", function (x, ...) standardGeneric("getScore"))
 #' @export
 setGeneric("getEvalue", function (x, ...) standardGeneric("getEvalue"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the numbers of identities.
 #' 
@@ -93,7 +323,7 @@ setGeneric("getEvalue", function (x, ...) standardGeneric("getEvalue"))
 #' @export
 setGeneric("getIdentity", function (x, ...) standardGeneric("getIdentity"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the numbers of positives.
 #' 
@@ -105,7 +335,7 @@ setGeneric("getIdentity", function (x, ...) standardGeneric("getIdentity"))
 #' @export
 setGeneric("getPositive", function (x, ...) standardGeneric("getPositive"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the numbers of gaps.
 #' 
@@ -117,7 +347,7 @@ setGeneric("getPositive", function (x, ...) standardGeneric("getPositive"))
 #' @export
 setGeneric("getGaps", function (x, ...) standardGeneric("getGaps"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the alignment lengths.
 #' 
@@ -129,7 +359,7 @@ setGeneric("getGaps", function (x, ...) standardGeneric("getGaps"))
 #' @export
 setGeneric("getAlignLen", function (x, ...) standardGeneric("getAlignLen"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the position of the start, end, frame, or range of the residues of
 #' query and hit sequences.
@@ -179,7 +409,7 @@ setGeneric("getQueryRange", function (x, ...) standardGeneric("getQueryRange"))
 #' @export
 setGeneric("getHitRange", function (x, ...) standardGeneric("getHitRange"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract the query or hit sequence.
 #' 
@@ -202,7 +432,7 @@ setGeneric("getHitSeq", function (x, ...) standardGeneric("getHitSeq"))
 #' @export
 setGeneric("getMatch", function (x, ...) standardGeneric("getMatch"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract Percent Identity, Percent Positives or Percent Gaps.
 #' 
@@ -219,7 +449,7 @@ setGeneric("getPercIdentity", function (x, ...) standardGeneric("getPercIdentity
 #' @export
 setGeneric("getMaxPercIdentity", function (x, ...) standardGeneric("getMaxPercIdentity"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract Percent Positives.
 #' 
@@ -231,7 +461,7 @@ setGeneric("getMaxPercIdentity", function (x, ...) standardGeneric("getMaxPercId
 #' @export
 setGeneric("getPercPositive", function (x, ...) standardGeneric("getPercPositive"))
 
-#' Access components of High-Scoring Pairs (Hsps)
+#' Access components of High-Scoring Pairs (HSPs)
 #' 
 #' Extract Percent Gaps.
 #' 
@@ -262,248 +492,6 @@ setGeneric("getQueryCoverage", function (x, ...) standardGeneric("getQueryCovera
 #' @usage getHitCoverage(x)
 #' @export
 setGeneric("getHitCoverage", function (x, ...) standardGeneric("getHitCoverage"))
-
-
-# Hit-accessor generics --------------------------------------------------
-
-
-#' Access components of Blast Hits
-#' 
-#' Extract Hsp IDs
-#' 
-#' @usage getHspID(x)
-#' @param x A \linkS4class{BlastReportDB} connection.
-#' @return An numeric vector.
-#' @export
-setGeneric("getHspID", function (x, ...) standardGeneric("getHspID"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract Hit IDs for Hsps. 
-#' 
-#' @usage getHspHitID(x)
-#' @param x A \linkS4class{BlastReportDB} connection.
-#' @return An numeric vector.
-#' @export
-setGeneric("getHspHitID", function (x, ...) standardGeneric("getHspHitID"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the number of Hsps for each Hit.
-#' 
-#' @usage nhsps(x)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @return An numeric vector.
-#' @export
-setGeneric("nhsps", function (x, ...) standardGeneric("nhsps"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract Hsps from a Hit.
-#' 
-#' @usage getHsp(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @export
-setGeneric("getHsp", function (x, ...) standardGeneric("getHsp"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the Hit indices.
-#' 
-#' @usage getHitNum(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return An \linkS4class{Hsp} or \linkS4class{HspList}.
-#' @return A numeric vector or list of numeric vectors.
-#' @export
-setGeneric("getHitNum", function (x, ...) standardGeneric("getHitNum"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the hit length.
-#' 
-#' @usage getHitLen(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A numeric vector or list of numeric vectors.
-#' @export
-setGeneric("getHitLen", function (x, ...) standardGeneric("getHitLen"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract hit IDs.
-#' 
-#' @usage getHitID(x, db = 'any', ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param db Database tag (e.g. 'gi', 'ref', 'gb', 'dbj', 'any')
-#' @param ... Further arguments passed to methods.
-#' @return An character matrix or character vector.
-#' @export
-setGeneric("getHitID", function (x, ...) standardGeneric("getHitID"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the accession numbers of hits.
-#' 
-#' @usage getAccession(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A character vector or list of character vectors.
-#' @export
-setGeneric("getAccession", function (x, ...) standardGeneric("getAccession"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the GIs (gene identifiers) of hits.
-#' 
-#' @usage getGeneID(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A character vector or list of character vectors.
-#' @export
-setGeneric("getGeneID", function (x, ...) standardGeneric("getGeneID"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the (primary) hit definition.
-#' 
-#' @usage getHitDef(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A character vector or list of character vectors.
-#' @export
-setGeneric("getHitDef", function (x, ...) standardGeneric("getHitDef"))
-
-#' @usage getPrimaryHitDef(x, ...)
-#' @rdname getHitDef
-#' @export
-setGeneric("getPrimaryHitDef", function (x, ...) standardGeneric("getPrimaryHitDef"))
-
-#' Access components of Blast Hits
-#' 
-#' Extract the (primary) definition lines.
-#' 
-#' @usage getDefline(x, ...)
-#' @param x A \linkS4class{Hit} or \linkS4class{HitList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A character vector or list of character vectors.
-#' @export
-setGeneric("getDefline", function (x, ...) standardGeneric("getDefline"))
-
-#' @usage getPrimaryDefline(x, ...)
-#' @rdname getDefline
-#' @export
-setGeneric("getPrimaryDefline", function (x, ...) standardGeneric("getPrimaryDefline"))
-
-
-# query-accessor generics ------------------------------------------------
-
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract a data frame with the fields:
-#' query_id, query_def, query_len, n_hits
-#' 
-#' @usage getQuery(x, ...)
-#' @param x A \linkS4class{BlastReport} or \linkS4class{BlastReportDB} object.
-#' @param ... Further arguments passed to methods.
-#' @return A numeric vector or list of numeric vectors.
-#' @export
-setGeneric("getQuery", function (x, ...) standardGeneric("getQuery"))
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract the Iteration (Query) numbers.
-#' 
-#' @usage getIterNum(x, ...)
-#' @param x A \linkS4class{BlastReport} or \linkS4class{IterationList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A numeric vector or list of numeric vectors.
-#' @export
-setGeneric("getIterNum", function (x, ...) standardGeneric("getIterNum"))
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract the query ID.
-#' 
-#' @usage getQueryID(x, ...)
-#' @param x A \linkS4class{BlastReport} or \linkS4class{IterationList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A numeric vector or list of numeric vectors.
-#' @export
-setGeneric("getQueryID", function (x, ...) standardGeneric("getQueryID"))
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract the query definition.
-#' 
-#' @usage getQueryDef(x, ...)
-#' @param x A \linkS4class{BlastReport} or \linkS4class{IterationList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A character vector or list of character vectors.
-#' @export
-setGeneric("getQueryDef", function (x, ...) standardGeneric("getQueryDef"))
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract the query length.
-#' 
-#' @usage getQueryLen(x, ...)
-#' @param x A \linkS4class{BlastReport} or \linkS4class{IterationList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A numeric vector or list of numeric vectors.
-#' @export
-setGeneric("getQueryLen", function (x, ...) standardGeneric("getQueryLen"))
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract Blast hits.
-#' 
-#' @usage getHit(x, ...)
-#' @param x A \linkS4class{BlastReport} or \linkS4class{IterationList} object.
-#' @param ... Further arguments passed to methods.
-#' @return A \linkS4class{hit} or \linkS4class{HitList} object.
-#' @export
-setGeneric("getHit", function (x, ...) standardGeneric("getHit"))
-
-#' Access components of Blast Iterations (Queries)
-#' 
-#' Extract the number of Hits for each Iteration/Query.
-#' 
-#' @param x A \linkS4class{BlastReport} or \linkS4class{IterationList} object.
-#' @return An numeric vector.
-#' @export
-setGeneric("nhits", function (x, ...) standardGeneric("nhits"))
-
-
-# BlastReport-accessor generics ------------------------------------------
-
-
-#' Extract the header from a BLAST report
-#'
-#' @param x A \code{\linkS4class{BlastReport}} object.
-#' @param ... Further arguments passed to methods.
-#' @return A \linkS4class{BlastHeader} object.
-#' @export
-setGeneric("getHeader", function (x, ...) standardGeneric("getHeader"))
-
-#' Extract Iterations/Queries from a BLAST report
-#' 
-#' @param x A \code{\linkS4class{BlastReport}} object.
-#' @param ... Further arguments passed to methods.
-#' @return A \linkS4class{Iteration} or \linkS4class{IterationList} object.
-#' @export
-setGeneric("getIteration", function (x, ...) standardGeneric("getIteration"))
-
-#' Extract parameters and statistics from a BLAST report
-#' 
-#' @param x A \code{\linkS4class{BlastReport}} object.
-#' @param ... Further arguments passed to methods.
-#' @return A \linkS4class{BlastParameters} object.
-#' @export
-setGeneric("getParams", function (x, ...) standardGeneric("getParams"))
 
 
 # Defline, DeflineSet ----------------------------------------------------

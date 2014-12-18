@@ -3,7 +3,7 @@
 \name{getHitDef}
 \alias{getHitDef}
 \alias{getPrimaryHitDef}
-\title{Access components of Blast Hits}
+\title{Access components of BLAST Hits}
 \usage{
 getHitDef(x, ...)
 

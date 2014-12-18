@@ -24,18 +24,18 @@ NULL
 #' getParams(x)
 #' 
 #' ## look at the results of the first query
-#' getIteration(x, 1)
+#' getQuery(x, 1)
 #' 
 #' ## or easier
 #' x[[1]]
 #' 
 #' ## access the first two hits in the second query
-#' getHit(getIteration(x, 2), 1:2)
+#' getHit(getQuery(x, 2), 1:2)
 #' 
 #' ## for better readability use piping
 #' \dontrun{
 #' library("magrittr")
-#' x %>% getIteration(2) %>% getHit(1:2)
+#' x %>% getQuery(2) %>% getHit(1:2)
 #' }
 #' 
 #' ## or simple subsetting
@@ -53,11 +53,11 @@ NULL
 blastReport <- function(x, asText = FALSE) {
   doc <- xmlRoot(xmlInternalTreeParse(x, asText = asText))
   dbr <- parseBlastDatabaseReport(doc)
-  iter_elems <- xpathApply(doc, '/BlastOutput/BlastOutput_iterations/Iteration')
+  query_elems <- xpathApply(doc, '/BlastOutput/BlastOutput_iterations/Iteration')
   new_BlastReport(
     header = dbr$header,
     parameters = dbr$params,
-    iterations = parseIterations(iter_elems)
+    queries = parseQueries(query_elems)
   )
 }
 
@@ -94,9 +94,9 @@ parseBlastDatabaseReport  <- function(doc) {
   )
 }
 
-parseIterations <- function(iter_elems) {
-  IterationList(
-    lapply(iter_elems, function(elem) {
+parseQueries <- function(query_elems) {
+  QueryList(
+    lapply(query_elems, function(elem) {
       doc <- xmlDoc(elem)
       hit_elems <- xpathApply(doc, '/Iteration/Iteration_hits/Hit')
       query_env <- new.env(parent=emptyenv())
@@ -105,7 +105,7 @@ parseIterations <- function(iter_elems) {
       query_env[['query_def']] <- xvalue(doc, '/Iteration/Iteration_query-def')
       query_env[['query_len']] <- xvalue(doc, '/Iteration/Iteration_query-len', as='integer')
       message <- xvalue(doc, '/Iteration/Iteration_message')
-      new_Iteration(
+      new_Query(
         iter_num = query_env[['iter_num']] , query_id = query_env[['query_id']],
         query_def = query_env[['query_def']], query_len = query_env[['query_len']],
         hits = message %|na|% parseHits(hit_elems, query_env),

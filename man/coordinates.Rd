@@ -9,7 +9,7 @@
 \alias{getQueryFrom}
 \alias{getQueryRange}
 \alias{getQueryTo}
-\title{Access components of High-Scoring Pairs (Hsps)}
+\title{Access components of High-Scoring Pairs (HSPs)}
 \usage{
 getQueryFrom(x, max = FALSE)
 

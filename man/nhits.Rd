@@ -2,17 +2,17 @@
 % Please edit documentation in R/all-generics.r
 \name{nhits}
 \alias{nhits}
-\title{Access components of Blast Iterations (Queries)}
+\title{Access components of BLAST Queries}
 \usage{
 nhits(x, ...)
 }
 \arguments{
-\item{x}{A \linkS4class{BlastReport} or \linkS4class{IterationList} object.}
+\item{x}{A \linkS4class{BlastReport} or \linkS4class{QueryList} object.}
 }
 \value{
 An numeric vector.
 }
 \description{
-Extract the number of Hits for each Iteration/Query.
+Extract the number of Hits for each Query.
 }
 

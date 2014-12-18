@@ -7,12 +7,12 @@
 \alias{[[,BlastReport-method}
 \alias{getHeader,BlastReport-method}
 \alias{getHit,BlastReport-method}
-\alias{getIterNum,BlastReport-method}
-\alias{getIteration,BlastReport-method}
 \alias{getParams,BlastReport-method}
+\alias{getQuery,BlastReport-method}
 \alias{getQueryDef,BlastReport-method}
 \alias{getQueryID,BlastReport-method}
 \alias{getQueryLen,BlastReport-method}
+\alias{getQueryNum,BlastReport-method}
 \alias{is.na,BlastReport-method}
 \alias{new_BlastReport}
 \alias{nhits,BlastReport-method}
@@ -23,13 +23,13 @@
 
 \S4method{getParams}{BlastReport}(x)
 
-\S4method{getIteration}{BlastReport}(x, i, drop = TRUE)
+\S4method{getQuery}{BlastReport}(x, i, drop = TRUE)
 
 \S4method{getHit}{BlastReport}(x, i, drop = TRUE)
 
 \S4method{nhits}{BlastReport}(x)
 
-\S4method{getIterNum}{BlastReport}(x)
+\S4method{getQueryNum}{BlastReport}(x)
 
 \S4method{getQueryID}{BlastReport}(x)
 
@@ -52,17 +52,17 @@ NCBI BLAST XML output. It contains the following top-level components:
 \itemize{
    \item \code{\linkS4class{BlastHeader}}
    \item \code{\linkS4class{BlastParameters}}
-   \item \code{\linkS4class{IterationList}}
+   \item \code{\linkS4class{QueryList}}
 }
 }
 \details{
-The \code{\linkS4class{Iteration}} elements store results from individual
-BLAST queries. Each \code{Iteration} holds a \code{\linkS4class{HitList}}
+The \code{\linkS4class{Query}} elements store results from individual
+BLAST queries. Each \code{Query} holds a \code{\linkS4class{HitList}}
 with possibly multiple \code{\linkS4class{Hit}s}, which, in turn, can
 contain multiple high-scoring pairs (\code{\linkS4class{Hsp}s}).
 
-Iterations, Hits, and Hsps can be extracted using the accessors
-\code{\link{getIteration}}, \code{\link{getHit}}, and \code{\link{getHsp}},
+Queries, Hits, and Hsps can be extracted using the accessors
+\code{\link{getQuery}}, \code{\link{getHit}}, and \code{\link{getHsp}},
  or by directly subsetting a \code{BlastReport} object.
 
 E.g. \code{report[[1]][[1]]} will return the first hit in the first query.
@@ -70,7 +70,7 @@ E.g. \code{report[[1]][[1]]} will return the first hit in the first query.
 The \code{show} methods for various blast objects can be modified by
 a number of global options. Specifically, the number of
 \code{\linkS4class{Hit}s} shown when displaying
-\code{\linkS4class{Iteration}s} or \code{\linkS4class{HitList}s} are set
+\code{\linkS4class{Query}s} or \code{\linkS4class{HitList}s} are set
 by \code{showHits}. Whether alignments are displayed or not is controlled
 by \code{showAlignment}. Setting these options to \code{NULL}, restores
 the defaults.
@@ -84,14 +84,14 @@ the expected behavior.
 
 \item \code{getParams}: Return \code{\linkS4class{BlastParameters}}.
 
-\item \code{getIteration}: Return \code{\linkS4class{Iteration}} or
-\code{\linkS4class{IterationList}}.
+\item \code{getQuery}: Return \code{\linkS4class{Query}} or
+\code{\linkS4class{QueryList}}.
 
 \item \code{getHit}: Return a list of \code{\linkS4class{HitList}}s.
 
 \item \code{nhits}: Returns the numbers of hits; <\code{numeric}>.
 
-\item \code{getIterNum}: Return iteration numbers; <\code{integer}>.
+\item \code{getQueryNum}: Return query numbers; <\code{integer}>.
 
 \item \code{getQueryID}: Return query IDs; <\code{character}>.
 
@@ -99,11 +99,11 @@ the expected behavior.
 
 \item \code{getQueryLen}: Return query lengths; <\code{integer}>.
 
-\item \code{[}: Subset to return an \code{\linkS4class{IterationList}}.
+\item \code{[}: Subset to return an \code{\linkS4class{QueryList}}.
 
-\item \code{[[}: Subset to return an \code{\linkS4class{Iteration}}.
+\item \code{[[}: Subset to return an \code{\linkS4class{Query}}.
 
-\item \code{is.na}: Indicate missing \code{\linkS4class{Iteration}}s.
+\item \code{is.na}: Indicate missing \code{\linkS4class{Query}}s.
 
 \item \code{show}: 
 }}
@@ -114,7 +114,7 @@ the expected behavior.
 
 \item{\code{params}}{Blast parameters and statistics \code{\linkS4class{BlastParameters}}.}
 
-\item{\code{iterations}}{Iterations; \code{\linkS4class{IterationList}}.}
+\item{\code{queries}}{Queries; \code{\linkS4class{QueryList}}.}
 }}
 \examples{
 # options("showHits" = 20)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/all-generics.r
 \name{getGeneID}
 \alias{getGeneID}
-\title{Access components of Blast Hits}
+\title{Access components of BLAST Hits}
 \usage{
 getGeneID(x, ...)
 }

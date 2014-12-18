@@ -2,12 +2,12 @@
 % Please edit documentation in R/all-generics.r
 \name{getHit}
 \alias{getHit}
-\title{Access components of Blast Iterations (Queries)}
+\title{Access components of BLAST Queries}
 \usage{
 getHit(x, ...)
 }
 \arguments{
-\item{x}{A \linkS4class{BlastReport} or \linkS4class{IterationList} object.}
+\item{x}{A \linkS4class{BlastReport} or \linkS4class{QueryList} object.}
 
 \item{...}{Further arguments passed to methods.}
 }
@@ -15,6 +15,6 @@ getHit(x, ...)
 A \linkS4class{hit} or \linkS4class{HitList} object.
 }
 \description{
-Extract Blast hits.
+Extract BLAST hits.
 }
 
