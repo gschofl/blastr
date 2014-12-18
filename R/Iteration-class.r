@@ -93,7 +93,7 @@ setMethod('nhits', 'Iteration', function(x) length(x@hits))
 
 #' @describeIn IterationList Returns the numbers of hits; <\code{numeric}>.
 setMethod('nhits', 'IterationList', function(x) {
-  vapply(x, nhits, numeric(1))
+  vapply(x, nhits, 0L)
 })
 
 ## @return integer
@@ -101,7 +101,7 @@ setMethod("getIterNum", "Iteration", function(x) x@iter_num)
 
 ## @return vector<integer> 
 setMethod("getIterNum", "IterationList", function(x) {
-  vapply(x, getIterNum, integer(1))
+  vapply(x, getIterNum, 0L)
 })
 
 ## @return character
@@ -109,7 +109,7 @@ setMethod("getQueryID", "Iteration", function(x) x@query_id)
 
 ## @return vector<character> 
 setMethod("getQueryID", "IterationList", function(x) {
-  vapply(x, getQueryID, character(1))
+  vapply(x, getQueryID, "")
 })
 
 ## @return character
@@ -117,7 +117,7 @@ setMethod("getQueryDef", "Iteration", function(x) x@query_def)
 
 ## @return vector<character>
 setMethod("getQueryDef", "IterationList", function(x) {
-  vapply(x, getQueryDef, character(1))
+  vapply(x, getQueryDef, "")
 })
 
 ## @return integer
@@ -125,14 +125,14 @@ setMethod("getQueryLen", "Iteration", function(x) x@query_len)
 
 ## @return vector<integer>
 setMethod("getQueryLen", "IterationList", function(x) {
-  vapply(x, getQueryLen, integer(1))
+  vapply(x, getQueryLen, 0L)
 })
 
 ## HitNum, HitLen, Accession, GeneID ####
 
 ## @return vector<integer>
 setMethod("getHitNum", "Iteration", function(x) {
-  vapply(x@hits, getHitNum, integer(1))
+  vapply(x@hits, getHitNum, 0L)
 })
 
 ## @return list<vector<integer>>
@@ -142,7 +142,7 @@ setMethod("getHitNum", "IterationList", function(x) {
 
 ## @return vector<integer>
 setMethod("getHitLen", "Iteration", function(x) {
-  vapply(x@hits, getHitLen, integer(1))
+  vapply(x@hits, getHitLen, 0L)
 })
 
 ## @return list<vector<integer>> 
@@ -152,7 +152,7 @@ setMethod("getHitLen", "IterationList", function(x) {
 
 ## @return vector<character>
 setMethod("getAccession", "Iteration", function(x) {
-  vapply(x@hits, getAccession, character(1))
+  vapply(x@hits, getAccession, "")
 })
 
 ## @return list<vector<character>>
@@ -162,7 +162,7 @@ setMethod("getAccession", "IterationList", function(x) {
 
 ## @return vector<character>
 setMethod("getGeneID", "Iteration", function(x) {
-  vapply(x@hits, getGeneID, character(1))
+  vapply(x@hits, getGeneID, "")
 })
 
 ## @return list<vector<character>>
@@ -189,7 +189,7 @@ setMethod("getDefline", "Iteration", function(x) {
 
 ## @return vector<character>
 setMethod("getPrimaryHitDef", "Iteration", function(x) {
-  vapply(x@hits, getPrimaryHitDef, character(1))
+  vapply(x@hits, getPrimaryHitDef, "")
 })
 ## @return list<vector<character>>
 setMethod("getPrimaryHitDef", "IterationList", function(x) {
@@ -198,7 +198,7 @@ setMethod("getPrimaryHitDef", "IterationList", function(x) {
 
 ## @return vector<character>
 setMethod("getPrimaryDefline", "Iteration", function(x) {
-  vapply(x@hits, getPrimaryDefline, character(1))
+  vapply(x@hits, getPrimaryDefline, "")
 })
 
 ## @return list<vector<character>>
@@ -348,7 +348,7 @@ setMethod('getPercIdentity', 'Iteration', function(x, max = FALSE) {
 ## the highest PercIdenty, but the PercIdentity of the hsp with the highest
 ## bitscore !!!
 setMethod('getMaxPercIdentity', 'Iteration', function(x) {
-  vapply(x@hits, getMaxPercIdentity, numeric(1))
+  vapply(x@hits, getMaxPercIdentity, 0L)
 })
 
 setMethod('getMaxPercIdentity', 'IterationList', function(x) {

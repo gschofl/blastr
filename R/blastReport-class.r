@@ -143,13 +143,13 @@ new_BlastReport <-
 # getter, BlastReport ----------------------------------------------------
 
 
-#' @describeIn BlastReport Return the \code{\linkS4class{BlastHeader}}.
+#' @describeIn BlastReport Return \code{\linkS4class{BlastHeader}}.
 setMethod("getHeader", "BlastReport", function(x, ...) x@header)
 
-#' @describeIn BlastReport Return the \code{\linkS4class{BlastParameters}}.
+#' @describeIn BlastReport Return \code{\linkS4class{BlastParameters}}.
 setMethod("getParams", "BlastReport", function(x) x@parameters)
 
-#' @describeIn BlastReport Return the \code{\linkS4class{Iteration}} or 
+#' @describeIn BlastReport Return \code{\linkS4class{Iteration}} or 
 #'   \code{\linkS4class{IterationList}}.
 setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
   it <- if (missing(i)) x@iterations[] else x@iterations[i]
@@ -162,6 +162,11 @@ setMethod("getIteration", "BlastReport", function(x, i, drop = TRUE) {
 setMethod("getHit", "BlastReport", function(x, i, drop = TRUE) {
   f <- if (missing(i)) getHit else Partial(getHit, i = i)
   lapply(getIteration(x), f, drop = drop)
+})
+
+#' @describeIn BlastReport Returns the numbers of hits; <\code{numeric}>.
+setMethod('nhits', 'BlastReport', function(x) {
+  vapply(getIteration(x), nhits, 0L)
 })
 
 #' @describeIn BlastReport Return iteration numbers; <\code{integer}>.
