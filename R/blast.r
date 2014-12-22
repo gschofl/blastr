@@ -6,7 +6,9 @@
 NULL
 
 #' Wrapper for NCBI makeblastdb
-#' 
+#'
+#' Generate a BLAST database from FASTA files.
+#'   
 #' @param input_file Input file/database name. Multiple file/database names
 #' can be provided as a character vector.
 #' @param input_type Type of data specified in input file. One of \dQuote{fasta},
@@ -18,35 +20,39 @@ NULL
 #' @family blast functions
 #' @export
 #' @examples 
-#' ##
+#' ## Retrieve, for instance, the human reference genome files located at
+#' ## ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/Assembled_chromosomes/seq/
+#' ## and generate an input file hs_ref.fa by inflating and concatenating
+#' ## the hs_ref_*.fa.gz files.
+#' \dontrun{
+#' makeblasttdb("hs_ref.fa", input_type = "fasta", dbtype = "nucl",
+#'   parse_seqids = TRUE, out = "hs_ref", title = "Human reference assembly, GRCh28")
+#' }
 makeblasttdb <- function(input_file, input_type = 'fasta', dbtype = 'nucl',
                          ..., show_log = TRUE, show_cmd = FALSE) {
   assert_that(has_command('makeblastdb'))
   if (missing(input_file)) {
-    return(SysCall("makeblastdb", help=TRUE, redirection=FALSE))
+    return(SysCall("makeblastdb", help = TRUE, redirection = FALSE))
   }
   ## assert that multiple input files are present and readable
   lapply(input_file, Compose(assert_that, is.readable))
   
   if (length(input_file) > 1) {
-    input_file <- sprintf("\"%s\"", paste(input_file, collapse=" "))
+    input_file <- sprintf("\"%s\"", paste(input_file, collapse = " "))
   }
   
-  input_type <- match.arg(input_type, c("fasta","blastdb","asn1_bin","asn1_txt"))
+  input_type <- match.arg(input_type, c("fasta", "blastdb", "asn1_bin", "asn1_txt"))
   dbtype <- match.arg(dbtype, c("nucl","prot"))
   
-  o <- dots(...)
-  if (!is.null(o$logfile)) {
-    logfile <- o$logfile
-  } else {
-    logfile <- replace_ext(input_file[[1]], "log")
-  }
-  SysCall(exec="makeblastdb", infile=NULL, outfile=NULL,
-          `in`=input_file, input_type=input_type,
-          dbtype=dbtype, logfile=logfile, ..., style="unix",
-          show_cmd=show_cmd)  
-  if (show_log && assert_that(is.readable(logfile))) {
-    cat(paste(readLines(logfile), collapse="\n"))
+  args <- dots(...)
+  args$logfile <- if (is.null(args$logfile)) replace_ext(input_file[[1]], "log") else args$logfile 
+  args$title <- if (is.null(args$title)) NULL else shQuote(args$title)
+  
+  SysCall(exec = "makeblastdb", infile = NULL, outfile = NULL, `in` = input_file,
+          input_type = input_type, dbtype = dbtype, args = args, style = "unix",
+          show_cmd = show_cmd)  
+  if (show_log && assert_that(is.readable(args$logfile))) {
+    cat(paste(readLines(args$logfile), collapse = "\n"))
   }
 }
 

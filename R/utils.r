@@ -336,11 +336,11 @@ SysCall <- function(exec, ..., args = list(), stdin = NULL, stdout = NULL,
   args <- switch(style,
                  unix = paste0(trim(sprintf("-%s%s%s", names(args), sep, args)), collapse=" "),
                  gnu  = paste0(trim(sprintf("--%s%s%s", names(args), sep, args)), collapse=" "))
-  
+  cmd <- trim(paste(exec, args, stdin, stdout)) 
   if (show_cmd) {
-    print(trim(paste(exec, args, stdin, stdout)))
-  } else{
-    system(trim(paste(exec, args, stdin, stdout)), intern = intern, input = input)
+    print(cmd)
+  } else {
+    system(command = cmd, intern = intern, input = input)
   }
 }
 

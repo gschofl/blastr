@@ -23,10 +23,17 @@ can be provided as a character vector.}
 \item{show_cmd}{print the command line instead of executing it.}
 }
 \description{
-Wrapper for NCBI makeblastdb
+Generate a BLAST database from FASTA files.
 }
 \examples{
-##
+## Retrieve, for instance, the human reference genome files located at
+## ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/Assembled_chromosomes/seq/
+## and generate an input file hs_ref.fa by inflating and concatenating
+## the hs_ref_*.fa.gz files.
+\dontrun{
+makeblasttdb("hs_ref.fa", input_type = "fasta", dbtype = "nucl",
+  parse_seqids = TRUE, out = "hs_ref", title = "Human reference assembly, GRCh28")
+}
 }
 \seealso{
 Other blast functions: \code{\link{blastn}},
