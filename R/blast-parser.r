@@ -172,7 +172,15 @@ parseHsps <- function(hsp_elems, query_env) {
 #' @return A \code{\linkS4class{blastTable}} object.
 #' @rdname blastTable
 #' @export
+#' @examples 
+#' ##
 blastTable <- function(x) {
+  ## split multiple query results
+  if (is.character(x) && !is.na(x[2]) && grepl("^# Query:.*$", x[2])) {
+    start <- grep("^# Query:.*$", x) - 1
+    end <- unique(c(grep("^# Query:.*$", x)[-1] - 2, length(x)))
+    x <- Map(function(i) x[i], i = Map(seq, from = start, to = end))  
+  }
   res <- list()
   for (blout in x) {
     if (is.character(blout) && file.exists(blout)) {
@@ -191,13 +199,12 @@ blastTable <- function(x) {
     hasComment <- TRUE
     comStr <- NULL
     while (hasComment) {
-      line <- readLines(file_path, n=1)
+      line <- readLines(file_path, n = 1)
       if (hasComment <- str_detect(line, "^#")) {
         comStr <- c(comStr, str_match(line, "[^(# *)].*"))
       }
     }
-    
-    pushBack(line, connection=file_path)  
+    pushBack(line, connection = file_path)  
     hit_table <- 
       read.table(file_path, header = FALSE, sep = "\t",
                  as.is = TRUE, nrows = length(cf),
@@ -212,8 +219,8 @@ blastTable <- function(x) {
     
     ## parse subjectIds in 'hit_table'
     all_ids <- with(hit_table, strsplit(sid, "\\|"))
-    gi  <- vapply(all_ids, '[', 2, FUN.VALUE = character(1))
-    source_tag <- vapply(all_ids, '[', 3, FUN.VALUE = character(1))
+    gi  <- vapply(all_ids, '[', 2, FUN.VALUE = '')
+    source_tag <- vapply(all_ids, '[', 3, FUN.VALUE = '')
     accn <- ifelse(grepl("pdb", source_tag),
                    paste0(sapply(all_ids, '[', 4), "_", sapply(all_ids, '[', 5)),
                    sapply(all_ids, '[', 4))
@@ -224,8 +231,8 @@ blastTable <- function(x) {
     neg_log_evalue[is.infinite(neg_log_evalue)] <- -log(1e-323)
     if (!is.null(comStr) && length(comStr) == 5) {
       program <- comStr[1]
-      query <- str_split_fixed(comStr[2], "Query: ", 2)[,2]
-      database <- str_split_fixed(comStr[3], "Database: ", 2)[,2]
+      query <- str_split_fixed(comStr[2], "Query: ", 2)[, 2]
+      database <- str_split_fixed(comStr[3], "Database: ", 2)[, 2]
     } else {
       program <- query <- database <- NA_character_
     }
@@ -241,6 +248,8 @@ blastTable <- function(x) {
                       accession = accn,
                       table = hit_table))
   }
-  
-  return(res)
+
+  if (length(res) == 1) {
+    res[[1]]
+  } else res
 }

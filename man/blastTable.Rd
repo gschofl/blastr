@@ -15,4 +15,7 @@ A \code{\linkS4class{blastTable}} object.
 \description{
 Parse NCBI BLAST table files into \linkS4class{BlastTable} objects.
 }
+\examples{
+##
+}
 
