@@ -184,13 +184,15 @@ BlastOutput.Iterations <- function(
     accumulate('midline',     xvalue(node, xp%.%'Hsp_midline'), hsp)
   }
   
-  list('Iteration_iter-num'=`Iteration_iter-num`,
-       'Iteration_query-def'=`Iteration_query-def`,
-       'Iteration_query-len'=`Iteration_query-len`,
-       'Iteration_hits'=Iteration_hits,
-       getQuery=getQuery,
-       getHit=getHit,
-       getHsp=getHsp)
+  list(
+    'Iteration_iter-num'  = `Iteration_iter-num`,
+    'Iteration_query-def' = `Iteration_query-def`,
+    'Iteration_query-len' = `Iteration_query-len`,
+    'Iteration_hits'      = Iteration_hits,
+    getQuery = getQuery,
+    getHit   = getHit,
+    getHsp   = getHsp
+  )
 }
 
 

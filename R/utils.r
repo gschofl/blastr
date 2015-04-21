@@ -109,11 +109,6 @@ pad <- function(x, n = 10, where = 'left', pad = ' ') {
   paste0(padding[match(left, lengths)], x, padding[match(right, lengths)])
 }
 
-trim <- function(x, trim = '\\s+') {
-  assert_that(is.vector(x))
-  gsub(paste0("^", trim, "|", trim, "$"), '', x)
-}
-
 ellipsize <- function(obj, width = getOption("width"), ellipsis = " ...") {
   str <- encodeString(obj)
   ifelse(nchar(str) > width - 1,
@@ -186,7 +181,7 @@ linebreak <- function(s, width = getOption("width") - 2,
     # convert newlines, tabs, spaces to " "
     # find first position where 'split' applies
     if (!FULL_FORCE) {
-      s <- gsub("\\s+", " ", trim(s), perl=TRUE)
+      s <- gsub("\\s+", " ", trimws(s), perl=TRUE)
     }
     fws <- regexpr(split, s, perl=TRUE)
     
@@ -334,9 +329,9 @@ SysCall <- function(exec, ..., args = list(), stdin = NULL, stdout = NULL,
   args[are_true(args)] <- ""
   args[are_false(args) | are_null(args)] <- NULL
   args <- switch(style,
-                 unix = paste0(trim(sprintf("-%s%s%s", names(args), sep, args)), collapse=" "),
-                 gnu  = paste0(trim(sprintf("--%s%s%s", names(args), sep, args)), collapse=" "))
-  cmd <- trim(paste(exec, args, stdin, stdout)) 
+                 unix = paste0(trimws(sprintf("-%s%s%s", names(args), sep, args)), collapse=" "),
+                 gnu  = paste0(trimws(sprintf("--%s%s%s", names(args), sep, args)), collapse=" "))
+  cmd <- trimws(paste(exec, args, stdin, stdout)) 
   if (show_cmd) {
     print(cmd)
   } else {

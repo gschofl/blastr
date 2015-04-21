@@ -54,7 +54,7 @@ getterConstructor <- function(SELECT, FROM, ..., as = 'character') {
                          ARGS$VAL, " in (select ", ARGS$FUN,
                          "(", ARGS$VAL, ") from ", FROM, WHERE, GROUPBY, ")")
     }
-    stmts <- trim(paste0("select ", SELECT, " from ", FROM, WHERE, AND, GROUPBY))
+    stmts <- trimws(paste0("select ", SELECT, " from ", FROM, WHERE, AND, GROUPBY))
     lapply(stmts, function(stmt) {
       AS(.db_query(con, stmt, 1L, log=log) %||% NA)
     })
@@ -71,7 +71,7 @@ simpleGetter <- function(SELECT, FROM, ..., as = 'character') {
     if (!is.null(ARGS$WHERE) && !missing(id)) {
       WHERE <- paste0(" where ", ARGS$WHERE, " in (", paste0(id, collapse=","), ")") 
     }
-    stmt <- trim(paste0("select ", SELECT, " from ", FROM, WHERE))
+    stmt <- trimws(paste0("select ", SELECT, " from ", FROM, WHERE))
     AS(.db_query(conn(x), stmt, 1L, log=log) %||% NA)
   }
 }

@@ -50,11 +50,11 @@ new_Query <-
 #' showClass("QueryList")
 setClass(Class    = "QueryList",
          contains = "list",
-         validity = listclassValidator('QueryList', 'Query')
+         validity = listclassValidator("QueryList", "Query")
 )
 
 ## constructor
-QueryList <- listclassConstructor('QueryList', 'Query')
+QueryList <- listclassConstructor("QueryList", "Query")
 
 # Hsp, nhsps, HspNum ####
 
@@ -64,7 +64,7 @@ setMethod("getHsp", "Query", function(x, i, drop = TRUE) {
 })
 
 #' @describeIn Query Returns the number of HSPs for each hit; <\code{integer}>. 
-setMethod('nhsps', 'Query', function(x) {
+setMethod("nhsps", "Query", function(x) {
   vapply(x@hits, nhsps, 0L)
 })
 
@@ -91,10 +91,10 @@ setMethod("getHit", "QueryList", function(x, i, drop = TRUE, ...) {
 })
 
 #' @describeIn Query Returns the number of hits; <\code{numeric}>. 
-setMethod('nhits', 'Query', function(x) length(x@hits))
+setMethod("nhits", "Query", function(x) length(x@hits))
 
 #' @describeIn QueryList Returns the numbers of hits; <\code{list}> of <\code{numeric}s>.
-setMethod('nhits', 'QueryList', function(x) {
+setMethod("nhits", "QueryList", function(x) {
   vapply(x, nhits, 0L)
 })
 

@@ -52,7 +52,7 @@ db_create <- function(dbName = ":memory:", dbSchema = "", overwrite = FALSE, ver
     message('Creating new database ', sQuote(basename(dbName)))
   }
   con <- db_connect(dbName = dbName, create = TRUE)
-  sql <- compactChar(trim(strsplit(dbSchema, ";\n")[[1L]]))
+  sql <- compactChar(trimws(strsplit(dbSchema, ";\n")[[1L]]))
   if (length(sql) > 0L) {
     tryCatch(lapply(sql, dbGetQuery, conn = con), error = function(e) {
       message(e)
